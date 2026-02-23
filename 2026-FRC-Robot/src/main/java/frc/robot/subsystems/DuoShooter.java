@@ -9,22 +9,30 @@ package frc.robot.subsystems;
 
 import java.util.Vector;
 
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Limelight;
-import frc.robot.Constants.TurretConstants.*;
-// import frc.robot.Constants.ShooterLogicConstants;
-import frc.robot.Constants.TurretConstants;
-// import frc.robot.Constants.ShooterLogicConstants.*;
+import static frc.robot.Constants.TurretConstants.*;
+import static frc.robot.Constants.DuoShooterConstants.*;
 
-public class ShooterLogic extends SubsystemBase {
+
+public class DuoShooter extends SubsystemBase {
   /** Creates a new ShooterLogic. */
+
+  private SparkFlex leftShooterMotor, rightShooterMotor;
+
 
   private Limelight limelight;
 
-  public ShooterLogic(Limelight limelight) {
+  public DuoShooter(Limelight limelight) {
     this.limelight = limelight;
+
+    leftShooterMotor = new SparkFlex(kLeftShooterMotorID, MotorType.kBrushless);
+    rightShooterMotor = new SparkFlex(kRightShooterMotorID, MotorType.kBrushless);
   }
 
   @Override
@@ -50,4 +58,25 @@ public class ShooterLogic extends SubsystemBase {
   //   double coordinateTheta = robotVelocity.
 
   // }
+
+  public void setLeftShooterPower(double power)
+  {
+    leftShooterMotor.set(power);
+  }
+
+  public void setRightShooterPower (double power)
+  {
+    rightShooterMotor.set(power);
+  }
+
+  public void stopLeftShooter()
+  {
+    leftShooterMotor.set(0);
+  }
+
+  public void stopRightShooter()
+  {
+    rightShooterMotor.set(0);
+  }
+
 }

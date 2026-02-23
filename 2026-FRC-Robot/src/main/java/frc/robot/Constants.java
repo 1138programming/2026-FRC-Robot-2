@@ -102,6 +102,9 @@ public final class Constants {
     public static final int KXboxLeftTrigger = 2;
     public static final int KXboxRightTrigger = 3;
     public static final int kDriverControllerPort = 0;
+
+    public static final double kLeftShooterPower = 0.0;
+    public static final double kRightShooterPower = 0.0;
   }
 
   public static class TurretConstants {
@@ -176,6 +179,12 @@ public final class Constants {
 
   public static class LaserConstants {
     public static final int klaserDIOPort = 3;
+  }
+
+  public static class DuoShooterConstants
+  {
+    public static final int kLeftShooterMotorID = 67;
+    public static final int kRightShooterMotorID = 41;
   }
 
   public static class FieldConstants {

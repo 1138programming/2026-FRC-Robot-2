@@ -4,17 +4,19 @@
 
 package frc.robot.commands.TurretCommands;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Turret;
-import static frc.robot.Constants.turretSpeedConstants.*;
+import frc.robot.subsystems.DuoShooter;
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class rotateTurret extends Command {
-  Turret turret;
+public class rotateRightFlyWheel extends Command {
+  private DuoShooter duoShooter;
+  private double power;
 
-  public rotateTurret(Turret turret) {
-    this.turret = turret;
+  public rotateRightFlyWheel(DuoShooter duoShooter, double power) {
+    this.duoShooter = duoShooter;
+    this.power = power;
 
-    addRequirements(turret);
+    addRequirements(duoShooter);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +26,7 @@ public class rotateTurret extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    turret.rotateRotationMotor(KRotationMotorPower);
+    duoShooter.setRightShooterPower(power);
   }
   // Called once the command ends or is interrupted.
   @Override
