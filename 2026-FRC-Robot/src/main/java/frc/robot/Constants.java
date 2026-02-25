@@ -142,6 +142,13 @@ public final class Constants {
     
     public static final int KintakeDeployMotorId = 0;
     public static final double KintakeDeployMotorSpeed = 0.0;
+
+    public static final double kDeployReduction = 50.0;
+
+    public static final double kDeployAngle = -4;
+    public static final double kStowed = 100;
+
+
   }
   
 
