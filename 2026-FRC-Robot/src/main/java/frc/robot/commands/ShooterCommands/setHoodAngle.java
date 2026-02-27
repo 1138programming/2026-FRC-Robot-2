@@ -5,15 +5,15 @@
 package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DuoShooter;
+import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class setHoodAngle extends Command {
   /** Creates a new setHoodAngle. */
-  private DuoShooter shooter;
+  private Shooter shooter;
   private double angle;
 
-  public setHoodAngle(DuoShooter shooter, double angle) {
+  public setHoodAngle(Shooter shooter, double angle) {
     this.shooter = shooter;
     this.angle = angle;
     // Use addRequirements() here to declare subsystem dependencies.

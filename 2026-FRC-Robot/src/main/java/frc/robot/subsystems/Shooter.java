@@ -8,39 +8,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.ShooterConstants.*;
 
-public class DuoShooter extends SubsystemBase{
-  private SparkFlex leftShooterMotor;
-  private SparkFlex rightShooterMotor;
+public class Shooter extends SubsystemBase{
+  private SparkFlex ShooterMotor;
 
   private Servo hoodController;
 
-  public DuoShooter(){
-    leftShooterMotor = new SparkFlex(kLeftShooterID, MotorType.kBrushless);
-    rightShooterMotor = new SparkFlex(kRightShooterID, MotorType.kBrushless);
+  public Shooter(){
+    ShooterMotor = new SparkFlex(kLeftShooterID, MotorType.kBrushless);
 
     hoodController = new Servo(khoodControllerID);
 
   }
 
   public void setLeftShooterPower(double power){
-    leftShooterMotor.set(power);
+    ShooterMotor.set(power);
   }
 
   public void stopLeftShooter() {
-    leftShooterMotor.set(0.0);
+    ShooterMotor.set(0.0);
   }
 
-  public void stopRightShooter() {
-    leftShooterMotor.set(0.0);
-  }
-
-  public void setRightShooterPower(double power){
-    rightShooterMotor.set(power);
-  }
 
   public void setFullShooterPower(double power) {
     setLeftShooterPower(power);
-    setRightShooterPower(power);
   }
 
 

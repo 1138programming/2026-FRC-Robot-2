@@ -1,13 +1,13 @@
 package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DuoShooter;
+import frc.robot.subsystems.Shooter;
 
 public class setLeftShooterPower extends Command{
     private double power;
-    private DuoShooter duoShooter;
+    private Shooter duoShooter;
 
-    public setLeftShooterPower(DuoShooter duoShooter, double power){
+    public setLeftShooterPower(Shooter duoShooter, double power){
         this.duoShooter = duoShooter;
         this.power = power;
         addRequirements(duoShooter);

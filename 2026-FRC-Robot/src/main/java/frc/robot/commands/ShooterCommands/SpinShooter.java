@@ -5,15 +5,15 @@
 package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DuoShooter;
+import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class SpinShooter extends Command {
 
-  private DuoShooter shooter;
+  private Shooter shooter;
   private double power;
   /** Creates a new SpinShooter. */
-  public SpinShooter(DuoShooter shooter, double power) {
+  public SpinShooter(Shooter shooter, double power) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
     this.power = power;
@@ -33,7 +33,6 @@ public class SpinShooter extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopLeftShooter();
-    shooter.stopRightShooter();
   }
 
   // Returns true when the command should end.
