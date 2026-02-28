@@ -244,4 +244,15 @@ public final class Constants {
 
     }
   }
+
+  public static class ShooterConstants{
+    public static final int kLeftShooterID = 0;
+    public static final int  kRightShooterID = 1;
+
+    public static final int khoodControllerID = 2;
+
+    public static final double kHoodMaxAngle = 70.0;
+    public static final double kHoodMinAngle = 20.0;
+
+  }
 }
