@@ -337,7 +337,7 @@ public class RobotContainer {
             () -> getLogiRightXAxis()));
 
     // Lock to red hub when A button is held
-    logitechBtnA
+    logitechBtnRT
         .whileTrue(
             new DriveWhileAim(
                 drive,
