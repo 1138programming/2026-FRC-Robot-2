@@ -2,20 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Laser;
+import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class toggleLaser extends Command {
-  Laser laser;
-  /** Creates a new turnLaserOff. */
-  public toggleLaser(Laser laser) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.laser = laser;
+public class SpinShooter extends Command {
 
-    addRequirements(laser);
+  private Shooter shooter;
+  private double power;
+  /** Creates a new SpinShooter. */
+  public SpinShooter(Shooter shooter, double power) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.shooter = shooter;
+    this.power = power;
   }
 
   // Called when the command is initially scheduled.
@@ -25,16 +26,18 @@ public class toggleLaser extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    laser.toggleLaser();
+    shooter.setFullShooterPower(power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooter.stopLeftShooter();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
