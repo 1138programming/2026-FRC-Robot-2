@@ -82,7 +82,7 @@ public class Intake extends SubsystemBase{
   
   
 
-  public void setIntakePowwer(double power) {
+  public void setIntakePower(double power) {
     intakeMotor.set(power);
   }
 

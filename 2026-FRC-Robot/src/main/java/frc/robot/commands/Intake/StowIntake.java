@@ -1,13 +1,14 @@
 package frc.robot.commands.Intake;
 
+import static frc.robot.Constants.intakeConstants.kStowed;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import static frc.robot.Constants.intakeConstants.*;
 
-public class DeployToIntake extends Command {
+public class StowIntake extends Command {
     private Intake intake;
 
-    public DeployToIntake(Intake intake) {
+    public StowIntake(Intake intake) {
         this.intake = intake;
         addRequirements(intake);
     }
@@ -19,7 +20,7 @@ public class DeployToIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        intake.setAngle(kDeployAngle);
+        intake.setAngle(kStowed);
     }
 
     // Called once the command ends or is interrupted.
@@ -33,4 +34,6 @@ public class DeployToIntake extends Command {
     public boolean isFinished() {
         return false;
     }
+
+
 }
