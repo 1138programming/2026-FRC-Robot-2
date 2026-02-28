@@ -17,7 +17,6 @@ import java.util.Optional;
 //subsystem
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShooterLogic;
-import frc.robot.subsystems.Turret;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -31,13 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.toggleLaser;
-import frc.robot.commands.TurretCommands.FlyWheelSetSpeed;
-import frc.robot.commands.TurretCommands.TurretAutoAim;
-import frc.robot.commands.TurretCommands.TurretMatchDrive;
-import frc.robot.commands.TurretCommands.TurretRotate;
-import frc.robot.commands.TurretCommands.TurretSetRotation;
-import frc.robot.commands.TurretCommands.TurretTracking;
-import frc.robot.commands.TurretCommands.TurretVelocity;
+
 import frc.robot.subsystems.Laser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -46,7 +39,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import frc.robot.commands.TurretCommands.TurretCalibration;
 import frc.robot.Constants.LimelightConstants;
 //drive
 import frc.robot.commands.DriveCommands;
@@ -69,23 +61,14 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;  
   public final Laser m_Laser;
-  public final Turret m_Turret;
   public final Limelight limelight;
 
   public final ShooterLogic logic;
 
 
   // Comands
-  public final TurretTracking m_Turret_Tracking;
-  public final TurretRotate m_Turret_Rotate_Forward;
-  public final TurretSetRotation turretresetRot; 
-  public final TurretRotate m_Turret_Rotate_Backward;
-  public final TurretVelocity m_Turret_Rotate_Velocity;
-  public final TurretCalibration m_TurretCalibration;
-  public final TurretMatchDrive m_turretMatchDrive;
-  public final TurretAutoAim m_Turret_Auto_Aim;
+
   public final toggleLaser lasertoggle;
-  public final FlyWheelSetSpeed m_SetSpeed;
 
 
   // Comands
@@ -169,14 +152,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    m_Turret = new Turret();
-    m_Turret_Tracking = new TurretTracking(m_Turret);
-    m_Turret_Rotate_Forward = new TurretRotate(m_Turret, -0.1);
-    m_Turret_Rotate_Backward = new TurretRotate(m_Turret, 0.1);
-    m_Turret_Rotate_Velocity = new TurretVelocity(m_Turret, -50);
-    m_TurretCalibration = new TurretCalibration(m_Turret);
-    turretresetRot = new TurretSetRotation(m_Turret, 0);
-    m_SetSpeed = new FlyWheelSetSpeed(m_Turret, -0.65);
 
     m_Laser = new Laser();
     lasertoggle = new toggleLaser(m_Laser);
@@ -240,9 +215,7 @@ public class RobotContainer {
         break;
     }
 
-    logic = new ShooterLogic(limelight, drive, m_Turret, DriverStation.getAlliance());
-    m_Turret_Auto_Aim = new TurretAutoAim(m_Turret, logic); //note would it be wise to have autoaim get the turret and limelight objects from logic itself?
-    m_turretMatchDrive = new TurretMatchDrive(m_Turret, logic);
+    logic = new ShooterLogic(limelight, drive, DriverStation.getAlliance());
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -369,15 +342,11 @@ public class RobotContainer {
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     //turret controls
-    logitechBtnB.whileTrue(m_Turret_Rotate_Forward);
-    logitechBtnA.whileTrue(m_Turret_Rotate_Backward);
-    logitechBtnX.whileTrue(m_Turret_Rotate_Velocity);
-    logitechBtnRB.whileTrue(m_Turret_Tracking);
+    ;
 
     //laser controls
     logitechBtnLB.onTrue(lasertoggle);
-    logitechBtnRT.whileTrue(m_Turret_Auto_Aim);
-    logitechBtnLT.whileTrue(m_turretMatchDrive);
+    
 
     //logitechBtnRT.whileTrue(m_SetSpeed);
 
