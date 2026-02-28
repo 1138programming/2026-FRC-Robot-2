@@ -255,4 +255,9 @@ public final class Constants {
     public static final double kHoodMinAngle = 20.0;
 
   }
+
+  public static class IndexerConstants{
+    public static final int kIndexerID = 0;
+  
+  }
 }
