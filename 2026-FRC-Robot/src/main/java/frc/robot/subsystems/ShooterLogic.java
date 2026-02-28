@@ -312,7 +312,8 @@ public class ShooterLogic extends SubsystemBase {
    * @return Returns the angle of the bot to the Pose2d relative to the field in degrees
    */
   private double botAngletoPose2d(Pose2d pose2d) {
-    return pose2d.getTranslation().minus(turretPose2d.getTranslation()).getAngle().getDegrees();
+    Translation2d diffTranslation = pose2d.getTranslation().minus(drive.getPose().getTranslation());
+    return diffTranslation.getAngle().getDegrees();
   }
 
   /**

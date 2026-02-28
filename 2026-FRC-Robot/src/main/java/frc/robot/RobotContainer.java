@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commandGroups.DriveWhileAim;
 import frc.robot.commands.Autos;
 import frc.robot.commands.toggleLaser;
 import frc.robot.commands.TurretCommands.FlyWheelSetSpeed;
@@ -48,8 +49,11 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import frc.robot.commands.TurretCommands.TurretCalibration;
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.FieldConstants;
+
 //drive
 import frc.robot.commands.DriveCommands;
+import frc.robot.commandGroups.DriveWhileAim;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -86,6 +90,8 @@ public class RobotContainer {
   public final TurretAutoAim m_Turret_Auto_Aim;
   public final toggleLaser lasertoggle;
   public final FlyWheelSetSpeed m_SetSpeed;
+
+  
 
 
   // Comands
@@ -244,6 +250,7 @@ public class RobotContainer {
     m_Turret_Auto_Aim = new TurretAutoAim(m_Turret, logic); //note would it be wise to have autoaim get the turret and limelight objects from logic itself?
     m_turretMatchDrive = new TurretMatchDrive(m_Turret, logic);
 
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -356,23 +363,19 @@ public class RobotContainer {
             () -> getLogiLeftXAxis(),
             () -> getLogiRightXAxis()));
 
-    // Lock to 0° when A button is held
-    // logitechBtnA
-    //     .whileTrue(
-    //         DriveCommands.joystickDriveAtAngle(
-    //             drive,
-    //             () -> getLogiLeftYAxis(),
-    //             () -> getLogiLeftXAxis(),
-    //             () -> Rotation2d.kZero));
+    // Lock to red hub when A button is held
+    logitechBtnA
+        .whileTrue(
+            new DriveWhileAim(
+                drive,
+                () -> getLogiLeftYAxis(),
+                () -> getLogiLeftXAxis(),
+                FieldConstants.HubConstants.red.kHubFieldPose2d));
 
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     //turret controls
-    logitechBtnB.whileTrue(m_Turret_Rotate_Forward);
-    logitechBtnA.whileTrue(m_Turret_Rotate_Backward);
-    logitechBtnX.whileTrue(m_Turret_Rotate_Velocity);
-    logitechBtnRB.whileTrue(m_Turret_Tracking);
 
     //laser controls
     logitechBtnLB.onTrue(lasertoggle);
