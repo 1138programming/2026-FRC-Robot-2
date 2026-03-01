@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -27,7 +28,7 @@ import static frc.robot.Constants.intakeConstants.*;
 
 
 public class Intake extends SubsystemBase{
-    private TalonFX intakeMotor;
+    private SparkFlex intakeMotor;
     private TalonFX intakeDeployMotor;
 
     private static final AngularVelocity maxPivotSpeed = RPM.of(6000).div(kDeployReduction);
@@ -37,10 +38,10 @@ public class Intake extends SubsystemBase{
     private final VoltageOut intakeVoltageREquest = new VoltageOut(0);
 
   public Intake() {
-      intakeMotor = new TalonFX(KintakeMotorId);
+      intakeMotor = new SparkFlex(KintakeMotorId,MotorType.kBrushless);
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
       configureDeployMotor();
-      configureIntakeMotor();
+      // configureIntakeMotor();
   }
 
   private void configureDeployMotor() {
@@ -70,14 +71,14 @@ public class Intake extends SubsystemBase{
   }
 
   private void configureIntakeMotor() {
-    final TalonFXConfiguration config = new TalonFXConfiguration()
-      .withMotorOutput(
-        new MotorOutputConfigs()
-          .withInverted(InvertedValue.Clockwise_Positive)
-          .withNeutralMode(NeutralModeValue.Brake)
-      );
+    // final TalonFXConfiguration config = new TalonFXConfiguration()
+    //   .withMotorOutput(
+    //     new MotorOutputConfigs()
+    //       .withInverted(InvertedValue.Clockwise_Positive)
+    //       .withNeutralMode(NeutralModeValue.Brake)
+    //   );
 
-    intakeMotor.getConfigurator().apply(config);
+    // intakeMotor.getConfigurator().apply(config);
   }
   
   

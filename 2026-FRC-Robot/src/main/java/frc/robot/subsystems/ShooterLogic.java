@@ -56,6 +56,8 @@ public class ShooterLogic extends SubsystemBase {
     this.limelight = limelight;
     this.drive = drive;
     readyToShoot = false;
+    turretPose2d = new Pose2d(new Translation2d(), new Rotation2d());
+    turretPose3d = new Pose3d(new Translation3d(), new Rotation3d());
 
     if (alliance.isPresent()) {
       if (alliance.get() == Alliance.Red) {
@@ -77,7 +79,7 @@ public class ShooterLogic extends SubsystemBase {
     // This method will be called once per scheduler run
 
 
-    // addTurretRotationtoPose();
+    
 
     //shot change math
     shotChangeDataHub = calculateShotChanges(kHubFieldPose2d);

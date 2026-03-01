@@ -1,4 +1,5 @@
 
+
 // Copyright (c) 2021-2026 Littleton Robotics
 // http://github.com/Mechanical-Advantage
 //
@@ -13,10 +14,12 @@ import static frc.robot.Constants.SwerveConstants.*;
 import static frc.robot.Constants.TurretConstants.*;
 
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 //subsystem
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShooterLogic;
+
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -30,10 +33,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.toggleLaser;
-
+import frc.robot.commands.Intake.ExtendIntake;
+import frc.robot.commands.Intake.IntakeIn;
+import frc.robot.commands.Intake.IntakeOut;
+import frc.robot.commands.Intake.RetractIntake;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Laser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -61,6 +70,7 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;  
   public final Laser m_Laser;
+  public final Intake intake;
   public final Limelight limelight;
 
   public final ShooterLogic logic;
@@ -69,6 +79,13 @@ public class RobotContainer {
   // Comands
 
   public final toggleLaser lasertoggle;
+  public final IntakeIn intakein;
+  public final IntakeOut intakeOut;
+  public final ExtendIntake extendIntake;
+  public final RetractIntake retractIntake;
+
+
+
 
 
   // Comands
@@ -149,13 +166,27 @@ public class RobotContainer {
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
+  // speed
+  public double driveSpeed;
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     m_Laser = new Laser();
-    lasertoggle = new toggleLaser(m_Laser);
+    intake = new Intake();
     limelight = new Limelight(LimelightConstants.kLimelightName);
+
+    //commands
+    lasertoggle = new toggleLaser(m_Laser);
+    intakein = new IntakeIn(intake);
+    intakeOut = new IntakeOut(intake);
+    extendIntake = new ExtendIntake(intake);
+    retractIntake = new RetractIntake(intake);
+
+
+
+
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -309,7 +340,7 @@ public class RobotContainer {
     autonTestStreamDeck15 = new JoystickButton(testStreamDeck, 15);
 
 
-
+    driveSpeed = 0.7;
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -325,9 +356,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> getLogiLeftYAxis(),
-            () -> getLogiLeftXAxis(),
-            () -> getLogiRightXAxis()));
+            () -> getLogiLeftYAxis() * 0.6,
+            () -> getLogiLeftXAxis() * 0.6,
+            () -> getLogiRightXAxis() * 0.6));
 
     // Lock to 0° when A button is held
     // logitechBtnA
@@ -345,8 +376,24 @@ public class RobotContainer {
     ;
 
     //laser controls
-    logitechBtnLB.onTrue(lasertoggle);
+    // logitechBtnLB.onTrue(lasertoggle);
+
+    logitechBtnLB.whileTrue(intakein);
+    logitechBtnLT.whileTrue(intakeOut);
+    logitechBtnX.whileTrue(extendIntake);
+    logitechBtnY.whileTrue(retractIntake);
     
+  logitechBtnRB.whileTrue( new FunctionalCommand(
+    () -> {}, 
+    () -> {
+    driveSpeed = 0.5;
+    }, 
+    interrupted -> {
+      driveSpeed = 0.7;
+    }, 
+    () -> true, 
+    (SubsystemBase) null) );
+
 
     //logitechBtnRT.whileTrue(m_SetSpeed);
 
