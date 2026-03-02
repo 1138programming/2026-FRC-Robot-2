@@ -38,6 +38,10 @@ public final class Constants {
     REPLAY
   }
 
+  public static class standardConstants {
+    public static final double gravity = 9.81; // m/s^2
+  }
+
   public static class SwerveConstants {
 
     // public static final double KMaxSpeed = kSpeedAt12Volts.in(MetersPerSecond);
@@ -243,6 +247,39 @@ public final class Constants {
       public static final double kPassThroughPointRadius = 0.6096; //meters
 
     }
+
+    //ferry constants: tosses balls into alliance zone. approximately 3/4 between wall and alliance boarder and halfway beteen alliance mid line and alliance wall up down per specified target location.
+    public static class FerryConstants {
+      public static class blue {
+          public static class left {
+              public static final double kPoseX = 2.9834;
+              public static final double kPoseY = 6.0520;
+              public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+            
+          }
+
+          public static class right {
+              public static final double kPoseX = 2.9834;
+              public static final double kPoseY = 2.0173;
+              public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+          }
+      }
+
+      public static class red {
+        public static class left {
+            public static final double kPoseX = 13.5576;
+            public static final double kPoseY = 6.0520;
+            public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+          
+        }
+
+        public static class right {
+            public static final double kPoseX = 13.5576;
+            public static final double kPoseY = 2.0173;
+            public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+        }
+      }
+    }
   }
 
   public static class ShooterConstants{
@@ -253,6 +290,11 @@ public final class Constants {
 
     public static final double kHoodMaxAngle = 70.0;
     public static final double kHoodMinAngle = 20.0;
+
+    public static final double kShooterHeightInches = 19.39;
+    public static final double kShooterHeightMeters = 0.492506;
+    public static final double kShooterWheelRadiusInches = 1.48; // 3 inches in meters PLACEHOLDER PLACEHOLDER
+    public static final double kShooterWheelRadiusMeters = kShooterWheelRadiusInches * 0.0254;
 
   }
 }

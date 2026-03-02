@@ -29,4 +29,12 @@ public class DriveWhileAim extends SequentialCommandGroup {
     addCommands(DriveCommands.joystickDriveAtAngle(drive, xSupplier, ySupplier, () -> diffTranslation.getAngle()));
 
   }
+
+  public DriveWhileAim(Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier, double angle) {
+    // Add your commands in the addCommands() call, e.g.
+    // addCommands(new FooCommand(), new BarCommand());
+
+    addCommands(DriveCommands.joystickDriveAtAngle(drive, xSupplier, ySupplier, () -> new Rotation2d(angle)));
+
+   }
 }
