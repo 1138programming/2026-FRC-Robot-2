@@ -23,6 +23,7 @@ import frc.robot.subsystems.ShooterLogic;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -248,7 +249,9 @@ public class RobotContainer {
 
     logic = new ShooterLogic(limelight, drive, DriverStation.getAlliance());
 
+
     // Set up auto routines
+    NamedCommands.registerCommand("intakeout", intakeOut);
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
@@ -356,9 +359,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> getLogiLeftYAxis() * 0.6,
-            () -> getLogiLeftXAxis() * 0.6,
-            () -> getLogiRightXAxis() * 0.6));
+            () -> getLogiLeftYAxis() ,
+            () -> getLogiLeftXAxis() ,
+            () -> getLogiRightXAxis() ));
 
     // Lock to 0° when A button is held
     // logitechBtnA
@@ -373,7 +376,7 @@ public class RobotContainer {
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     //turret controls
-    ;
+    
 
     //laser controls
     // logitechBtnLB.onTrue(lasertoggle);
@@ -382,17 +385,18 @@ public class RobotContainer {
     logitechBtnLT.whileTrue(intakeOut);
     logitechBtnX.whileTrue(extendIntake);
     logitechBtnY.whileTrue(retractIntake);
+
     
-  logitechBtnRB.whileTrue( new FunctionalCommand(
-    () -> {}, 
-    () -> {
-    driveSpeed = 0.5;
-    }, 
-    interrupted -> {
-      driveSpeed = 0.7;
-    }, 
-    () -> true, 
-    (SubsystemBase) null) );
+  // logitechBtnRB.whileTrue( new FunctionalCommand(
+  //   () -> {}, 
+  //   () -> {
+  //   driveSpeed = 0.5;
+  //   }, 
+  //   interrupted -> {
+  //     driveSpeed = 0.7;
+  //   }, 
+  //   () -> true, 
+  //   (SubsystemBase) null) );
 
 
     //logitechBtnRT.whileTrue(m_SetSpeed);

@@ -22,6 +22,9 @@ import static edu.wpi.first.units.Units.Second;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import static frc.robot.Constants.intakeConstants.*;
@@ -30,6 +33,7 @@ import static frc.robot.Constants.intakeConstants.*;
 public class Intake extends SubsystemBase{
     private SparkFlex intakeMotor;
     private TalonFX intakeDeployMotor;
+    private DutyCycleEncoder  deployencoder;
 
     private static final AngularVelocity maxPivotSpeed = RPM.of(6000).div(kDeployReduction);
 
@@ -40,6 +44,7 @@ public class Intake extends SubsystemBase{
   public Intake() {
       intakeMotor = new SparkFlex(KintakeMotorId,MotorType.kBrushless);
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
+      deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio);
       configureDeployMotor();
       // configureIntakeMotor();
   }
@@ -67,7 +72,17 @@ public class Intake extends SubsystemBase{
           .withKI(0)
           .withKD(0)
       );
+     
+      CurrentLimitsConfigs limitConfigs = new CurrentLimitsConfigs();
+
+      limitConfigs.StatorCurrentLimit = 40;
+      limitConfigs.StatorCurrentLimitEnable = true;
+
+      limitConfigs.SupplyCurrentLimit = 20;
+      limitConfigs.SupplyCurrentLimitEnable = true;
+  
       intakeDeployMotor.getConfigurator().apply(config);
+       intakeDeployMotor.getConfigurator().apply(limitConfigs);
   }
 
   private void configureIntakeMotor() {
@@ -105,11 +120,15 @@ public class Intake extends SubsystemBase{
   public void stopIntakeDeployMotor() {
     intakeDeployMotor.set(0);
   }
+  public double getIntakeThroughBore() {
+    return deployencoder.get();
+  }
 
 
 
     @Override
     public void periodic() {
+      SmartDashboard.putNumber("Intake ThroughBore", getIntakeThroughBore());
       // This method will be called once per scheduler run
     }
 }
