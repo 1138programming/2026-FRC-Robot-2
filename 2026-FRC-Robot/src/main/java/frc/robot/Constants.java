@@ -257,7 +257,8 @@ public final class Constants {
   }
 
   public static class IndexerConstants{
-    public static final int kIndexerID = 0;
-  
+    public static final int kIndexerID = 4;
+    
+    public static final double kIndexerPower = 0.4;
   }
 }

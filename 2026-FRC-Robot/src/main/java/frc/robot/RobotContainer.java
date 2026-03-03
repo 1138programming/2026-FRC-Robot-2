@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.IndexerConstants.kIndexerPower;
 import static frc.robot.Constants.OperatorConstants.*;
 import static frc.robot.Constants.SwerveConstants.*;
 import static frc.robot.Constants.TurretConstants.*;
@@ -17,6 +18,7 @@ import java.util.Optional;
 //subsystem
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShooterLogic;
+import frc.robot.subsystems.Indexer;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -30,6 +32,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.toggleLaser;
+import frc.robot.commands.SetIndexerPower;
+import frc.robot.commands.StopIndexer;
 
 import frc.robot.subsystems.Laser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,6 +66,7 @@ public class RobotContainer {
   private final Drive drive;  
   public final Laser m_Laser;
   public final Limelight limelight;
+  public final Indexer indexer;
 
   public final ShooterLogic logic;
 
@@ -69,6 +74,8 @@ public class RobotContainer {
   // Comands
 
   public final toggleLaser lasertoggle;
+  public final SetIndexerPower setIndexerPower;
+  public final StopIndexer stopIndexer;
 
 
   // Comands
@@ -156,6 +163,10 @@ public class RobotContainer {
     m_Laser = new Laser();
     lasertoggle = new toggleLaser(m_Laser);
     limelight = new Limelight(LimelightConstants.kLimelightName);
+    indexer = new Indexer();
+    setIndexerPower = new SetIndexerPower(indexer, kIndexerPower);
+    stopIndexer = new StopIndexer(indexer);
+
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -346,6 +357,12 @@ public class RobotContainer {
 
     //laser controls
     logitechBtnLB.onTrue(lasertoggle);
+    /*logitechBtnLB.whileTrue(intakein);
+    logitechBtnLT.whileTrue(intakeOut);
+    logitechBtnX.whileTrue(extendIntake);
+    logitechBtnY.whileTrue(retractIntake);*/
+    logitechBtnRT.onTrue(setIndexerPower);
+    logitechBtnRT.onFalse(stopIndexer);
     
 
     //logitechBtnRT.whileTrue(m_SetSpeed);

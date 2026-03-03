@@ -1,0 +1,13 @@
+Controller
+X: 
+Y: Shoot
+A:
+B:
+LB: 
+LT: joystickDriveAtAngle
+RB:
+RT: 
+Back:
+Mode: 
+
+SteamDeck Macros: (Coordinates)
