@@ -81,6 +81,8 @@ public class ShooterLogic extends SubsystemBase {
 
 
     // addTurretRotationtoPose();
+    turretPose3d = turretPositionPose3d();
+    turretPose2d = turretPose3d.toPose2d();
 
     //shot change math
     shotChangeDataHub = calculateShotChanges(kHubFieldPose3d);
@@ -280,6 +282,20 @@ public class ShooterLogic extends SubsystemBase {
     return diffTranslation.getAngle().getDegrees();
   }
 
+
+  private Pose3d turretPositionPose3d() {
+
+    Pose3d currentPose = new Pose3d(drive.getPose().getX(), drive.getPose().getY(), 0.0, new Rotation3d(drive.getRotation()));
+    
+    Translation3d translationOffset = new Translation3d(TurretOffsetConstants.kForwardOffsetMeters_X, TurretOffsetConstants.kSideOffsetMeters_Y, TurretOffsetConstants.kVerticalOffsetMeters_Z); //include turret offsets once known. Placeholder is top right corner of robot
+    
+    //yaw angle should be only independent value from drive and offsets and should be updated periodically
+    //yaw of the turret is subtracted because turret is CW positive while Pose is CCW positive
+    //Rotation3d rotationOffset = new Rotation3d(TurretOffsetConstants.kTurretYawOffsetRadians, TurretOffsetConstants.kTurretPitchOffsetRadians, TurretOffsetConstants.kTurretYawOffsetRadians - Math.toRadians(turret.getTurretRotationDegree())); 
+    Transform3d offsetTransformation = new Transform3d(translationOffset, new Rotation3d(0, 0, 0)); //placeholder rotation offset, will be updated with turret angle once implemented
+
+    return currentPose.plus(offsetTransformation);
+  }
   /**
    * 
    * @param pose2d

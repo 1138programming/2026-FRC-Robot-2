@@ -54,6 +54,8 @@ public class Shooter extends SubsystemBase{
     hoodController.set(Math.max(kHoodMaxAngle, Math.min(kHoodMinAngle, angle)));
   }
 
+  
+
   public double getHoodAngle(){
     return hoodController.getAngle();
   }
