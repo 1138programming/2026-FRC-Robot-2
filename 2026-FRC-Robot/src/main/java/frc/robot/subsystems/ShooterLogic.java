@@ -38,7 +38,6 @@ public class ShooterLogic extends SubsystemBase {
 
   private Limelight limelight;
   private Drive drive;
-  private Turret turret;
 
   private Boolean readyToShoot; 
   private Pose3d turretPose3d;
@@ -53,11 +52,12 @@ public class ShooterLogic extends SubsystemBase {
   }
 
 
-  public ShooterLogic(Limelight limelight, Drive drive, Turret turret, Optional<Alliance> alliance) {
+  public ShooterLogic(Limelight limelight, Drive drive, Optional<Alliance> alliance) {
     this.limelight = limelight;
     this.drive = drive;
-    this.turret = turret;
     readyToShoot = false;
+    turretPose2d = new Pose2d(new Translation2d(), new Rotation2d());
+    turretPose3d = new Pose3d(new Translation3d(), new Rotation3d());
 
     if (alliance.isPresent()) {
       if (alliance.get() == Alliance.Red) {
@@ -78,10 +78,8 @@ public class ShooterLogic extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    //update turret pose
-    turretPose3d = turretPositionPose3d();
-    turretPose2d = turretPose3d.toPose2d();
-    // addTurretRotationtoPose();
+
+    
 
     //shot change math
     shotChangeDataHub = calculateShotChanges(kHubFieldPose2d);
@@ -158,7 +156,7 @@ public class ShooterLogic extends SubsystemBase {
    */
   public double absoluteAngletoAprilTagLimelightRadians() {
     double angleDif = limelight.getTx();
-    double absoluteAngle = turret.getTurretRotationDegree() + angleDif;
+    double absoluteAngle = angleDif;
     return absoluteAngle;
   }
 
@@ -221,82 +219,14 @@ public class ShooterLogic extends SubsystemBase {
     return Math.toRadians(angleDif);
   }
 
-  //---------------------//
-  //-- Turret Tracking --//
-  //---------------------//
 
-  /**
-   * Tracks the given feild position
-   * @return whether the turret is ready to shoot
-   */
-  public boolean turretTrackPose(Pose2d pose) {
-    double angle = relativeTurretAngletoPose2d(pose);
-    double deltaangle = (drive.getAngularVelocityRadiansPerSecond() * 180)/ Math.PI; // change in deg per sec of the base4
-    // deltaangle = deltaangle 
 
-    angle -= TurretConstants.KturretBodyOffset;
-    readyToShoot = turret.turretRotationmotorpidatsetpoint();
-
-    if (angle > KrotationMotorRightLim + Kturretsetpointoffset) {
-      angle = KrotationMotorRightLim;
-      readyToShoot = false;
-    }
-    else if (angle < KrotationMotorLeftLim - Kturretsetpointoffset) {
-      angle = KrotationMotorRightLim;
-      readyToShoot = false;
-    }
-
-    SmartDashboard.putNumber("turret angle output", angle);
-
-    // turret.rotationMoveToPosition(relativeTurretAngletoPose2d(pose));
-    turret.rotationMoveToPosition(angle,0);
-    return readyToShoot;
-  }
-
-  public void turretMatchDrive() {
-    double deltaangle = (drive.getAngularVelocityRadiansPerSecond() * 180)/ Math.PI; // change in deg per sec of the base4
-    turret.rotateRotationMotorAtVelocity(deltaangle);
-    return;
-  }
-
-  public boolean turretTrackAngle(double angle) {
-    angle = TurretAnglefromabsolute(angle);
-    angle -= TurretConstants.KturretBodyOffset;
-    readyToShoot = turret.turretRotationmotorpidatsetpoint();
-
-        if (angle > KrotationMotorRightLim + Kturretsetpointoffset) {
-      angle = KrotationMotorRightLim;
-      readyToShoot = false;
-    }
-    else if (angle < KrotationMotorLeftLim - Kturretsetpointoffset) {
-      angle = KrotationMotorRightLim;
-      readyToShoot = false;
-    }
-
-    SmartDashboard.putNumber("turret angle output", angle);
-    // turret.rotationMoveToPosition(relativeTurretAngletoPose2d(pose));
-    turret.rotationMoveToPosition(angle,0);
-    return readyToShoot;
-    
-  } 
 
 
   //in shooter logic as it requires continual adjustment by drive for the robot's position
   //Review if this is alright here
   
-  private Pose3d turretPositionPose3d() {
 
-    Pose3d currentPose = new Pose3d(drive.getPose().getX(), drive.getPose().getY(), 0.0, new Rotation3d(drive.getRotation()));
-    
-    Translation3d translationOffset = new Translation3d(TurretOffsetConstants.kForwardOffsetMeters_X, TurretOffsetConstants.kSideOffsetMeters_Y, TurretOffsetConstants.kVerticalOffsetMeters_Z); //include turret offsets once known. Placeholder is top right corner of robot
-    
-    //yaw angle should be only independent value from drive and offsets and should be updated periodically
-    //yaw of the turret is subtracted because turret is CW positive while Pose is CCW positive
-    Rotation3d rotationOffset = new Rotation3d(TurretOffsetConstants.kTurretYawOffsetRadians, TurretOffsetConstants.kTurretPitchOffsetRadians, TurretOffsetConstants.kTurretYawOffsetRadians - Math.toRadians(turret.getTurretRotationDegree())); 
-    Transform3d offsetTransformation = new Transform3d(translationOffset, rotationOffset);
-
-    return currentPose.plus(offsetTransformation);
-  }
 
   private double distancetoPose2d(Pose2d pose2d) {
     return turretPose2d.getTranslation().getDistance(pose2d.getTranslation());

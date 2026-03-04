@@ -60,6 +60,7 @@ public class Shooter extends SubsystemBase{
     return hoodController.getAngle();
   }
 
+
   public boolean isPosWithinTolerance() {
     return MathUtil.isNear(targetPos, currentPos, kHoodTolerance);
   }
@@ -79,7 +80,11 @@ public class Shooter extends SubsystemBase{
         currentPos = targetPos > currentPos
             ? Math.min(targetPos, currentPos + maxPercentageTraveled)
             : Math.max(targetPos, currentPos - maxPercentageTraveled);
-    } 
+  } 
+
+  public void incrementHoodAngle(int amount){ 
+    setHoodAngle(getHoodAngle() + amount);
+  }
 
   @Override
   public void periodic() {

@@ -109,6 +109,9 @@ public final class Constants {
     public static final int KXboxLeftTrigger = 2;
     public static final int KXboxRightTrigger = 3;
     public static final int kDriverControllerPort = 0;
+
+    public static final int khoodDecrement = -5;
+    public static final int khoodIncrement = 5;
   }
 
   public static class TurretConstants {
@@ -189,6 +192,26 @@ public final class Constants {
 
     public static final double kturretToCancoderRatio= 11; // concoder rotates 11 times per 1 rotation of turret.
   }
+
+  public static class intakeConstants {
+    //change
+    public static final int KintakeMotorId = 2;
+    public static final double KintakeMotorInSpeed = -0.4;
+    public static final double KintakeMotorOutSpeed = 0.4;
+
+    
+    public static final int KintakeDeployMotorId = 1;
+    public static final double KintakeDeployMotorSpeed = 0.2;
+
+    public static final double kDeployReduction = 50.0;
+
+    public static final double kDeployAngle = -4;
+    public static final double kStowed = 100;
+
+
+  }
+  
+
   public static class LimelightConstants {
 
     public static final String kLimelightName = "limelight-down";
@@ -251,7 +274,7 @@ public final class Constants {
     public static final int kLeftShooterID = 0;
     public static final int  kRightShooterID = 1;
 
-    public static final int khoodControllerID = 2;
+    public static final int khoodControllerID = 0;
 
     public static final double kHoodMaxAngle = 0.77; 
     public static final double kHoodMinAngle = 0.01;
@@ -260,6 +283,8 @@ public final class Constants {
 
     public static final LinearVelocity kMaxServoSpeed = Millimeters.of(20).per(Second);
     public static final Distance kServoLength = Millimeters.of(100); //meters, placeholder
+
+    
 
   }
 }
