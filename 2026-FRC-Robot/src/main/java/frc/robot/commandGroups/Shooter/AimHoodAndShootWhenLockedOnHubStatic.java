@@ -16,6 +16,7 @@ import static frc.robot.Constants.ShooterConstants.*;
 
 import frc.robot.commands.ShooterCommands.setHoodAngle;
 import frc.robot.commands.ShooterCommands.SpinShooter;
+import frc.robot.commands.ShooterCommands.setAutohoodWhileStatic;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -25,9 +26,7 @@ public class AimHoodAndShootWhenLockedOnHubStatic extends ParallelCommandGroup {
   public AimHoodAndShootWhenLockedOnHubStatic(ShooterLogic shooterLogic, double shooterPower, Shooter shooter, Pose3d target) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-
-    double angle = shooterLogic.getHoodAimAngleforStaticBase(target, shooter.ShooterPowertoLinearSpeed(shooterPower), kShooterHeightMeters); 
-    addCommands(new SpinShooter(shooter, shooterPower), new setHoodAngle(shooter, angle));
+    addCommands(new SpinShooter(shooter, shooterPower), new setAutohoodWhileStatic(shooter, shooterLogic, shooterPower, target));
 
   }
 }

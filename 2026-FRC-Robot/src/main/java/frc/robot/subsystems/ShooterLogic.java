@@ -143,9 +143,9 @@ public class ShooterLogic extends SubsystemBase {
     return new double[] {flywheelSpeed, hoodAngle, newAngle};
   }
 
-  public double getHoodAimAngleforStaticBase(Pose3d target, double flywheelSpeed, double intialHeight) {
+  public double getHoodAimAngleforStaticBase(Pose3d target, double flywheelSpeed) {
         double y = target.getZ();
-        double h = intialHeight; 
+        double h = kShooterHeightMeters; //should be constant
         double x2 = distancetoPose2d(target.toPose2d()) * distancetoPose2d(target.toPose2d());
         double x4 = x2 * x2;
         double y2 = y * y;
