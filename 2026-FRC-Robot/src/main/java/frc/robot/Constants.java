@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -251,8 +253,13 @@ public final class Constants {
 
     public static final int khoodControllerID = 2;
 
-    public static final double kHoodMaxAngle = 70.0;
-    public static final double kHoodMinAngle = 20.0;
+    public static final double kHoodMaxAngle = 0.77; 
+    public static final double kHoodMinAngle = 0.01;
+
+    public static final double kHoodTolerance = 1.0; //degrees
+
+    public static final LinearVelocity kMaxServoSpeed = Millimeters.of(20).per(Second);
+    public static final Distance kServoLength = Millimeters.of(100); //meters, placeholder
 
   }
 }
