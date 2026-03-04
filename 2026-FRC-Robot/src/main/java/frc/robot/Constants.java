@@ -174,9 +174,20 @@ public final class Constants {
     public static class TurretOffsetConstants {
       //translation offsets -> PLEASE UPDATE
       //currently configured for base/alpha bot 
-      public static final double kForwardOffsetMeters_X = 0.0;
+      public static final double kOldForwardOffsetMeters_X = 0.0;
+      
+      public static final double kOldSideOffsetMeters_Y = 0.0;
+      public static final double kOldVerticalOffsetMeters_Z = 0.6096; 
+
+      //inch values
+      // forward: -3.625 -> meters: -0.092075
+      // side: 0 -> meters: 0
+      // verticle: 14.35 -> meters: 0.36449
+
+      public static final double kForwardOffsetMeters_X = -0.092075;
       public static final double kSideOffsetMeters_Y = 0.0;
-      public static final double kVerticalOffsetMeters_Z = 0.6096; 
+      public static final double kVerticalOffsetMeters_Z = 0.36449;
+
 
       //rotation offsets
       public static final double kTurretRollOffsetRadians = 0.0; 
