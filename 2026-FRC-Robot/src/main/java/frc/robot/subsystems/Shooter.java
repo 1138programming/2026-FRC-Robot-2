@@ -43,6 +43,10 @@ public class Shooter extends SubsystemBase{
     return hoodController.getAngle();
   }
 
+  public void incrementHoodAngle(int amount){ 
+    setHoodAngle(getHoodAngle() + amount);
+  }
+
   @Override
   public void periodic() {
 

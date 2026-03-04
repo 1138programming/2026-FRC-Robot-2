@@ -18,8 +18,8 @@ import java.util.function.BooleanSupplier;
 
 //subsystem
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
-
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -38,6 +38,9 @@ import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.Intake.IntakeOut;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.subsystems.Intake;
+import frc.robot.commands.ShooterCommands.IncrementHoodAngle;
+import frc.robot.commands.ShooterCommands.setHoodAngle;
+
 import frc.robot.subsystems.Laser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -72,6 +75,7 @@ public class RobotContainer {
   public final Laser m_Laser;
   public final Intake intake;
   public final Limelight limelight;
+  public final Shooter shooter;
 
   public final ShooterLogic logic;
 
@@ -86,6 +90,8 @@ public class RobotContainer {
 
 
 
+  public final IncrementHoodAngle hoodUpCommand;
+  public final IncrementHoodAngle hoodDownCommand;
 
 
   // Comands
@@ -176,13 +182,16 @@ public class RobotContainer {
     m_Laser = new Laser();
     intake = new Intake();
     limelight = new Limelight(LimelightConstants.kLimelightName);
-
+    shooter = new Shooter();
+  
     //commands
     lasertoggle = new toggleLaser(m_Laser);
     intakein = new IntakeIn(intake);
     intakeOut = new IntakeOut(intake);
     extendIntake = new ExtendIntake(intake);
     retractIntake = new RetractIntake(intake);
+    hoodUpCommand = new IncrementHoodAngle(shooter, khoodIncrement);
+    hoodDownCommand = new IncrementHoodAngle(shooter, khoodDecrement);
 
 
 
@@ -393,6 +402,10 @@ public class RobotContainer {
     }, 
     () -> true, 
     (SubsystemBase) null) );
+
+
+    logitechBtnX.whileTrue(hoodUpCommand);
+    logitechBtnB.whileTrue(hoodDownCommand);
 
 
     //logitechBtnRT.whileTrue(m_SetSpeed);

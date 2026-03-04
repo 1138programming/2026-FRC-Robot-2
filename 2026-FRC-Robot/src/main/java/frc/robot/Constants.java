@@ -107,6 +107,9 @@ public final class Constants {
     public static final int KXboxLeftTrigger = 2;
     public static final int KXboxRightTrigger = 3;
     public static final int kDriverControllerPort = 0;
+
+    public static final int khoodDecrement = -5;
+    public static final int khoodIncrement = 5;
   }
 
   public static class TurretConstants {
@@ -269,10 +272,12 @@ public final class Constants {
     public static final int kLeftShooterID = 0;
     public static final int  kRightShooterID = 1;
 
-    public static final int khoodControllerID = 2;
+    public static final int khoodControllerID = 0;
 
     public static final double kHoodMaxAngle = 70.0;
     public static final double kHoodMinAngle = 20.0;
+
+    
 
   }
 }
