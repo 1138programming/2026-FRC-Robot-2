@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -111,6 +113,9 @@ public final class Constants {
     public static final int KXboxLeftTrigger = 2;
     public static final int KXboxRightTrigger = 3;
     public static final int kDriverControllerPort = 0;
+
+    public static final double khoodDecrement = -0.1;
+    public static final double khoodIncrement = 0.1;
   }
 
   public static class TurretConstants {
@@ -314,18 +319,36 @@ public final class Constants {
   }
 
   public static class ShooterConstants{
-    public static final int kLeftShooterID = 0;
-    public static final int  kRightShooterID = 1;
+    public static final int kShooterID = 3;
 
-    public static final int khoodControllerID = 2;
+    public static final int kServoHubID = 5;
+     public static final int KHoodPulseWidth = 2000;
 
-    public static final double kHoodMaxAngle = 70.0;
-    public static final double kHoodMinAngle = 20.0;
+    public static final double kHoodMaxAngle = 0.77; 
+    public static final double kHoodMinAngle = 0.01;
+
+    public static final double kHoodTolerance = 1.0; //degrees
+
+    public static final LinearVelocity kMaxServoSpeed = Millimeters.of(20).per(Second);
+    public static final Distance kServoLength = Millimeters.of(100); //meters, placeholder
+
+    public static final int kpulseWidthMin = 500;
+    public static final int kpulseWidthMax = 2500;
+    
+
+    
 
     public static final double kShooterHeightInches = 19.39;
     public static final double kShooterHeightMeters = 0.492506;
     public static final double kShooterWheelRadiusInches = 1.48; // 3 inches in meters PLACEHOLDER PLACEHOLDER
     public static final double kShooterWheelRadiusMeters = kShooterWheelRadiusInches * 0.0254;
 
+  }
+
+  public static class IndexerConstants{
+    public static final int kIndexerID = 4;
+    
+    public static final double kIndexerPower = 0.6;
+    
   }
 }
