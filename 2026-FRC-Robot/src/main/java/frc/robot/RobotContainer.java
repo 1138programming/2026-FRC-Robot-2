@@ -405,14 +405,7 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    //turret controls
-    
-
-    //laser controls
-    // logitechBtnLB.onTrue(lasertoggle);
-    //logitechBtnLB.onTrue(lasertoggle);
-    
-    // logitechBtnRB.onFalse(stopIndexer);
+ 
     
 
     compStreamDeck5.whileTrue(intakein);
