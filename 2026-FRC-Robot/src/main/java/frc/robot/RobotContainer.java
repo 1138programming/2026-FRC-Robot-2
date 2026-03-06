@@ -405,23 +405,13 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    //turret controls
-
-    //laser controls
-    // logitechBtnLB.onTrue(lasertoggle);
-    //logitechBtnLB.onTrue(lasertoggle);
-    
-    logitechBtnRT.whileTrue(setIndexerPower);
-    // logitechBtnRT.onFalse(stopIndexer);
-
-    logitechBtnRB.whileTrue(reverseIndexerPower);
-    // logitechBtnRB.onFalse(stopIndexer);
+ 
     
 
-    // logitechBtnLB.whileTrue(intakein);
-    // logitechBtnLT.whileTrue(intakeOut);
-    // logitechBtnX.whileTrue(extendIntake);
-    // logitechBtnY.whileTrue(retractIntake);
+    compStreamDeck5.whileTrue(intakein);
+    compStreamDeck4.whileTrue(intakeOut);
+    compStreamDeck9.whileTrue(extendIntake);
+    compStreamDeck10.whileTrue(retractIntake);
     
   // logitechBtnRB.whileTrue( new FunctionalCommand(
   //   () -> {}, 
@@ -433,17 +423,25 @@ public class RobotContainer {
   //     driveSpeed = 0.7;
   //   }, 
   //   () -> true, 
-  //   (SubsystemBase) null) );
+    compStreamDeck2.whileTrue(setIndexerPower);
+    // logitechBtnRT.onFalse(stopIndexer);
+
+    compStreamDeck2.whileTrue(reverseIndexerPower);
+
+    compStreamDeck8.whileTrue(hoodUpCommand);
+    compStreamDeck13.whileTrue(hoodDownCommand);
 
 
-    logitechBtnLB.whileTrue(hoodUpCommand);
-    logitechBtnLT.whileTrue(hoodDownCommand);
+
+
+    compStreamDeck7.whileTrue(spinShooter);  
+    compStreamDeck6.whileTrue(spinShooterReverse);  
 
 
 
 
-    logitechBtnX.whileTrue(spinShooter);  
-    logitechBtnA.whileTrue(spinShooterReverse);  
+    compStreamDeck1.whileTrue(spinShooter);  
+    compStreamDeck6.whileTrue(spinShooterReverse);  
 
 
 
