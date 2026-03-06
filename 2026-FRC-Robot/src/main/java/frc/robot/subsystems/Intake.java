@@ -37,6 +37,8 @@ public class Intake extends SubsystemBase{
     private final MotionMagicVoltage deployMMRequest = new MotionMagicVoltage(0).withSlot(0);
     private final VoltageOut intakeVoltageREquest = new VoltageOut(0);
 
+    private boolean isDeployed = false;
+
   public Intake() {
       intakeMotor = new SparkFlex(KintakeMotorId,MotorType.kBrushless);
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
@@ -106,10 +108,18 @@ public class Intake extends SubsystemBase{
     intakeDeployMotor.set(0);
   }
 
+  public boolean isDeployed() {
+    return isDeployed;
+  }
+
+  public void setDeployed(boolean deployed) {
+    isDeployed = deployed;
+  }
 
 
-    @Override
-    public void periodic() {
-      // This method will be called once per scheduler run
-    }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
 }

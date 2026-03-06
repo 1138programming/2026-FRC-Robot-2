@@ -19,6 +19,10 @@ public class DeployAndIntake extends ParallelCommandGroup {
   public DeployAndIntake(Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new DeployIntake(intake), new IntakeIn(intake));
+    if (!intake.isDeployed()) {
+      addCommands(new DeployIntake(intake));
+    }
+    
+    addCommands(new IntakeIn(intake));
   }
 }
