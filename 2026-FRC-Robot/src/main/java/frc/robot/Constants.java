@@ -38,6 +38,10 @@ public final class Constants {
     REPLAY
   }
 
+  public static class standardConstants {
+    public static final double gravity = 9.81; // m/s^2
+  }
+
   public static class SwerveConstants {
 
     // public static final double KMaxSpeed = kSpeedAt12Volts.in(MetersPerSecond);
@@ -170,9 +174,20 @@ public final class Constants {
     public static class TurretOffsetConstants {
       //translation offsets -> PLEASE UPDATE
       //currently configured for base/alpha bot 
-      public static final double kForwardOffsetMeters_X = 0.0;
+      public static final double kOldForwardOffsetMeters_X = 0.0;
+      
+      public static final double kOldSideOffsetMeters_Y = 0.0;
+      public static final double kOldVerticalOffsetMeters_Z = 0.6096; 
+
+      //inch values
+      // forward: -3.625 -> meters: -0.092075
+      // side: 0 -> meters: 0
+      // verticle: 14.35 -> meters: 0.36449
+
+      public static final double kForwardOffsetMeters_X = -0.092075;
       public static final double kSideOffsetMeters_Y = 0.0;
-      public static final double kVerticalOffsetMeters_Z = 0.6096; 
+      public static final double kVerticalOffsetMeters_Z = 0.36449;
+
 
       //rotation offsets
       public static final double kTurretRollOffsetRadians = 0.0; 
@@ -263,6 +278,39 @@ public final class Constants {
       public static final double kPassThroughPointRadius = 0.6096; //meters
 
     }
+
+    //ferry constants: tosses balls into alliance zone. approximately 3/4 between wall and alliance boarder and halfway beteen alliance mid line and alliance wall up down per specified target location.
+    public static class FerryConstants {
+      public static class blue {
+          public static class left {
+              public static final double kPoseX = 2.9834;
+              public static final double kPoseY = 6.0520;
+              public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+            
+          }
+
+          public static class right {
+              public static final double kPoseX = 2.9834;
+              public static final double kPoseY = 2.0173;
+              public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+          }
+      }
+
+      public static class red {
+        public static class left {
+            public static final double kPoseX = 13.5576;
+            public static final double kPoseY = 6.0520;
+            public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+          
+        }
+
+        public static class right {
+            public static final double kPoseX = 13.5576;
+            public static final double kPoseY = 2.0173;
+            public static final Pose2d kFerryFieldPose2d = new Pose2d(kPoseX, kPoseY, new Rotation2d());
+        }
+      }
+    }
   }
 
   public static class ShooterConstants{
@@ -273,6 +321,11 @@ public final class Constants {
 
     public static final double kHoodMaxAngle = 70.0;
     public static final double kHoodMinAngle = 20.0;
+
+    public static final double kShooterHeightInches = 19.39;
+    public static final double kShooterHeightMeters = 0.492506;
+    public static final double kShooterWheelRadiusInches = 1.48; // 3 inches in meters PLACEHOLDER PLACEHOLDER
+    public static final double kShooterWheelRadiusMeters = kShooterWheelRadiusInches * 0.0254;
 
   }
 }

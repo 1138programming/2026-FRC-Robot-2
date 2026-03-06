@@ -28,6 +28,21 @@ public class Shooter extends SubsystemBase{
     ShooterMotor.set(0.0);
   }
 
+  /**
+   * @param power
+   * @return Linear speed meters per second
+   */
+  public double ShooterPowertoLinearSpeed(double power) {
+    double speed = (power * 6784) / 60; // Convert power to RPM, then to RPS. 6784 is the free speed of the motor at 12V
+    return speed * (2 * Math.PI * kShooterWheelRadiusMeters); // Convert RPS to linear speed
+  }
+
+  public double LinearSpeedToShooterPower(double linearSpeed) {
+    double rps = linearSpeed / (2 * Math.PI * kShooterWheelRadiusMeters); // Convert linear speed to RPS
+    double rpm = rps * 60; // Convert RPS to RPM
+    return rpm / 6784; // Convert RPM to power
+  }
+
 
   public void setFullShooterPower(double power) {
     setLeftShooterPower(power);
@@ -38,6 +53,8 @@ public class Shooter extends SubsystemBase{
   public void setHoodAngle(double angle){
     hoodController.set(Math.max(kHoodMaxAngle, Math.min(kHoodMinAngle, angle)));
   }
+
+  
 
   public double getHoodAngle(){
     return hoodController.getAngle();

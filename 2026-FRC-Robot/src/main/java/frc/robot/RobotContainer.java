@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commandGroups.DriveWhileAim;
 import frc.robot.commands.Autos;
 import frc.robot.commands.toggleLaser;
 import frc.robot.commands.Intake.ExtendIntake;
@@ -49,8 +50,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.FieldConstants;
+
 //drive
 import frc.robot.commands.DriveCommands;
+import frc.robot.commandGroups.DriveWhileAim;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -86,6 +90,8 @@ public class RobotContainer {
 
 
 
+
+  
 
 
   // Comands
@@ -248,6 +254,7 @@ public class RobotContainer {
 
     logic = new ShooterLogic(limelight, drive, DriverStation.getAlliance());
 
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -360,20 +367,19 @@ public class RobotContainer {
             () -> getLogiLeftXAxis() * 0.6,
             () -> getLogiRightXAxis() * 0.6));
 
-    // Lock to 0° when A button is held
-    // logitechBtnA
-    //     .whileTrue(
-    //         DriveCommands.joystickDriveAtAngle(
-    //             drive,
-    //             () -> getLogiLeftYAxis(),
-    //             () -> getLogiLeftXAxis(),
-    //             () -> Rotation2d.kZero));
+    // Lock to red hub when A button is held
+    logitechBtnRT
+        .whileTrue(
+            new DriveWhileAim(
+                drive,
+                () -> getLogiLeftYAxis(),
+                () -> getLogiLeftXAxis(),
+                FieldConstants.HubConstants.red.kHubFieldPose2d));
 
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     //turret controls
-    ;
 
     //laser controls
     // logitechBtnLB.onTrue(lasertoggle);

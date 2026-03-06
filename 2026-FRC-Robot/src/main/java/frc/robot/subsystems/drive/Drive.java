@@ -423,7 +423,7 @@ public class Drive extends SubsystemBase {
     Rotation3d currentRotation = new Rotation3d(getRotation());
     Pose3d currentPose = new Pose3d(poseEstimator.getEstimatedPosition().getX(),poseEstimator.getEstimatedPosition().getY(), 0.0, currentRotation);
     
-    Translation3d translationOffset = new Translation3d(TurretOffsetConstants.kForwardOffsetMeters_X, TurretOffsetConstants.kSideOffsetMeters_Y, TurretOffsetConstants.kVerticalOffsetMeters_Z); //include turret offsets once known. Placeholder is top right corner of robot
+    Translation3d translationOffset = new Translation3d(TurretOffsetConstants.kOldForwardOffsetMeters_X, TurretOffsetConstants.kOldSideOffsetMeters_Y, TurretOffsetConstants.kOldVerticalOffsetMeters_Z); //include turret offsets once known. Placeholder is top right corner of robot
     Rotation3d rotationOffset = new Rotation3d(TurretOffsetConstants.kTurretYawOffsetRadians, TurretOffsetConstants.kTurretPitchOffsetRadians,TurretOffsetConstants.kTurretYawOffsetRadians);
     Transform3d offsetTransformation = new Transform3d(translationOffset, rotationOffset);
 
