@@ -31,7 +31,8 @@ import frc.robot.Constants.TurretConstants.TurretOffsetConstants;
 import static frc.robot.Constants.TurretConstants.*;
 import static frc.robot.Constants.FieldConstants.*;
 import static frc.robot.Constants.FieldConstants.HubConstants.*;
-import static frc.robot.Constants.TurretConstants;
+import static frc.robot.Constants.ShooterConstants.kShooterHeightMeters;
+import static frc.robot.Constants.TurretConstants.*;
 
 public class ShooterLogic extends SubsystemBase {
   /** Creates a new ShooterLogic. */
@@ -43,6 +44,7 @@ public class ShooterLogic extends SubsystemBase {
   private Pose3d turretPose3d;
   private Pose2d turretPose2d;
 
+  private Pose3d kHubFieldPose3d;
   private Pose2d kHubFieldPose2d;
 
   private double[] shotChangeDataHub;
@@ -61,16 +63,17 @@ public class ShooterLogic extends SubsystemBase {
 
     if (alliance.isPresent()) {
       if (alliance.get() == Alliance.Red) {
-        kHubFieldPose2d = HubConstants.red.kHubFieldPose2d;
+        kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
       }
 
       if (alliance.get() == Alliance.Blue) {
-        kHubFieldPose2d = HubConstants.blue.kHubFieldPose2d;
+        kHubFieldPose3d = HubConstants.blue.KhubFieldPose3d;
       }
     } else {
       //default red cause thats what the wooden hub we have has
-      kHubFieldPose2d = HubConstants.red.kHubFieldPose2d;
+      kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
     }
+    kHubFieldPose2d = kHubFieldPose3d.toPose2d();
 
   }
 
@@ -79,9 +82,15 @@ public class ShooterLogic extends SubsystemBase {
     // This method will be called once per scheduler run
 
 
-    
+
+    // addTurretRotationtoPose();
+    turretPose3d = turretPositionPose3d();
+    turretPose2d = turretPose3d.toPose2d();
 
     //shot change math
+
+    shotChangeDataHub = calculateShotChanges(kHubFieldPose3d);
+    SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
     //shotChangeDataHub = calculateShotChanges(kHubFieldPose2d);
     //SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
      
@@ -102,43 +111,76 @@ public class ShooterLogic extends SubsystemBase {
    * @return double[] {flywheelSpeed (meters per second), hoodAngle (radians), turretAngle (radians)}
    */
 
-  public double[] calculateShotChanges(Pose2d target) {
+  public double[] calculateShotChanges(Pose3d target) {
 
     final double g = 9.81;
-    double x =  distancetoPose2d(target) - kPassThroughPointRadius; //could be alternatively used using Pose
-    double y = kScoreHeight; //could be alternatively used using Pose
+    double x =  distancetoPose2d(target.toPose2d()) - kPassThroughPointRadius; //could be alternatively used using Pose
+    double y = target.getZ() - kShooterHeightMeters; //could be alternatively used using Pose
     double a = kScoreAngle;
     double robotAngle = drive.getRotation().getRadians(); //robot angle in reference to field
-    double robottoGoalAngle = turretAngletoPose2d(target); //angle from robot to goal in reference to field
+    double robottoGoalAngle = botAngletoPose2d(target.toPose2d()); //angle from robot to goal in reference to field
 
     //initial launch components
     double hoodAngle = Math.max(kHoodAngleMinRadians, Math.min(kHoodAngleMaxRadians, (Math.atan(2 * y / x - Math.tan(a))))); //this clamps the hood angle to constraints
     double flywheelSpeed = Math.sqrt(Math.abs(g * x * x / (2 * Math.pow(Math.cos(hoodAngle), 2) * (x * Math.tan(hoodAngle) - y))));
 
     //robot velocity components -> TODO, check video to see if this matches up
-    //double robotVelocity = drive.getchas(); //TODO: probably get the velocity from the IMU, also check units  
     double robotVelocityXComponent = drive.getHorizontalVelocityMetersPerSecond();
     double robotVelocityYComponent = drive.getVerticalVelocityMetersPerSecond();
 
     // //velocity compensation variables
-    // double vz = flywheelSpeed * Math.sin(hoodAngle); //velocity of the projectile in z direction (vertical)
-    // double time = x / (flywheelSpeed * Math.cos(hoodAngle)); //projectile air time
-    // double ivr = x / time + robotVelocityXComponent; //initial radial velocity of of the projectile
-    // double nvr = Math.sqrt(ivr * ivr + robotVelocityYComponent * robotVelocityYComponent); //compensating launch velocity using perpendicular moevement 
-    // double ndr = nvr * time; //convert to distance
+    double vz = flywheelSpeed * Math.sin(hoodAngle); //velocity of the projectile in z direction (vertical)
+    double time = x / (flywheelSpeed * Math.cos(hoodAngle)); //projectile air time
+    double ivr = x / time + robotVelocityXComponent; //initial radial velocity of of the projectile
+    double nvr = Math.sqrt(ivr * ivr + robotVelocityYComponent * robotVelocityYComponent); //compensating launch velocity using perpendicular moevement 
+    double ndr = nvr * time; //convert to distance
 
-    // //final launch components with compensation
-    // hoodAngle = Math.max(kHoodAngleMinRadians, Math.min(kHoodAngleMaxRadians, (Math.atan(vz / nvr))));
-    // flywheelSpeed = Math.sqrt(g * ndr * ndr / (2 * Math.pow(Math.cos(hoodAngle), 2) * (ndr * Math.tan(hoodAngle) - y)));
+    //final launch components with compensation
+    hoodAngle = Math.max(kHoodAngleMinRadians, Math.min(kHoodAngleMaxRadians, (Math.atan(vz / nvr))));
+    flywheelSpeed = Math.sqrt(g * ndr * ndr / (2 * Math.pow(Math.cos(hoodAngle), 2) * (ndr * Math.tan(hoodAngle) - y)));
 
     // //updating turret
-    // double turretVelCompensation = Math.atan(robotVelocityYComponent / ivr);
-    double turretAngle = relativeTurretAngletoPose2d(target);// + turretVelCompensation;//TODO check signs especially for turret compensation
+    double turretVelCompensation = Math.atan(robotVelocityYComponent / ivr);
+    double newAngle = robottoGoalAngle + turretVelCompensation;//TODO check signs especially for turret compensation
 
   
   
 
-    return new double[] {flywheelSpeed, hoodAngle, turretAngle};
+    return new double[] {flywheelSpeed, hoodAngle, newAngle};
+  }
+
+  public double getHoodAimAngleforStaticBase(Pose3d target, double flywheelSpeed) {
+        double y = target.getZ();
+        double h = kShooterHeightMeters; //should be constant
+        double x2 = distancetoPose2d(target.toPose2d()) * distancetoPose2d(target.toPose2d());
+        double x4 = x2 * x2;
+        double y2 = y * y;
+        double v2 = flywheelSpeed * flywheelSpeed;
+        double v4 = v2 * v2;
+        double h2 = h * h;
+        double g = Constants.standardConstants.gravity;
+        double g2 = g * g;
+
+        double innerDiscriminant = Math.sqrt(
+          Math.pow((g * y * x2 - g * h * x2)/(v2),2)
+          - (g2 * x4)/(v4) *
+          (x2 + y2 + h2 - (2 * h * y))
+        );
+
+        double innnerb = 
+          x2 
+          - ((g * y * x2 - g * h * x2)/(v2));
+
+        double denominator = 2 * (x2 + y2 + h2 - (2 * h * y));
+
+        if (denominator == 0) { 
+          return -1; //invalid shot, target is too close or at the same height as the shooter
+        }
+
+        //using plus because - will produce a more direct angle likly hitting the hoop of the hub
+        // + produces higher angle which is more likely to enter the hub with no collision.
+        double hoodAngle = Math.acos(Math.sqrt((innnerb + Math.sqrt(innerDiscriminant))/denominator));
+        return hoodAngle;
   }
   
 
@@ -242,9 +284,24 @@ public class ShooterLogic extends SubsystemBase {
    * @return Returns the angle of the bot to the Pose2d relative to the field in degrees
    */
   private double botAngletoPose2d(Pose2d pose2d) {
-    return pose2d.getTranslation().minus(turretPose2d.getTranslation()).getAngle().getDegrees();
+    Translation2d diffTranslation = pose2d.getTranslation().minus(drive.getPose().getTranslation());
+    return diffTranslation.getAngle().getDegrees();
   }
 
+
+  private Pose3d turretPositionPose3d() {
+
+    Pose3d currentPose = new Pose3d(drive.getPose().getX(), drive.getPose().getY(), 0.0, new Rotation3d(drive.getRotation()));
+    
+    Translation3d translationOffset = new Translation3d(TurretOffsetConstants.kForwardOffsetMeters_X, TurretOffsetConstants.kSideOffsetMeters_Y, TurretOffsetConstants.kVerticalOffsetMeters_Z); //include turret offsets once known. Placeholder is top right corner of robot
+    
+    //yaw angle should be only independent value from drive and offsets and should be updated periodically
+    //yaw of the turret is subtracted because turret is CW positive while Pose is CCW positive
+    //Rotation3d rotationOffset = new Rotation3d(TurretOffsetConstants.kTurretYawOffsetRadians, TurretOffsetConstants.kTurretPitchOffsetRadians, TurretOffsetConstants.kTurretYawOffsetRadians - Math.toRadians(turret.getTurretRotationDegree())); 
+    Transform3d offsetTransformation = new Transform3d(translationOffset, new Rotation3d(0, 0, 0)); //placeholder rotation offset, will be updated with turret angle once implemented
+
+    return currentPose.plus(offsetTransformation);
+  }
   /**
    * 
    * @param pose2d
