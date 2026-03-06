@@ -3,11 +3,11 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class IncrementHoodAngle extends Command {
+public class SetHoodPulseWidth extends Command {
     private Shooter shooter;
     private int amount;
 
-    public IncrementHoodAngle(Shooter shooter, int amount){
+    public SetHoodPulseWidth(Shooter shooter, int amount){
         this.shooter = shooter;
         this.amount = amount;
     }
@@ -19,7 +19,7 @@ public class IncrementHoodAngle extends Command {
 
      @Override
     public void end(boolean interrupted) {
-
+        shooter.setPulseWidthModulation(1500);
     }
 
     @Override

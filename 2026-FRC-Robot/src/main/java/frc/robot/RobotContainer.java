@@ -41,8 +41,10 @@ import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.Intake.IntakeOut;
 import frc.robot.commands.Intake.RetractIntake;
+import frc.robot.commands.Intake.StopIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.commands.ShooterCommands.IncrementHoodAngle;
+import frc.robot.commands.ShooterCommands.SetHoodPulseWidth;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.commands.ShooterCommands.setHoodAngle;
 import frc.robot.commands.SetIndexerPower;
@@ -98,6 +100,7 @@ public class RobotContainer {
   public final IntakeOut intakeOut;
   public final ExtendIntake extendIntake;
   public final RetractIntake retractIntake;
+  public final StopIntake stopintake;
   public final SpinShooter spinShooter;
   public final SpinShooter spinShooterReverse;
 
@@ -105,6 +108,8 @@ public class RobotContainer {
 
   public final IncrementHoodAngle hoodUpCommand;
   public final IncrementHoodAngle hoodDownCommand;
+  public final SetHoodPulseWidth hoodtsCommand;
+  public final setHoodAngle sethoodangle;
   public final SetIndexerPower setIndexerPower;
   public final SetIndexerPower reverseIndexerPower;
   public final StopIndexer stopIndexer;
@@ -208,16 +213,20 @@ public class RobotContainer {
     intakeOut = new IntakeOut(intake);
     extendIntake = new ExtendIntake(intake);
     retractIntake = new RetractIntake(intake);
-    spinShooter = new SpinShooter(shooter, 0.8);
-    spinShooterReverse = new SpinShooter(shooter, -0.8);
+    stopintake = new StopIntake(intake);
+    spinShooter = new SpinShooter(shooter, 0.6);
+    spinShooterReverse = new SpinShooter(shooter, -0.6);
     hoodUpCommand = new IncrementHoodAngle(shooter, 2100);
-    hoodDownCommand = new IncrementHoodAngle(shooter, -900);
+    hoodDownCommand = new IncrementHoodAngle(shooter, 900);
+    sethoodangle = new setHoodAngle(shooter, 0.9);
+    hoodtsCommand = new SetHoodPulseWidth(shooter, 2500);
+
 
 
 
     indexer = new Indexer();
-    setIndexerPower = new SetIndexerPower(indexer, kIndexerPower);
-    reverseIndexerPower = new SetIndexerPower(indexer, -kIndexerPower);
+    setIndexerPower = new SetIndexerPower(indexer, -kIndexerPower);
+    reverseIndexerPower = new SetIndexerPower(indexer, kIndexerPower);
     stopIndexer = new StopIndexer(indexer);
 
     switch (Constants.currentMode) {
@@ -391,9 +400,10 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> getLogiLeftYAxis() * 0.8,
-            () -> getLogiLeftXAxis() * 0.8,
-            () -> getLogiRightXAxis() * 0.8));
+            () -> getLogiLeftYAxis(),
+            () -> getLogiLeftXAxis(),
+            () -> getLogiRightXAxis()));
+    intake.setDefaultCommand(stopintake);
 
     // Lock to red hub when A button is held
     logitechBtnRT
@@ -426,20 +436,12 @@ public class RobotContainer {
   //   }, 
   //   () -> true, 
     compStreamDeck2.whileTrue(setIndexerPower);
-    // logitechBtnRT.onFalse(stopIndexer);
-
-    compStreamDeck2.whileTrue(reverseIndexerPower);
-
+    compStreamDeck3.whileTrue(reverseIndexerPower);
     compStreamDeck13.whileTrue(hoodDownCommand);
-
-
-
-
-
-
-
-    compStreamDeck1.whileTrue(spinShooter);  
-    compStreamDeck6.whileTrue(spinShooterReverse);  
+    compStreamDeck8.whileTrue(hoodUpCommand);
+    compStreamDeck12.whileTrue(hoodtsCommand);
+    compStreamDeck7.whileTrue(spinShooterReverse);  
+    compStreamDeck6.whileTrue(spinShooter);  
 
 
 

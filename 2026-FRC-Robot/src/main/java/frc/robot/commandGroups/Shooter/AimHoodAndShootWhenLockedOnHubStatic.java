@@ -26,7 +26,9 @@ public class AimHoodAndShootWhenLockedOnHubStatic extends ParallelCommandGroup {
   public AimHoodAndShootWhenLockedOnHubStatic(ShooterLogic shooterLogic, double shooterPower, Shooter shooter, Pose3d target) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SpinShooter(shooter, shooterPower), new setAutohoodWhileStatic(shooter, shooterLogic, shooterPower, target));
+    addCommands(
+      new SpinShooter(shooter, shooterPower), 
+      new setAutohoodWhileStatic(shooter, shooterLogic, shooterPower, target));
 
   }
 }

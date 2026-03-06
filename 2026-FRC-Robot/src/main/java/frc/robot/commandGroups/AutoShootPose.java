@@ -20,9 +20,9 @@ import frc.robot.subsystems.drive.Drive;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoShoot extends ParallelCommandGroup {
+public class AutoShootPose extends ParallelCommandGroup {
   /** Creates a new AutoShoot. */
-  public AutoShoot(ShooterLogic shooterLogic, Shooter shooter, Drive drive, Pose3d target, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
+  public AutoShootPose(ShooterLogic shooterLogic, Shooter shooter, Drive drive, Pose3d target, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 

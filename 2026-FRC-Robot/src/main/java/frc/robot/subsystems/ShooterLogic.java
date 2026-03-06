@@ -96,13 +96,12 @@ public class ShooterLogic extends SubsystemBase {
      
 
     //SmartDashboard.putNumber("TX Helper", absoluteAngletoAprilTagLimelightDegrees(0));
-    // SmartDashboard.putString("Turret Pose 3d", turretPose3d.toString());
+    SmartDashboard.putNumber("Angle to Hub center", botAngletoPose2d(kHubFieldPose2d));
+      SmartDashboard.putNumber("relative Angle to Hub center", relativebaseAngletoPose2d(kHubFieldPose2d));
     // SmartDashboard.putString("Turret Pose 2d", turretPose2d.toString());
     // SmartDashboard.putString("diff translation", kHubFieldPose2d.getTranslation().minus(turretPose2d.getTranslation()).toString());
 
-    // SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(kHubFieldPose2d));
-    // SmartDashboard.putNumber("Angle to Hub Center", relativeTurretAngletoPose2d(kHubFieldPose2d));
-
+    SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(kHubFieldPose2d));
   }
 
   /**
@@ -240,6 +239,21 @@ public class ShooterLogic extends SubsystemBase {
     return angle;
   }
 
+  public double relativebaseAngletoPose2d(Pose2d pose) {
+    // double angle = Math.abs(Math.abs(botAngletoPose2d(pose)) - 180);
+     double angle = botAngletoPose2d(pose) - 180;
+
+  
+    if(angle > 180) {
+      angle -= 360;
+    } 
+    if(angle < -180) {
+      angle += 360;
+    }
+
+    return angle;
+  }
+
   // angle used for when we just want parameters
   private double TurretAnglefromabsolute(double angle) {
     if(angle > 180) {
@@ -285,7 +299,7 @@ public class ShooterLogic extends SubsystemBase {
    */
   private double botAngletoPose2d(Pose2d pose2d) {
     Translation2d diffTranslation = pose2d.getTranslation().minus(drive.getPose().getTranslation());
-    return diffTranslation.getAngle().getDegrees();
+    return   drive.getRotation().getDegrees() - diffTranslation.getAngle().getDegrees();
   }
 
 

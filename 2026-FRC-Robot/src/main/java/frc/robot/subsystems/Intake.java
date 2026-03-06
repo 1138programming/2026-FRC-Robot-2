@@ -50,6 +50,7 @@ public class Intake extends SubsystemBase{
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
       deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio);
       IntakeControler = new PIDController(KintakePIDKp, KintakePIDKi, KintakePIDKd);
+      deployencoder.setDutyCycleRange(0,1);
       configureDeployMotor();
       // configureIntakeMotor();
   }
@@ -87,7 +88,7 @@ public class Intake extends SubsystemBase{
       limitConfigs.SupplyCurrentLimitEnable = true;
   
       intakeDeployMotor.getConfigurator().apply(config);
-       intakeDeployMotor.getConfigurator().apply(limitConfigs);
+      intakeDeployMotor.getConfigurator().apply(limitConfigs);
   }
 
   private void configureIntakeMotor() {

@@ -26,13 +26,13 @@ public class SpinShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setFullShooterPower(power);
+    shooter.setShooterPower(power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopLeftShooter();
+    shooter.stopShooter();
   }
 
   // Returns true when the command should end.

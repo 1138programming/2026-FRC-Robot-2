@@ -27,7 +27,7 @@ public class RetractIntake extends Command {
   @Override
   public void execute() {
     intake.setDeployed(false);
-    intake.setIntakeDeployMotorPower(-KintakeDeployMotorSpeed);
+    intake.setIntakeDeployMotorPower(KintakeStowMotorSpeed);
   }
 
   // Called once the command ends or is interrupted.

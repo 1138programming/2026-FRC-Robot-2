@@ -11,7 +11,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static edu.wpi.first.units.Units.Seconds;
@@ -44,15 +44,14 @@ public class Shooter extends SubsystemBase{
     hoodServo.setPowered(true);
 
 
-    hoodServo.setEnabled(true);
-    hoodServo.setPowered(true);
+  
   }
 
-  public void setLeftShooterPower(double power){
+  public void setShooterPower(double power){
     ShooterMotor.set(power);
   }
 
-  public void stopLeftShooter() {
+  public void stopShooter() {
     ShooterMotor.set(0.0);
   }
 
@@ -72,9 +71,7 @@ public class Shooter extends SubsystemBase{
   }
 
 
-  public void setFullShooterPower(double power) {
-    setLeftShooterPower(power);
-  }
+
 
   // servo
   public int angleToPulseWidth(double angle){
@@ -94,12 +91,12 @@ public class Shooter extends SubsystemBase{
   public void setHoodAngle(double angle){
     final double clamped = MathUtil.clamp(angle, kHoodMinAngle, kHoodMaxAngle);
     targetPos = clamped;
-    hoodServo.setPulseWidth(angleToPulseWidth(clamped));
+    hoodServo.setPulseWidth(angleToPulseWidth(angle));
   }
 
   
   public double getHoodAngle(){
-    return angleToPulseWidth(hoodServo.getPulseWidth());
+    return pulseWidthToAngle(hoodServo.getPulseWidth());
   }
 
 
@@ -131,6 +128,8 @@ public class Shooter extends SubsystemBase{
   @Override
   public void periodic() {
     updateCurrentPosition();
+    SmartDashboard.putNumber("servo", hoodServo.getPulseWidth());
+    SmartDashboard.putNumber("hood angle", getHoodAngle());
   }
 
 

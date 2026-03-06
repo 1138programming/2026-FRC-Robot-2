@@ -217,7 +217,9 @@ public final class Constants {
     
     public static final int KintakeDeployMotorId = 1;
     public static final int KintakeThroughBoreDio = 9;
-    public static final double KintakeDeployMotorSpeed = 0.3;
+    public static final double KintakeDeployMotorSpeed = -0.4;
+    public static final double KintakeStowMotorSpeed = 0.2;
+
 
     public static final double KintakePIDKp = 0.1;
     public static final double KintakePIDKi = 0;
@@ -330,6 +332,9 @@ public final class Constants {
     public static final int kServoHubID = 5;
      public static final int KHoodPulseWidth = 2000;
 
+    public static final double kHoodMaxAngleDeg = 70; 
+    public static final double kHoodMinAngleDeg = 20;
+
     public static final double kHoodMaxAngle = 0.77; 
     public static final double kHoodMinAngle = 0.01;
 
@@ -354,7 +359,7 @@ public final class Constants {
   public static class IndexerConstants{
     public static final int kIndexerID = 4;
     
-    public static final double kIndexerPower = 0.6;
+    public static final double kIndexerPower = 0.5;
     
   }
 }
