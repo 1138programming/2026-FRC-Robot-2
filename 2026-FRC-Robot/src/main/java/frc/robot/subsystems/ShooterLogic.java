@@ -82,17 +82,17 @@ public class ShooterLogic extends SubsystemBase {
     
 
     //shot change math
-    shotChangeDataHub = calculateShotChanges(kHubFieldPose2d);
-    SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
+    //shotChangeDataHub = calculateShotChanges(kHubFieldPose2d);
+    //SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
      
 
     //SmartDashboard.putNumber("TX Helper", absoluteAngletoAprilTagLimelightDegrees(0));
-    SmartDashboard.putString("Turret Pose 3d", turretPose3d.toString());
-    SmartDashboard.putString("Turret Pose 2d", turretPose2d.toString());
-    SmartDashboard.putString("diff translation", kHubFieldPose2d.getTranslation().minus(turretPose2d.getTranslation()).toString());
+    // SmartDashboard.putString("Turret Pose 3d", turretPose3d.toString());
+    // SmartDashboard.putString("Turret Pose 2d", turretPose2d.toString());
+    // SmartDashboard.putString("diff translation", kHubFieldPose2d.getTranslation().minus(turretPose2d.getTranslation()).toString());
 
-    SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(kHubFieldPose2d));
-    SmartDashboard.putNumber("Angle to Hub Center", relativeTurretAngletoPose2d(kHubFieldPose2d));
+    // SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(kHubFieldPose2d));
+    // SmartDashboard.putNumber("Angle to Hub Center", relativeTurretAngletoPose2d(kHubFieldPose2d));
 
   }
 
