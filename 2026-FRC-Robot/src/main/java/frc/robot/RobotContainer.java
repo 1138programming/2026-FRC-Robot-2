@@ -25,6 +25,7 @@ import frc.robot.subsystems.Indexer;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -282,6 +283,7 @@ public class RobotContainer {
 
 
     // Set up auto routines
+    NamedCommands.registerCommand("intakeout", intakeOut);
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
@@ -428,14 +430,10 @@ public class RobotContainer {
 
     compStreamDeck2.whileTrue(reverseIndexerPower);
 
-    compStreamDeck8.whileTrue(hoodUpCommand);
     compStreamDeck13.whileTrue(hoodDownCommand);
 
 
 
-
-    compStreamDeck7.whileTrue(spinShooter);  
-    compStreamDeck6.whileTrue(spinShooterReverse);  
 
 
 
