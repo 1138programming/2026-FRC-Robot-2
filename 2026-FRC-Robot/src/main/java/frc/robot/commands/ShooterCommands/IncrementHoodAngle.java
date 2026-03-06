@@ -14,12 +14,17 @@ public class IncrementHoodAngle extends Command {
 
     @Override
     public void execute(){
-        shooter.incrementHoodAngle(amount);
+        shooter.setPulseWidthModulation(amount);
+    }
+
+     @Override
+    public void end(boolean interrupted) {
+        shooter.setPulseWidthModulation(1500);
     }
 
     @Override
     public boolean isFinished(){
-        return true;
+        return false;
     }
 
     

@@ -110,8 +110,8 @@ public final class Constants {
     public static final int KXboxRightTrigger = 3;
     public static final int kDriverControllerPort = 0;
 
-    public static final int khoodDecrement = -5;
-    public static final int khoodIncrement = 5;
+    public static final double khoodDecrement = -0.1;
+    public static final double khoodIncrement = 0.1;
   }
 
   public static class TurretConstants {
@@ -271,10 +271,10 @@ public final class Constants {
   }
 
   public static class ShooterConstants{
-    public static final int kLeftShooterID = 0;
-    public static final int  kRightShooterID = 1;
+    public static final int kShooterID = 3;
 
-    public static final int khoodControllerID = 0;
+    public static final int kServoHubID = 5;
+     public static final int KHoodPulseWidth = 2000;
 
     public static final double kHoodMaxAngle = 0.77; 
     public static final double kHoodMinAngle = 0.01;
@@ -284,6 +284,10 @@ public final class Constants {
     public static final LinearVelocity kMaxServoSpeed = Millimeters.of(20).per(Second);
     public static final Distance kServoLength = Millimeters.of(100); //meters, placeholder
 
+    public static final int kpulseWidthMin = 500;
+    public static final int kpulseWidthMax = 2500;
+    
+
     
 
   }
@@ -291,6 +295,7 @@ public final class Constants {
   public static class IndexerConstants{
     public static final int kIndexerID = 4;
     
-    public static final double kIndexerPower = 0.4;
+    public static final double kIndexerPower = 0.6;
+    
   }
 }

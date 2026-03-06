@@ -4,10 +4,12 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import static frc.robot.Constants.IndexerConstants.*;
 
 public class Indexer extends SubsystemBase {
     private SparkFlex indexerMotor;
+    
 
     public Indexer(){
         indexerMotor = new SparkFlex(kIndexerID, MotorType.kBrushless);

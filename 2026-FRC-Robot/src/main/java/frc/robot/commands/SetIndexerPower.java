@@ -18,9 +18,15 @@ public class SetIndexerPower extends Command {
         indexer.setIndexerPower(power);
     }
 
+      @Override
+    public void end(boolean interrupted){
+        indexer.stopIndexer();
+    }
+
+
     @Override
     public boolean isFinished(){
-        return true;
+        return false;
     }
 
 
