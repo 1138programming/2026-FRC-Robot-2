@@ -9,6 +9,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.IndexerConstants.kIndexerPower;
 import static frc.robot.Constants.OperatorConstants.*;
 import static frc.robot.Constants.SwerveConstants.*;
 import static frc.robot.Constants.TurretConstants.*;
@@ -18,8 +19,9 @@ import java.util.function.BooleanSupplier;
 
 //subsystem
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
-
+import frc.robot.subsystems.Indexer;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -38,6 +40,12 @@ import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.Intake.IntakeOut;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.subsystems.Intake;
+import frc.robot.commands.ShooterCommands.IncrementHoodAngle;
+import frc.robot.commands.ShooterCommands.SpinShooter;
+import frc.robot.commands.ShooterCommands.setHoodAngle;
+import frc.robot.commands.SetIndexerPower;
+import frc.robot.commands.StopIndexer;
+
 import frc.robot.subsystems.Laser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -72,6 +80,8 @@ public class RobotContainer {
   public final Laser m_Laser;
   public final Intake intake;
   public final Limelight limelight;
+  public final Shooter shooter;
+  public final Indexer indexer;
 
   public final ShooterLogic logic;
 
@@ -83,9 +93,16 @@ public class RobotContainer {
   public final IntakeOut intakeOut;
   public final ExtendIntake extendIntake;
   public final RetractIntake retractIntake;
+  public final SpinShooter spinShooter;
+  public final SpinShooter spinShooterReverse;
 
 
 
+  public final IncrementHoodAngle hoodUpCommand;
+  public final IncrementHoodAngle hoodDownCommand;
+  public final SetIndexerPower setIndexerPower;
+  public final SetIndexerPower reverseIndexerPower;
+  public final StopIndexer stopIndexer;
 
 
   // Comands
@@ -176,16 +193,25 @@ public class RobotContainer {
     m_Laser = new Laser();
     intake = new Intake();
     limelight = new Limelight(LimelightConstants.kLimelightName);
-
+    shooter = new Shooter();
+  
     //commands
     lasertoggle = new toggleLaser(m_Laser);
     intakein = new IntakeIn(intake);
     intakeOut = new IntakeOut(intake);
     extendIntake = new ExtendIntake(intake);
     retractIntake = new RetractIntake(intake);
+    spinShooter = new SpinShooter(shooter, 0.8);
+    spinShooterReverse = new SpinShooter(shooter, -0.8);
+    hoodUpCommand = new IncrementHoodAngle(shooter, 2100);
+    hoodDownCommand = new IncrementHoodAngle(shooter, -900);
 
 
 
+    indexer = new Indexer();
+    setIndexerPower = new SetIndexerPower(indexer, kIndexerPower);
+    reverseIndexerPower = new SetIndexerPower(indexer, -kIndexerPower);
+    stopIndexer = new StopIndexer(indexer);
 
     switch (Constants.currentMode) {
       case REAL:
@@ -356,9 +382,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> getLogiLeftYAxis() * 0.6,
-            () -> getLogiLeftXAxis() * 0.6,
-            () -> getLogiRightXAxis() * 0.6));
+            () -> getLogiLeftYAxis() * 0.8,
+            () -> getLogiLeftXAxis() * 0.8,
+            () -> getLogiRightXAxis() * 0.8));
 
     // Lock to 0° when A button is held
     // logitechBtnA
@@ -377,25 +403,42 @@ public class RobotContainer {
 
     //laser controls
     // logitechBtnLB.onTrue(lasertoggle);
-
-    logitechBtnLB.whileTrue(intakein);
-    logitechBtnLT.whileTrue(intakeOut);
-    logitechBtnX.whileTrue(extendIntake);
-    logitechBtnY.whileTrue(retractIntake);
+    //logitechBtnLB.onTrue(lasertoggle);
     
-  logitechBtnRB.whileTrue( new FunctionalCommand(
-    () -> {}, 
-    () -> {
-    driveSpeed = 0.5;
-    }, 
-    interrupted -> {
-      driveSpeed = 0.7;
-    }, 
-    () -> true, 
-    (SubsystemBase) null) );
+    logitechBtnRT.whileTrue(setIndexerPower);
+    // logitechBtnRT.onFalse(stopIndexer);
+
+    logitechBtnRB.whileTrue(reverseIndexerPower);
+    // logitechBtnRB.onFalse(stopIndexer);
+    
+
+    // logitechBtnLB.whileTrue(intakein);
+    // logitechBtnLT.whileTrue(intakeOut);
+    // logitechBtnX.whileTrue(extendIntake);
+    // logitechBtnY.whileTrue(retractIntake);
+    
+  // logitechBtnRB.whileTrue( new FunctionalCommand(
+  //   () -> {}, 
+  //   () -> {
+  //   driveSpeed = 0.5;
+  //   }, 
+  
+  //   interrupted -> {
+  //     driveSpeed = 0.7;
+  //   }, 
+  //   () -> true, 
+  //   (SubsystemBase) null) );
 
 
-    //logitechBtnRT.whileTrue(m_SetSpeed);
+    logitechBtnLB.whileTrue(hoodUpCommand);
+    logitechBtnLT.whileTrue(hoodDownCommand);
+
+
+
+
+    logitechBtnX.whileTrue(spinShooter);  
+    logitechBtnA.whileTrue(spinShooterReverse);  
+
 
 
 
