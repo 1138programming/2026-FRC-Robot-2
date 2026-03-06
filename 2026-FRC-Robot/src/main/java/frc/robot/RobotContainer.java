@@ -286,28 +286,28 @@ public class RobotContainer {
     logitechBtnStart = new JoystickButton(logitech, KLogitechRightStart);
 
     // Streamdeck Pages used in match
-    compStreamDeck1 = new JoystickButton(compStreamDeck, 1);
-    compStreamDeck2 = new JoystickButton(compStreamDeck, 2);
-    compStreamDeck3 = new JoystickButton(compStreamDeck, 3);
+    compStreamDeck1 = new JoystickButton(compStreamDeck, 1); // -> shoot (Indexer in and activate flywheel)
+    compStreamDeck2 = new JoystickButton(compStreamDeck, 2); // -> Indexer (toggle indexer)
+    compStreamDeck3 = new JoystickButton(compStreamDeck, 3); 
     compStreamDeck4 = new JoystickButton(compStreamDeck, 4);
-    compStreamDeck5 = new JoystickButton(compStreamDeck, 5);
+    compStreamDeck5 = new JoystickButton(compStreamDeck, 5); // -> Intake (deploy and run intake motors)
     compStreamDeck6 = new JoystickButton(compStreamDeck, 6);
-    compStreamDeck7 = new JoystickButton(compStreamDeck, 7);
-    compStreamDeck8 = new JoystickButton(compStreamDeck, 8);
+    compStreamDeck7 = new JoystickButton(compStreamDeck, 7); // -> Flywheel (Hold to run flywheel)
+    compStreamDeck8 = new JoystickButton(compStreamDeck, 8); // -> Hood Up (Move hood up manual)
     compStreamDeck9 = new JoystickButton(compStreamDeck, 9);
-    compStreamDeck10 = new JoystickButton(compStreamDeck, 10);
+    compStreamDeck10 = new JoystickButton(compStreamDeck, 10); // -> Stow (Stop intake motors and stow intake)
     compStreamDeck11 = new JoystickButton(compStreamDeck, 11);
-    compStreamDeck12 = new JoystickButton(compStreamDeck, 12);
-    compStreamDeck13 = new JoystickButton(compStreamDeck, 13);
-    compStreamDeck14 = new JoystickButton(compStreamDeck, 14);
-    compStreamDeck15 = new JoystickButton(compStreamDeck, 15);
+    compStreamDeck12 = new JoystickButton(compStreamDeck, 12); // -> Hood Bottom (Move hood to lowest position))
+    compStreamDeck13 = new JoystickButton(compStreamDeck, 13); // -> Hood Down (Move hood down manual)
+    compStreamDeck14 = new JoystickButton(compStreamDeck, 14); // -> Hood Optimum (Set hood to optimum angle for current distance to hub and intake power)
+    compStreamDeck15 = new JoystickButton(compStreamDeck, 15); // -> Eject (Run indexer to eject game pieces)
     compStreamDeck16 = new JoystickButton(compStreamDeck, 16);
     compStreamDeck17 = new JoystickButton(compStreamDeck, 17);
     compStreamDeck18 = new JoystickButton(compStreamDeck, 18);
     compStreamDeck19 = new JoystickButton(compStreamDeck, 19);
 
     // Streamdeck Pages used for testing
-    testStreamDeck1 = new JoystickButton(testStreamDeck, 1);
+    testStreamDeck1 = new JoystickButton(testStreamDeck, 1); 
     testStreamDeck2 = new JoystickButton(testStreamDeck, 2);
     testStreamDeck3 = new JoystickButton(testStreamDeck, 3);
     testStreamDeck4 = new JoystickButton(testStreamDeck, 4);
@@ -323,7 +323,7 @@ public class RobotContainer {
     testStreamDeck14 = new JoystickButton(testStreamDeck, 14);
     testStreamDeck15 = new JoystickButton(testStreamDeck, 15);
 
-    autonTestStreamDeck1 = new JoystickButton(testStreamDeck, 1);
+    autonTestStreamDeck1 = new JoystickButton(testStreamDeck, 1); 
     autonTestStreamDeck2 = new JoystickButton(testStreamDeck, 2);
     autonTestStreamDeck3 = new JoystickButton(testStreamDeck, 3);
     autonTestStreamDeck4 = new JoystickButton(testStreamDeck, 4);
