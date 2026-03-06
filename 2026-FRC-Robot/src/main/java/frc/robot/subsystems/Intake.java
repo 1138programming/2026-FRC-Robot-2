@@ -20,6 +20,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Second;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -34,6 +35,7 @@ public class Intake extends SubsystemBase{
     private SparkFlex intakeMotor;
     private TalonFX intakeDeployMotor;
     private DutyCycleEncoder  deployencoder;
+    private PIDController IntakeControler; 
 
     private static final AngularVelocity maxPivotSpeed = RPM.of(6000).div(kDeployReduction);
 
@@ -45,6 +47,7 @@ public class Intake extends SubsystemBase{
       intakeMotor = new SparkFlex(KintakeMotorId,MotorType.kBrushless);
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
       deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio);
+      IntakeControler = new PIDController(KintakePIDKp, KintakePIDKi, KintakePIDKd);
       configureDeployMotor();
       // configureIntakeMotor();
   }

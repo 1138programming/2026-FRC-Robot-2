@@ -219,6 +219,11 @@ public final class Constants {
     public static final int KintakeThroughBoreDio = 9;
     public static final double KintakeDeployMotorSpeed = 0.3;
 
+    public static final double KintakePIDKp = 0.1;
+    public static final double KintakePIDKi = 0;
+    public static final double KintakePIDKd = 0;
+
+
     public static final double kDeployReduction = 50.0;
 
     public static final double kDeployAngle = -4;
