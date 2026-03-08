@@ -54,19 +54,19 @@ public class ShooterLogic extends SubsystemBase {
   }
 
 
-  public ShooterLogic(Limelight limelight, Drive drive, Optional<Alliance> alliance) {
+  public ShooterLogic(Limelight limelight, Drive drive) {
     this.limelight = limelight;
     this.drive = drive;
     readyToShoot = false;
     turretPose2d = new Pose2d(new Translation2d(), new Rotation2d());
     turretPose3d = new Pose3d(new Translation3d(), new Rotation3d());
 
-    if (alliance.isPresent()) {
-      if (alliance.get() == Alliance.Red) {
+    if (DriverStation.getAlliance().isPresent()) {
+      if (DriverStation.getAlliance().get() == Alliance.Red) {
         kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
       }
 
-      if (alliance.get() == Alliance.Blue) {
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
         kHubFieldPose3d = HubConstants.blue.KhubFieldPose3d;
       }
     } else {
@@ -82,10 +82,25 @@ public class ShooterLogic extends SubsystemBase {
     // This method will be called once per scheduler run
 
 
+     if (DriverStation.getAlliance().isPresent()) {
+      if (DriverStation.getAlliance().get() == Alliance.Red) {
+        kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
+      }
+
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
+        kHubFieldPose3d = HubConstants.blue.KhubFieldPose3d;
+      }
+    } else {
+      //default red cause thats what the wooden hub we have has
+      kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
+    }
+    kHubFieldPose2d = kHubFieldPose3d.toPose2d();
 
     // addTurretRotationtoPose();
     turretPose3d = turretPositionPose3d();
     turretPose2d = turretPose3d.toPose2d();
+
+   
 
     //shot change math
 
@@ -209,6 +224,10 @@ public class ShooterLogic extends SubsystemBase {
     double angleDif = limelight.getTxHelper();
     double absoluteAngle = limelightOffsetAngleDegrees + angleDif;
     return absoluteAngle;
+  }
+
+  public Pose3d getHubPose3d() {
+    return kHubFieldPose3d;
   }
 
   //-----------------------//

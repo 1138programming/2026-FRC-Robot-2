@@ -59,6 +59,7 @@ public class Limelight extends SubsystemBase {
     //other 
     private double latency;
     private int isTargetsDetected;
+    private boolean firstpose;
 
     private final DoubleArrayPublisher orientationPublisher;
     private final DoubleArrayPublisher filterPublisher;
@@ -95,6 +96,7 @@ public class Limelight extends SubsystemBase {
     //LimelightOneTable.getEntry("priorityid").setNumber(priorityID);
     orientationPublisher = LimelightOneTable.getDoubleArrayTopic("robot_orientation_set").publish();
     filterPublisher =    LimelightOneTable.getDoubleArrayTopic("fiducial_id_filters_set").publish();
+    firstpose = false;
 
 
   //stores the data for the LL 
@@ -120,6 +122,11 @@ public class Limelight extends SubsystemBase {
 
 
    //botPose = LimelightOneTable.getEntry("botpose_wpiblue").getDoubleArray(new double[61]);
+
+   if ((getPoseEstimateMT1() != null && getPoseEstimateMT1().tagCount != 0) && !firstpose) {
+    updateOreintation(getMT1Pose().getRotation().getDegrees());
+
+   }
 
     if (botpose.length != 0) {
       botPoseX = botpose[0];
@@ -337,7 +344,9 @@ public class Limelight extends SubsystemBase {
   }
 
   public void updateOreintation(double degrees) {
-    LimelightHelpers.SetRobotOrientation(limelightName, degrees, 0,0,0,0,0);
+    if (firstpose) {
+      LimelightHelpers.SetRobotOrientation(limelightName, degrees, 0,0,0,0,0);
+    }
   }
 
   /**
