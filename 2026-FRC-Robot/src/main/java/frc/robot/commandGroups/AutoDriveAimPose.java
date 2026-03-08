@@ -10,8 +10,10 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 import frc.robot.commandGroups.DriveWhileAim;
+import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.commands.ShooterCommands.setHoodAngle;
 
@@ -24,13 +26,19 @@ import frc.robot.subsystems.drive.Drive;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoDriveAimPose extends ParallelCommandGroup {
   /** Creates a new AutoShoot. */
-  public AutoDriveAimPose(ShooterLogic shooterLogic, Shooter shooter, Drive drive, Pose3d target, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
+  public AutoDriveAimPose(ShooterLogic shooterLogic, Shooter shooter, Drive drive, Supplier<Pose3d> target, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
 
-    double angle = shooterLogic.relativeTurretAngletoPose2d(target.toPose2d());
     addCommands(
-      new DriveWhileAim(drive, xSupplier, ySupplier, angle)
-    );
+      DriveCommands.joystickDriveAtAngle(drive, xSupplier, ySupplier, () -> shooterLogic.botAngletoPose2d(target.get().toPose2d())));
+    
   }
 }
+
+
+
+
+
+
+

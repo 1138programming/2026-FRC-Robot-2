@@ -26,8 +26,10 @@ import frc.robot.subsystems.Indexer;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -119,7 +121,6 @@ public class RobotContainer {
   public final SetHoodPulseWidth hoodMid;
   public final SetHoodPulseWidth hoodAllUp;
 
-  public final AutoDriveAimPose DriveAimPose;
 
   public final IncrementHoodAngle hoodUpCommand;
   public final IncrementHoodAngle hoodDownCommand;
@@ -204,6 +205,8 @@ public class RobotContainer {
       autonTestStreamDeck15;
 
   private double baseSpeed = KBaseNormalMode;
+
+  public Pose3d kHubFieldPose3d;
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -309,8 +312,7 @@ public class RobotContainer {
         break;
     }
 
-    logic = new ShooterLogic(limelight, drive, DriverStation.getAlliance());
-    DriveAimPose = new AutoDriveAimPose(logic, shooter, drive, HubConstants.red.KhubFieldPose3d, () -> 0.0, () -> 0.0);
+    logic = new ShooterLogic(limelight, drive);
 
     // Set up auto routines
     NamedCommands.registerCommand("intakeout", intakeOut);
@@ -411,6 +413,8 @@ public class RobotContainer {
     autonTestStreamDeck14 = new JoystickButton(testStreamDeck, 14);
     autonTestStreamDeck15 = new JoystickButton(testStreamDeck, 15);
 
+
+   
     driveSpeed = 0.7;
     // Configure the button bindings
     configureButtonBindings();
@@ -436,14 +440,20 @@ public class RobotContainer {
     intake.setDefaultCommand(stopintake);
     // shooter.setDefaultCommand(hoodDownCommand);
 
-    // Lock to red hub when A button is held
     logitechBtnRT
         .whileTrue(
-            new DriveWhileAim(
-                drive,
-                () -> getLogiLeftYAxis(),
-                () -> getLogiLeftXAxis(),
-                FieldConstants.HubConstants.red.kHubFieldPose2d));
+          new AutoDriveAimPose(logic, shooter, drive, 
+          () -> logic.getHubPose3d(), 
+          () -> getLogiLeftYAxis(), 
+          () -> getLogiLeftXAxis()));
+
+    logitechBtnRB
+        .whileTrue(
+          DriveCommands.joystickDrive(
+            drive,
+            () -> getLogiLeftYAxis() * 0.7,
+            () -> getLogiLeftXAxis() * 0.7,
+            () -> getLogiRightXAxis() * 0.7));
 
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -477,7 +487,7 @@ public class RobotContainer {
     compStreamDeck7.whileTrue(spinShooterReverse);
     compStreamDeck6.whileTrue(spinShooter);
 
-    compStreamDeck1.whileTrue(DriveAimPose);
+    // logitechBtnX.whileTrue(DriveAimPose);
 
     // Reset gyro to 0° when B button is pressed
     logitechBtnY
