@@ -101,7 +101,6 @@ public class Drive extends SubsystemBase {
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
-  private final Limelight limelight;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = Rotation2d.kZero;
@@ -121,15 +120,14 @@ public class Drive extends SubsystemBase {
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
-      ModuleIO brModuleIO,
-      Limelight limelight) {
+      ModuleIO brModuleIO
+      ) {
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
     modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
     modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
     modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
 
-    this.limelight = limelight;
 
     // Usage reporting for swerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
@@ -168,7 +166,7 @@ public class Drive extends SubsystemBase {
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
-    limelight.updateOreintation(limelight.getMT1Pose().getRotation().getDegrees());
+    // limelight.updateOreintation(limelight.getMT1Pose().getRotation().getDegrees());
     // if(DriverStation.getAlliance().isPresent()
     //                   && DriverStation.getAlliance().get() == Alliance.Red) {
   
@@ -237,7 +235,7 @@ public class Drive extends SubsystemBase {
     }
 
     
-    limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    // limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
 
       
   
@@ -260,17 +258,17 @@ public class Drive extends SubsystemBase {
 
   }
 
-  //extra periodic methods
-  public boolean updateOdometryWithMT2() {
-    if (limelight.existsVisionData()) {
-      poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,0.7));//0.7,0.7,99999999
-      poseEstimator.addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time());
-      return true;
-    }
+  // //extra periodic methods
+  // public boolean updateOdometryWithMT2() {
+  //   if (limelight.existsVisionData()) {
+  //     poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,0.7));//0.7,0.7,99999999
+  //     poseEstimator.addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time());
+  //     return true;
+  //   }
 
-    return false; 
+  //   return false; 
 
-  }
+  // }
 
   /**
    * Runs the drive at the desired velocity.
