@@ -17,6 +17,8 @@ public class SpinShooter extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
     this.power = power;
+            addRequirements(shooter);
+
   }
 
   // Called when the command is initially scheduled.

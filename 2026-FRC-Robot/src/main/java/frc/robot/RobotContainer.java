@@ -1,5 +1,4 @@
 
-
 // Copyright (c) 2021-2026 Littleton Robotics
 // http://github.com/Mechanical-Advantage
 //
@@ -9,6 +8,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.FieldConstants.TagIDConstants.kHubCenterTagRed;
 import static frc.robot.Constants.IndexerConstants.kIndexerPower;
 import static frc.robot.Constants.OperatorConstants.*;
 import static frc.robot.Constants.SwerveConstants.*;
@@ -23,7 +23,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
 import frc.robot.subsystems.Indexer;
 
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,14 +33,19 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.FieldConstants.HubConstants;
+import frc.robot.commandGroups.AutoDriveAimPose;
 import frc.robot.commandGroups.DriveWhileAim;
+import frc.robot.commandGroups.Shooter.Indexandshoot;
 import frc.robot.commands.Autos;
 import frc.robot.commands.toggleLaser;
+import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.Intake.IntakeOut;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Intake.StopIntake;
+import frc.robot.commands.Intake.StowIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.commands.ShooterCommands.IncrementHoodAngle;
 import frc.robot.commands.ShooterCommands.SetHoodPulseWidth;
@@ -74,16 +78,18 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 
-
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;  
+  private final Drive drive;
   public final Laser m_Laser;
   public final Intake intake;
   public final Limelight limelight;
@@ -92,7 +98,6 @@ public class RobotContainer {
 
   public final ShooterLogic logic;
 
-
   // Comands
 
   public final toggleLaser lasertoggle;
@@ -100,11 +105,16 @@ public class RobotContainer {
   public final IntakeOut intakeOut;
   public final ExtendIntake extendIntake;
   public final RetractIntake retractIntake;
+  public final DeployIntake deployIntake;
+  public final StowIntake stowIntake;
   public final StopIntake stopintake;
   public final SpinShooter spinShooter;
   public final SpinShooter spinShooterReverse;
+  public final SetHoodPulseWidth hoodAllDown;
+  public final SetHoodPulseWidth hoodMid;
+  public final SetHoodPulseWidth hoodAllUp;
 
-
+  public final AutoDriveAimPose DriveAimPose;
 
   public final IncrementHoodAngle hoodUpCommand;
   public final IncrementHoodAngle hoodDownCommand;
@@ -114,15 +124,14 @@ public class RobotContainer {
   public final SetIndexerPower reverseIndexerPower;
   public final StopIndexer stopIndexer;
 
-  
-
-
   // Comands
+
+  public final Indexandshoot indexandshoot;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
-   public static Joystick logitech;
+  public static Joystick logitech;
   public static Joystick compStreamDeck;
   public static Joystick testStreamDeck;
   public static Joystick autonTestStreamDeck;
@@ -190,7 +199,6 @@ public class RobotContainer {
       autonTestStreamDeck15;
 
   private double baseSpeed = KBaseNormalMode;
- 
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -198,36 +206,43 @@ public class RobotContainer {
   // speed
   public double driveSpeed;
 
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
 
     m_Laser = new Laser();
     intake = new Intake();
     limelight = new Limelight(LimelightConstants.kLimelightName);
     shooter = new Shooter();
-  
-    //commands
+
+    // commands
     lasertoggle = new toggleLaser(m_Laser);
     intakein = new IntakeIn(intake);
     intakeOut = new IntakeOut(intake);
     extendIntake = new ExtendIntake(intake);
     retractIntake = new RetractIntake(intake);
+    deployIntake = new DeployIntake(intake);
+    stowIntake = new StowIntake(intake);
     stopintake = new StopIntake(intake);
-    spinShooter = new SpinShooter(shooter, 0.6);
-    spinShooterReverse = new SpinShooter(shooter, -0.6);
-    hoodUpCommand = new IncrementHoodAngle(shooter, 2100);
-    hoodDownCommand = new IncrementHoodAngle(shooter, 900);
+    spinShooter = new SpinShooter(shooter, 0.70);
+    spinShooterReverse = new SpinShooter(shooter, -0.70);
+    hoodUpCommand = new IncrementHoodAngle(shooter, 20);
+    hoodDownCommand = new IncrementHoodAngle(shooter, -20);
+    hoodAllDown = new SetHoodPulseWidth(shooter, 500);
+    hoodMid = new SetHoodPulseWidth(shooter, 1500);
+    hoodAllUp = new SetHoodPulseWidth(shooter, 2500);
     sethoodangle = new setHoodAngle(shooter, 0.9);
     hoodtsCommand = new SetHoodPulseWidth(shooter, 2500);
-
-
 
 
     indexer = new Indexer();
     setIndexerPower = new SetIndexerPower(indexer, -kIndexerPower);
     reverseIndexerPower = new SetIndexerPower(indexer, kIndexerPower);
     stopIndexer = new StopIndexer(indexer);
+        
+    indexandshoot = new Indexandshoot(shooter, indexer);
+
 
     switch (Constants.currentMode) {
       case REAL:
@@ -235,14 +250,13 @@ public class RobotContainer {
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
 
-        drive =
-            new Drive(
-                new GyroIOPigeon2(),
-                new ModuleIOTalonFX(TunerConstants.FrontLeft),
-                new ModuleIOTalonFX(TunerConstants.FrontRight),
-                new ModuleIOTalonFX(TunerConstants.BackLeft),
-                new ModuleIOTalonFX(TunerConstants.BackRight),
-                limelight);
+        drive = new Drive(
+            new GyroIOPigeon2(),
+            new ModuleIOTalonFX(TunerConstants.FrontLeft),
+            new ModuleIOTalonFX(TunerConstants.FrontRight),
+            new ModuleIOTalonFX(TunerConstants.BackLeft),
+            new ModuleIOTalonFX(TunerConstants.BackRight),
+            limelight);
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -265,34 +279,45 @@ public class RobotContainer {
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIOSim(TunerConstants.FrontLeft),
-                new ModuleIOSim(TunerConstants.FrontRight),
-                new ModuleIOSim(TunerConstants.BackLeft),
-                new ModuleIOSim(TunerConstants.BackRight),
-                limelight);
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new ModuleIOSim(TunerConstants.FrontLeft),
+            new ModuleIOSim(TunerConstants.FrontRight),
+            new ModuleIOSim(TunerConstants.BackLeft),
+            new ModuleIOSim(TunerConstants.BackRight),
+            limelight);
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
-            new Drive(
-                new GyroIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                new ModuleIO() {},
-                limelight);
+        drive = new Drive(
+            new GyroIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            },
+            new ModuleIO() {
+            },
+            limelight);
         break;
     }
 
     logic = new ShooterLogic(limelight, drive, DriverStation.getAlliance());
-
+    DriveAimPose = new AutoDriveAimPose(logic, shooter, drive, HubConstants.red.KhubFieldPose3d, () -> 0.0, () -> 0.0);
 
     // Set up auto routines
     NamedCommands.registerCommand("intakeout", intakeOut);
+    NamedCommands.registerCommand("indexandshoot", indexandshoot);
+    NamedCommands.registerCommand("restgyro",Commands.runOnce(
+                () -> drive.setPose(
+                    new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
+                drive)
+                .ignoringDisable(true));
+
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     // Set up SysId routines
@@ -310,7 +335,6 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    
 
     logitech = new Joystick(KLogitechPort); // Logitech Dual Action
     compStreamDeck = new Joystick(KCompStreamDeckPort); // Stream Deck + vjoy
@@ -332,7 +356,7 @@ public class RobotContainer {
     // Streamdeck Pages used in match
     compStreamDeck1 = new JoystickButton(compStreamDeck, 1); // -> shoot (Indexer in and activate flywheel)
     compStreamDeck2 = new JoystickButton(compStreamDeck, 2); // -> Indexer (toggle indexer)
-    compStreamDeck3 = new JoystickButton(compStreamDeck, 3); 
+    compStreamDeck3 = new JoystickButton(compStreamDeck, 3);
     compStreamDeck4 = new JoystickButton(compStreamDeck, 4);
     compStreamDeck5 = new JoystickButton(compStreamDeck, 5); // -> Intake (deploy and run intake motors)
     compStreamDeck6 = new JoystickButton(compStreamDeck, 6);
@@ -343,7 +367,8 @@ public class RobotContainer {
     compStreamDeck11 = new JoystickButton(compStreamDeck, 11);
     compStreamDeck12 = new JoystickButton(compStreamDeck, 12); // -> Hood Bottom (Move hood to lowest position))
     compStreamDeck13 = new JoystickButton(compStreamDeck, 13); // -> Hood Down (Move hood down manual)
-    compStreamDeck14 = new JoystickButton(compStreamDeck, 14); // -> Hood Optimum (Set hood to optimum angle for current distance to hub and intake power)
+    compStreamDeck14 = new JoystickButton(compStreamDeck, 14); // -> Hood Optimum (Set hood to optimum angle for current
+                                                               // distance to hub and intake power)
     compStreamDeck15 = new JoystickButton(compStreamDeck, 15); // -> Eject (Run indexer to eject game pieces)
     compStreamDeck16 = new JoystickButton(compStreamDeck, 16);
     compStreamDeck17 = new JoystickButton(compStreamDeck, 17);
@@ -351,7 +376,7 @@ public class RobotContainer {
     compStreamDeck19 = new JoystickButton(compStreamDeck, 19);
 
     // Streamdeck Pages used for testing
-    testStreamDeck1 = new JoystickButton(testStreamDeck, 1); 
+    testStreamDeck1 = new JoystickButton(testStreamDeck, 1);
     testStreamDeck2 = new JoystickButton(testStreamDeck, 2);
     testStreamDeck3 = new JoystickButton(testStreamDeck, 3);
     testStreamDeck4 = new JoystickButton(testStreamDeck, 4);
@@ -367,7 +392,7 @@ public class RobotContainer {
     testStreamDeck14 = new JoystickButton(testStreamDeck, 14);
     testStreamDeck15 = new JoystickButton(testStreamDeck, 15);
 
-    autonTestStreamDeck1 = new JoystickButton(testStreamDeck, 1); 
+    autonTestStreamDeck1 = new JoystickButton(testStreamDeck, 1);
     autonTestStreamDeck2 = new JoystickButton(testStreamDeck, 2);
     autonTestStreamDeck3 = new JoystickButton(testStreamDeck, 3);
     autonTestStreamDeck4 = new JoystickButton(testStreamDeck, 4);
@@ -383,27 +408,30 @@ public class RobotContainer {
     autonTestStreamDeck14 = new JoystickButton(testStreamDeck, 14);
     autonTestStreamDeck15 = new JoystickButton(testStreamDeck, 15);
 
-
     driveSpeed = 0.7;
     // Configure the button bindings
     configureButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
+
         DriveCommands.joystickDrive(
             drive,
             () -> getLogiLeftYAxis(),
             () -> getLogiLeftXAxis(),
             () -> getLogiRightXAxis()));
     intake.setDefaultCommand(stopintake);
+    // shooter.setDefaultCommand(hoodDownCommand);
 
     // Lock to red hub when A button is held
     logitechBtnRT
@@ -417,61 +445,63 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
- 
-    
-
     compStreamDeck5.whileTrue(intakein);
     compStreamDeck4.whileTrue(intakeOut);
-    compStreamDeck9.whileTrue(extendIntake);
-    compStreamDeck10.whileTrue(retractIntake);
-    
-  // logitechBtnRB.whileTrue( new FunctionalCommand(
-  //   () -> {}, 
-  //   () -> {
-  //   driveSpeed = 0.5;
-  //   }, 
-  
-  //   interrupted -> {
-  //     driveSpeed = 0.7;
-  //   }, 
-  //   () -> true, 
+    compStreamDeck9.whileTrue(deployIntake);
+
+    compStreamDeck10.whileTrue(stowIntake);
+
+    compStreamDeck16.whileTrue(extendIntake);
+    compStreamDeck15.whileTrue(retractIntake);
+
+    // logitechBtnRB.whileTrue( new FunctionalCommand(
+    // () -> {},
+    // () -> {
+    // driveSpeed = 0.5;
+    // },
+
+    // interrupted -> {
+    // driveSpeed = 0.7;
+    // },
+    // () -> true,
     compStreamDeck2.whileTrue(setIndexerPower);
     compStreamDeck3.whileTrue(reverseIndexerPower);
-    compStreamDeck13.whileTrue(hoodDownCommand);
-    compStreamDeck8.whileTrue(hoodUpCommand);
-    compStreamDeck12.whileTrue(hoodtsCommand);
-    compStreamDeck7.whileTrue(spinShooterReverse);  
-    compStreamDeck6.whileTrue(spinShooter);  
+    compStreamDeck13.onTrue(hoodDownCommand);
+    compStreamDeck8.onTrue(hoodUpCommand);
+    compStreamDeck11.whileTrue(hoodMid);
+    compStreamDeck12.whileTrue(hoodAllDown);
+    compStreamDeck14.whileTrue(hoodAllUp);
+    compStreamDeck7.whileTrue(spinShooterReverse);
+    compStreamDeck6.whileTrue(spinShooter);
 
-
-
+    compStreamDeck1.whileTrue(DriveAimPose);
 
     // Reset gyro to 0° when B button is pressed
     logitechBtnY
         .onTrue(
             Commands.runOnce(
-                    () ->
-                        drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                    drive)
+                () -> drive.setPose(
+                    new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
+                drive)
                 .ignoringDisable(true));
   }
 
-
-
-  
   public double getLogiRightYAxis() {
     final double Y = logitech.getRawAxis(KRightYAxis);
     SmartDashboard.putNumber("getLogiRightYAxis", -Y);
-    if (Y > KDeadZone || Y < -KDeadZone) return -Y;
-    else return 0;
+    if (Y > KDeadZone || Y < -KDeadZone)
+      return -Y;
+    else
+      return 0;
   }
 
   public double getLogiLeftYAxis() {
     final double Y = logitech.getY();
     SmartDashboard.putNumber("getLogiLeftYAxis", -Y);
-    if (Y > KDeadZone || Y < -KDeadZone) return -Y;
-    else return 0;
+    if (Y > KDeadZone || Y < -KDeadZone)
+      return -Y;
+    else
+      return 0;
   }
 
   public double getLogiRightXAxis() {

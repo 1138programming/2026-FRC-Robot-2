@@ -217,18 +217,20 @@ public final class Constants {
     
     public static final int KintakeDeployMotorId = 1;
     public static final int KintakeThroughBoreDio = 9;
-    public static final double KintakeDeployMotorSpeed = -0.4;
+    public static final double KintakeDeployMotorSpeed = -0.3;
     public static final double KintakeStowMotorSpeed = 0.2;
 
 
-    public static final double KintakePIDKp = 0.1;
+    public static final double KintakePIDKp = 0.001;
     public static final double KintakePIDKi = 0;
     public static final double KintakePIDKd = 0;
 
 
     public static final double kDeployReduction = 50.0;
 
-    public static final double kDeployAngle = -4;
+    public static final double kDeployAngle = 195;
+    public static final double kStowAngle = 125;
+
     public static final double kStowed = 100;
 
 
@@ -338,6 +340,8 @@ public final class Constants {
     public static final double kHoodMaxAngle = 0.77; 
     public static final double kHoodMinAngle = 0.01;
 
+    public static final double kHoodServoTravelDeg = 350;
+
     public static final double kHoodTolerance = 1.0; //degrees
 
     public static final LinearVelocity kMaxServoSpeed = Millimeters.of(20).per(Second);
@@ -359,7 +363,7 @@ public final class Constants {
   public static class IndexerConstants{
     public static final int kIndexerID = 4;
     
-    public static final double kIndexerPower = 0.5;
+    public static final double kIndexerPower = 0.75;
     
   }
 }

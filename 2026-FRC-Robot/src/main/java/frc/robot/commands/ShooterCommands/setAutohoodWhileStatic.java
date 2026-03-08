@@ -23,6 +23,8 @@ public class setAutohoodWhileStatic extends Command {
     this.logic = logic;
     this.power = power;
     this.targetPose = target;
+            addRequirements(shooter);
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -35,7 +37,7 @@ public class setAutohoodWhileStatic extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setHoodAngle(angle);
+    // shooter.setHoodAngle(angle);
   }
 
   // Called once the command ends or is interrupted.

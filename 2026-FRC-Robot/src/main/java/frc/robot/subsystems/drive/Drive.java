@@ -168,6 +168,15 @@ public class Drive extends SubsystemBase {
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+    limelight.updateOreintation(limelight.getMT1Pose().getRotation().getDegrees());
+    // if(DriverStation.getAlliance().isPresent()
+    //                   && DriverStation.getAlliance().get() == Alliance.Red) {
+  
+    //   limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees() - 180);
+    // }
+    // else {
+    //   limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    // }
   }
 
   @Override
@@ -227,9 +236,15 @@ public class Drive extends SubsystemBase {
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
+    
     limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
-    boolean isUsingVision = updateOdometryWithMT2();
-    SmartDashboard.putBoolean("isUsingVision", isUsingVision);
+
+      
+  
+
+
+    // boolean isUsingVision = updateOdometryWithMT2();
+    // SmartDashboard.putBoolean("isUsingVision", isUsingVision);
     SmartDashboard.putString("drive pose estimater", poseEstimator.getEstimatedPosition().toString());
     SmartDashboard.putNumber("base delta angle", getAngularVelocityRadiansPerSecond() * 180/ Math.PI);
     SmartDashboard.putNumber("base horizontal vel", getHorizontalVelocityMetersPerSecond());

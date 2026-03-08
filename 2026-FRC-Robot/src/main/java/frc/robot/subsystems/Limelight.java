@@ -350,6 +350,16 @@ public class Limelight extends SubsystemBase {
     return LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
   }
 
+    /**
+   * Get robot positional data using MegaTag1. 
+   * 
+   * @apiNote must be called in a periodic function so robot oreintation is continously
+   * @return
+   */
+  private LimelightHelpers.PoseEstimate getPoseEstimateMT1() {
+    return LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+  }
+
   public boolean existsVisionData() {
     LimelightHelpers.PoseEstimate mt2 = getPoseEstimateMT2();
     SmartDashboard.putBoolean("VisionDataExists", (mt2 != null && mt2.tagCount != 0));
@@ -357,6 +367,14 @@ public class Limelight extends SubsystemBase {
       SmartDashboard.putNumber("vision tag count", mt2.tagCount);
     }
     return (mt2 != null && mt2.tagCount != 0);
+  }
+
+   public Pose2d getMT1Pose() {
+    return getPoseEstimateMT1().pose;
+  }
+
+  public double getMT1Time() {
+    return getPoseEstimateMT1().timestampSeconds;
   }
 
   public Pose2d getMT2Pose() {

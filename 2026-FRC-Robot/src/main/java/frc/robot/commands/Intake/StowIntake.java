@@ -1,6 +1,6 @@
 package frc.robot.commands.Intake;
 
-import static frc.robot.Constants.intakeConstants.kStowed;
+import static frc.robot.Constants.intakeConstants.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
@@ -21,7 +21,7 @@ public class StowIntake extends Command {
     @Override
     public void execute() {
         intake.setDeployed(false);
-        intake.setAngle(kStowed);
+        intake.intakeMoveToPosition(kStowAngle);
     }
 
     // Called once the command ends or is interrupted.
@@ -33,7 +33,7 @@ public class StowIntake extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
 

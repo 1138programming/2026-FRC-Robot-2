@@ -26,13 +26,14 @@ public class Shooter extends SubsystemBase{
   private ServoHub servoHub;
   private ServoChannel hoodServo;
 
-
+  private int currentPulse;
 
   //PID info
   private double currentPos = 0.5;
   private double targetPos = 0.5;
 
   private Time lastUpdateTime = Seconds.of(0);
+  
 
   public Shooter(){
 
@@ -42,9 +43,7 @@ public class Shooter extends SubsystemBase{
     hoodServo = servoHub.getServoChannel(ChannelId.kChannelId0);
     hoodServo.setEnabled(true);
     hoodServo.setPowered(true);
-
-
-  
+    currentPulse = hoodServo.getPulseWidth();
   }
 
   public void setShooterPower(double power){
@@ -74,62 +73,86 @@ public class Shooter extends SubsystemBase{
 
 
   // servo
-  public int angleToPulseWidth(double angle){
+  public int servoAngleToPulseWidth(double angle){
     if (angle > 270 || angle < 0 ) return 1750;
     return (int) (angle / 270.0) * (kpulseWidthMax - kpulseWidthMin) + kpulseWidthMin;
   }
 
-
-  public double pulseWidthToAngle(int pulseWidth){
-    return ((pulseWidth - kpulseWidthMin) / (kpulseWidthMax - kpulseWidthMin)) * 270;
+  public double shooterAngleToServoAngle(double angle) {
+    return angle *8;
   }
 
-  public void setPulseWidthModulation(int pWidthModulation){
-    hoodServo.setPulseWidth(pWidthModulation);
+  public double ServoAngleToShooterAngle(double angle) {
+    return angle / 8;
   }
 
-  public void setHoodAngle(double angle){
-    final double clamped = MathUtil.clamp(angle, kHoodMinAngle, kHoodMaxAngle);
-    targetPos = clamped;
-    hoodServo.setPulseWidth(angleToPulseWidth(angle));
+  public double pulseWidthToAngleServo(int pulseWidth){
+    return ((pulseWidth - kpulseWidthMin) ); /// (kpulseWidthMax - kpulseWidthMin)) * kHoodServoTravelDeg;
+  }
+
+  // public void setHoodAngle(double angle){
+  //   final double clamped = MathUtil.clamp(angle, kHoodMinAngle, kHoodMaxAngle);
+  //   targetPos = clamped;
+  //   hoodServo.setPulseWidth(servoAngleToPulseWidth(angle));
+  // }
+
+  public void setcurrentpulse(int pulse) {
+    currentPulse = pulse;
+  }
+
+  public int getcurrentpulse() {
+    return currentPulse;
+  }
+
+  public void setHoodPulse(int pulse){
+    // final int clamped = MathUtil.clamp(pulse, kpulseWidthMin, kpulseWidthMax);
+    // targetPos = clamped;
+    hoodServo.setPulseWidth(pulse);
   }
 
   
   public double getHoodAngle(){
-    return pulseWidthToAngle(hoodServo.getPulseWidth());
+    return pulseWidthToAngleServo(hoodServo.getPulseWidth());
   }
 
 
-  public boolean isPosWithinTolerance() {
-    return MathUtil.isNear(targetPos, currentPos, kHoodTolerance);
-  }
+  // public boolean isPosWithinTolerance() {
+  //   return MathUtil.isNear(targetPos, currentPos, kHoodTolerance);
+  // }
 
-  private void updateCurrentPosition() {
-        final Time currentTime = Seconds.of(Timer.getFPGATimestamp());
-        final Time elapsedTime = currentTime.minus(lastUpdateTime);
-        lastUpdateTime = currentTime;
+  // private void updateCurrentPosition() {
+  //       final Time currentTime = Seconds.of(Timer.getFPGATimestamp());
+  //       final Time elapsedTime = currentTime.minus(lastUpdateTime);
+  //       lastUpdateTime = currentTime;
 
-        if (isPosWithinTolerance()) {
-            currentPos = targetPos;
-            return;
-        }
+  //       if (isPosWithinTolerance()) {
+  //           currentPos = targetPos;
+  //           return;
+  //       }
 
-        final Distance maxDistanceTraveled = kMaxServoSpeed.times(elapsedTime);
-        final double maxPercentageTraveled = maxDistanceTraveled.div(kServoLength).in(Value);
-        currentPos = targetPos > currentPos
-            ? Math.min(targetPos, currentPos + maxPercentageTraveled)
-            : Math.max(targetPos, currentPos - maxPercentageTraveled);
-  } 
+  //       final Distance maxDistanceTraveled = kMaxServoSpeed.times(elapsedTime);
+  //       final double maxPercentageTraveled = maxDistanceTraveled.div(kServoLength).in(Value);
+  //       currentPos = targetPos > currentPos
+  //           ? Math.min(targetPos, currentPos + maxPercentageTraveled)
+  //           : Math.max(targetPos, currentPos - maxPercentageTraveled);
+  // } 
 
-  public void incrementHoodAngle(double amount){ 
-    setHoodAngle(getHoodAngle() + amount);
+  // public void incrementHoodAngle(double amount){ 
+  //   setHoodAngle(hoodServo.getPulseWidth());
+  // }
+
+  public void incrementHoodPulse(int amount){ 
+    currentPulse = hoodServo.getPulseWidth() + amount;
   }
 
   @Override
   public void periodic() {
-    updateCurrentPosition();
-    SmartDashboard.putNumber("servo", hoodServo.getPulseWidth());
+    // updateCurrentPosition();
+    SmartDashboard.putNumber("servo pulse", hoodServo.getPulseWidth());
     SmartDashboard.putNumber("hood angle", getHoodAngle());
+    SmartDashboard.putNumber("fkywheel speed",ShooterMotor.getEncoder().getVelocity());
+    
+    setHoodPulse(currentPulse);
   }
 
 

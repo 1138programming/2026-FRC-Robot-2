@@ -10,16 +10,18 @@ public class SetHoodPulseWidth extends Command {
     public SetHoodPulseWidth(Shooter shooter, int amount){
         this.shooter = shooter;
         this.amount = amount;
+        addRequirements(shooter);
+
     }
 
     @Override
     public void execute(){
-        shooter.setPulseWidthModulation(amount);
+        shooter.setcurrentpulse(amount);
     }
 
      @Override
     public void end(boolean interrupted) {
-        shooter.setPulseWidthModulation(1500);
+        
     }
 
     @Override

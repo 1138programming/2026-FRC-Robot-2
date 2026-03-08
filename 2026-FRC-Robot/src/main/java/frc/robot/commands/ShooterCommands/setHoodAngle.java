@@ -16,6 +16,8 @@ public class setHoodAngle extends Command {
   public setHoodAngle(Shooter shooter, double angle) {
     this.shooter = shooter;
     this.angle = angle;
+    addRequirements(shooter);
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,7 +28,7 @@ public class setHoodAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setHoodAngle(angle);
+    // shooter.setHoodAngle(angle);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +38,6 @@ public class setHoodAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooter.isPosWithinTolerance();
+    return true; //shooter.isPosWithinTolerance();
   }
 }

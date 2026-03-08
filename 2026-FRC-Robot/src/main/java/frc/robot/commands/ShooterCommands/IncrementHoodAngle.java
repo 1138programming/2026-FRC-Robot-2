@@ -10,11 +10,13 @@ public class IncrementHoodAngle extends Command {
     public IncrementHoodAngle(Shooter shooter, int amount){
         this.shooter = shooter;
         this.amount = amount;
+        addRequirements(shooter);
+
     }
 
     @Override
     public void execute(){
-        shooter.setPulseWidthModulation(amount);
+        shooter.incrementHoodPulse(amount);
     }
 
      @Override
@@ -24,7 +26,7 @@ public class IncrementHoodAngle extends Command {
 
     @Override
     public boolean isFinished(){
-        return false;
+        return true;
     }
 
     

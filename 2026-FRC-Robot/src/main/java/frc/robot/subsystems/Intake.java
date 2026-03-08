@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -48,11 +49,11 @@ public class Intake extends SubsystemBase{
   public Intake() {
       intakeMotor = new SparkFlex(KintakeMotorId,MotorType.kBrushless);
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
-      deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio);
+      deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio,1,0);
       IntakeControler = new PIDController(KintakePIDKp, KintakePIDKi, KintakePIDKd);
-      deployencoder.setDutyCycleRange(0,1);
+      IntakeControler.disableContinuousInput();
       configureDeployMotor();
-      // configureIntakeMotor();
+   // configureIntakeMotor();
   }
 
   private void configureDeployMotor() {
@@ -108,26 +109,39 @@ public class Intake extends SubsystemBase{
     intakeMotor.set(power);
   }
 
-  public void setAngle(double angle) {
-    intakeDeployMotor.setControl(
-      deployMMRequest
-        .withPosition(angle)
-    );
-  }
 
   public void setIntakeDeployMotorPower(double power) {
     intakeDeployMotor.set(power);
+  }
+
+  public void intakeMoveToPosition(double position) {
+    double power = IntakeControler.calculate(getIntakeAngle(),position);
+    if (getIntakeAngle() < position + 10) {
+      power = -power;
+    }
+    SmartDashboard.putNumber("pid out", power);
+    intakeDeployMotor.set(power);
+ 
+  }
+
+  public void resetIntakePid() {
+    IntakeControler.reset();
   }
 
   public void stopIntakeMotor() {
     intakeMotor.set(0);
   }
 
-  public void stopIntakeDeployMotor() {
+  public void 
+  stopIntakeDeployMotor() {
     intakeDeployMotor.set(0);
   }
   public double getIntakeThroughBore() {
     return deployencoder.get();
+  }
+
+   public double getIntakeAngle() {
+    return deployencoder.get() * 360;
   }
 
   public boolean isDeployed() {
@@ -142,6 +156,8 @@ public class Intake extends SubsystemBase{
     @Override
     public void periodic() {
       SmartDashboard.putNumber("Intake ThroughBore", getIntakeThroughBore());
+      SmartDashboard.putNumber("Intake angle", getIntakeAngle());
+
       // This method will be called once per scheduler run
     }
 }

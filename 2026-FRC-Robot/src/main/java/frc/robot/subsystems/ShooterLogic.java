@@ -241,7 +241,7 @@ public class ShooterLogic extends SubsystemBase {
 
   public double relativebaseAngletoPose2d(Pose2d pose) {
     // double angle = Math.abs(Math.abs(botAngletoPose2d(pose)) - 180);
-     double angle = botAngletoPose2d(pose) - 180;
+     double angle = (drive.getRotation().getDegrees() - botAngletoPose2d(pose))- 180;
 
   
     if(angle > 180) {
@@ -297,9 +297,9 @@ public class ShooterLogic extends SubsystemBase {
    * @param pose2d
    * @return Returns the angle of the bot to the Pose2d relative to the field in degrees
    */
-  private double botAngletoPose2d(Pose2d pose2d) {
+  public double botAngletoPose2d(Pose2d pose2d) {
     Translation2d diffTranslation = pose2d.getTranslation().minus(drive.getPose().getTranslation());
-    return   drive.getRotation().getDegrees() - diffTranslation.getAngle().getDegrees();
+    return diffTranslation.getAngle().getDegrees();
   }
 
 
