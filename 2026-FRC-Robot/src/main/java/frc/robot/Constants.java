@@ -360,6 +360,13 @@ public final class Constants {
 
   }
 
+  public static class HangConstants {
+    public static final int kHangID = 11;
+
+    public static final double highPower = 0.6;
+    public static final double lowPower = 0.1;
+  }
+
   public static class IndexerConstants{
     public static final int kIndexerID = 4;
     
