@@ -363,8 +363,8 @@ public final class Constants {
   public static class HangConstants {
     public static final int kHangID = 11;
 
-    public static final double highPower = 0.6;
-    public static final double lowPower = 0.1;
+    public static final double khighPower = 0.6;
+    public static final double klowPower = 0.1;
   }
 
   public static class IndexerConstants{

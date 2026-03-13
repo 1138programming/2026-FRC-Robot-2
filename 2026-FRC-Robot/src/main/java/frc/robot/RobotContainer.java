@@ -21,6 +21,7 @@ import java.util.function.BooleanSupplier;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
+import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.Indexer;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -53,6 +54,9 @@ import frc.robot.commands.ShooterCommands.IncrementHoodAngle;
 import frc.robot.commands.ShooterCommands.SetHoodPulseWidth;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.commands.ShooterCommands.setHoodAngle;
+import frc.robot.commands.hang.HangDeploy;
+import frc.robot.commands.hang.HangPullup;
+import frc.robot.commands.hang.HangRetract;
 import frc.robot.commands.SetIndexerPower;
 import frc.robot.commands.StopIndexer;
 
@@ -97,6 +101,7 @@ public class RobotContainer {
   public final Limelight limelight;
   public final Shooter shooter;
   public final Indexer indexer;
+  public final Hang hang;
 
   public final ShooterLogic logic;
 
@@ -115,6 +120,9 @@ public class RobotContainer {
   public final SetHoodPulseWidth hoodAllDown;
   public final SetHoodPulseWidth hoodMid;
   public final SetHoodPulseWidth hoodAllUp;
+  public final HangDeploy hangDeploy;
+  public final HangRetract hangRetract;
+  public final HangPullup hangPullup;
 
 
   public final IncrementHoodAngle hoodUpCommand;
@@ -218,6 +226,8 @@ public class RobotContainer {
     intake = new Intake();
     limelight = new Limelight(LimelightConstants.kLimelightName);
     shooter = new Shooter();
+    hang = new Hang();
+
 
     // commands
     lasertoggle = new toggleLaser(m_Laser);
@@ -237,6 +247,9 @@ public class RobotContainer {
     hoodAllUp = new SetHoodPulseWidth(shooter, 2500);
     sethoodangle = new setHoodAngle(shooter, 0.9);
     hoodtsCommand = new SetHoodPulseWidth(shooter, 2500);
+    hangDeploy = new HangDeploy(hang);
+    hangRetract = new HangRetract(hang);
+    hangPullup = new HangPullup(hang);
 
 
     indexer = new Indexer();
