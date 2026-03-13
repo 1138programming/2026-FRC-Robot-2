@@ -28,7 +28,7 @@ public class Indexandshoot extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SetIndexerPower(indexer, kIndexerPower),
-      new SpinShooter(shooter, 0.6)
+      new SpinShooter(shooter, -0.6)
     );
   }
 }

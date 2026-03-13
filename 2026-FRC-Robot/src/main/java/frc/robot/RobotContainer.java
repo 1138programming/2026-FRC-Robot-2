@@ -124,7 +124,7 @@ public class RobotContainer {
   public final HangDeploy hangDeploy;
   public final HangRetract hangRetract;
   public final HangPullup hangPullup;
-  public final HangPower hangPower;
+  //public final HangPower hangPower;
 
 
   public final IncrementHoodAngle hoodUpCommand;
@@ -329,6 +329,7 @@ public class RobotContainer {
     // Set up auto routines
     NamedCommands.registerCommand("intakeout", intakeOut);
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
+    NamedCommands.registerCommand("shoot", spinShooterReverse);
     NamedCommands.registerCommand("restgyro",Commands.runOnce(
                 () -> drive.setPose(
                     new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
@@ -478,6 +479,7 @@ public class RobotContainer {
 
     compStreamDeck16.whileTrue(extendIntake);
     compStreamDeck15.whileTrue(retractIntake);
+
 
     // logitechBtnRB.whileTrue( new FunctionalCommand(
     // () -> {},

@@ -29,7 +29,6 @@ public class AutoShootPose extends ParallelCommandGroup {
     double[] compensatedComponents = shooterLogic.calculateShotChanges(target);
 
 
-
     addCommands(
       new SpinShooter(shooter, shooter.LinearSpeedToShooterPower(compensatedComponents[0])),
       new setHoodAngle(shooter, compensatedComponents[1]),

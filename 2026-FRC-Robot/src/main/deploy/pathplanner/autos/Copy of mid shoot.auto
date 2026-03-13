@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "restgyro"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Middle Shoot"
+            "pathName": "Copy of Middle Shoot"
           }
         },
         {
@@ -21,24 +15,31 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "indexandshoot"
+                  "waitTime": 0.75
                 }
               },
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 5.0
+                  "name": "shoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Move"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "indexandshoot"
+                }
+              }
+            ]
           }
         }
       ]

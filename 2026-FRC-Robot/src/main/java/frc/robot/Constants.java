@@ -364,7 +364,7 @@ public final class Constants {
     public static final int kHangID = 11;
 
     public static final double khighPower = 0.6;
-    public static final double klowPower = 0.1;
+    public static final double klowPower = 0.17;
   }
 
   public static class IndexerConstants{
