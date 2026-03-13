@@ -5,16 +5,20 @@
 package frc.robot.commands.hang;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
 import frc.robot.subsystems.Hang;
-import static frc.robot.Constants.HangConstants.khighPower;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class HangPullup extends Command {
-  private Hang hang;
-  /** Creates a new HangPullup. */
-  public HangPullup(Hang hang) {
+public class HangPower extends Command {
+  /** Creates a new HangPower. */
+
+  private final Hang hang;
+  private final double power;
+
+  public HangPower(Hang hang, double power) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.hang = hang;
+    this.power = power;
     addRequirements(hang);
   }
 
@@ -25,8 +29,8 @@ public class HangPullup extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //high power to pull up for power demand, low power to deploy cause we do not want to break the hang/bot
-    hang.setHangPower(khighPower);
+    
+    hang.setHangPower(power);
   }
 
   // Called once the command ends or is interrupted.

@@ -28,6 +28,7 @@ public class HangDeploy extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //low power to deploy, high power to pull up cause we do not want to break the hang/bot
     hang.setHangPower(klowPower);
   }
 

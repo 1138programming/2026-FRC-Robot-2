@@ -57,6 +57,7 @@ import frc.robot.commands.ShooterCommands.setHoodAngle;
 import frc.robot.commands.hang.HangDeploy;
 import frc.robot.commands.hang.HangPullup;
 import frc.robot.commands.hang.HangRetract;
+import frc.robot.commands.hang.HangPower;
 import frc.robot.commands.SetIndexerPower;
 import frc.robot.commands.StopIndexer;
 
@@ -123,6 +124,7 @@ public class RobotContainer {
   public final HangDeploy hangDeploy;
   public final HangRetract hangRetract;
   public final HangPullup hangPullup;
+  public final HangPower hangPower;
 
 
   public final IncrementHoodAngle hoodUpCommand;
@@ -496,6 +498,10 @@ public class RobotContainer {
     compStreamDeck14.whileTrue(hoodAllUp);
     compStreamDeck7.whileTrue(spinShooterReverse);
     compStreamDeck6.whileTrue(spinShooter);
+
+    compStreamDeck17.whileTrue(hangDeploy);
+    compStreamDeck18.whileTrue(hangRetract);
+    compStreamDeck19.whileTrue(hangPullup);
 
     // logitechBtnX.whileTrue(DriveAimPose);
 
