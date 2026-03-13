@@ -49,7 +49,7 @@ public class Intake extends SubsystemBase{
   public Intake() {
       intakeMotor = new SparkFlex(KintakeMotorId,MotorType.kBrushless);
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
-      deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio,1,0);
+      deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio,360,315);
       IntakeControler = new PIDController(KintakePIDKp, KintakePIDKi, KintakePIDKd);
       IntakeControler.disableContinuousInput();
       configureDeployMotor();

@@ -236,13 +236,8 @@ public class Drive extends SubsystemBase {
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
-    
     limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
-
       
-  
-
-
     // boolean isUsingVision = updateOdometryWithMT2();
     // SmartDashboard.putBoolean("isUsingVision", isUsingVision);
     SmartDashboard.putString("drive pose estimater", poseEstimator.getEstimatedPosition().toString());

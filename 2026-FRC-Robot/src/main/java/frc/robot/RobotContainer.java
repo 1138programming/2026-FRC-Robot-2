@@ -313,6 +313,7 @@ public class RobotContainer {
 
     // Set up auto routines
     NamedCommands.registerCommand("intakeout", intakeOut);
+    NamedCommands.registerCommand("shoot", spinShooterReverse);
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
     NamedCommands.registerCommand("restgyro",Commands.runOnce(
                 () -> drive.setPose(
@@ -448,21 +449,21 @@ public class RobotContainer {
         .whileTrue(
           DriveCommands.joystickDrive(
             drive,
-            () -> getLogiLeftYAxis() * 0.7,
-            () -> getLogiLeftXAxis() * 0.7,
-            () -> getLogiRightXAxis() * 0.7));
+            () -> getLogiLeftYAxis() * 0.6,
+            () -> getLogiLeftXAxis() * 0.6,
+            () -> getLogiRightXAxis() * 0.6));
 
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     compStreamDeck5.whileTrue(intakein);
     compStreamDeck4.whileTrue(intakeOut);
-    compStreamDeck9.whileTrue(deployIntake);
+    compStreamDeck16.whileTrue(deployIntake);
 
-    compStreamDeck10.whileTrue(stowIntake);
+    compStreamDeck15.whileTrue(stowIntake);
 
-    compStreamDeck16.whileTrue(extendIntake);
-    compStreamDeck15.whileTrue(retractIntake);
+    compStreamDeck9.whileTrue(extendIntake);
+    compStreamDeck10.whileTrue(retractIntake);
 
     // logitechBtnRB.whileTrue( new FunctionalCommand(
     // () -> {},
@@ -494,6 +495,12 @@ public class RobotContainer {
                     new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                 drive)
                 .ignoringDisable(true));
+    logitechBtnX.onTrue(
+            Commands.runOnce(
+                () -> limelight.forceMT1Oreintation(),
+                limelight)
+                .ignoringDisable(true));
+    
   }
 
   public double getLogiRightYAxis() {

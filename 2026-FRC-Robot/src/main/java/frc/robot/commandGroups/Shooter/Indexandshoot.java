@@ -7,6 +7,8 @@ package frc.robot.commandGroups.Shooter;
 import static frc.robot.Constants.IndexerConstants.kIndexerPower;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SetIndexerPower;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.subsystems.Indexer;
@@ -15,12 +17,13 @@ import frc.robot.subsystems.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Indexandshoot extends ParallelCommandGroup {
+public class Indexandshoot extends ParallelDeadlineGroup {
   Shooter shooter;
   Indexer indexer;
   /** Creates a new Indexandshoot. */
   public Indexandshoot( Shooter shooter,
   Indexer indexer) {
+    super(new WaitCommand(0.5));
     this.indexer = indexer;
     this.shooter = shooter;
 
@@ -28,7 +31,7 @@ public class Indexandshoot extends ParallelCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SetIndexerPower(indexer, kIndexerPower),
-      new SpinShooter(shooter, 0.6)
+      new SpinShooter(shooter, -0.7)
     );
   }
 }

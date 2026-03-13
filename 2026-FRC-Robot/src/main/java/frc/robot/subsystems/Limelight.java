@@ -110,7 +110,6 @@ public class Limelight extends SubsystemBase {
     Area = LimelightOneTable.getEntry("ta").getDouble(0); 
     ID = LimelightOneTable.getEntry("tid").getDouble(0);  
     
-
    Area = LimelightOneTable.getEntry("TA").getDouble(0); 
    ID = LimelightOneTable.getEntry("TID").getDouble(0);  
    
@@ -119,14 +118,14 @@ public class Limelight extends SubsystemBase {
 
    filterPublisher.accept(new double[]{3,4});
 
-
+  // SmartDashboard.putNumber("mt1deg",getMT1Pose().getRotation().getDegrees());
 
    //botPose = LimelightOneTable.getEntry("botpose_wpiblue").getDoubleArray(new double[61]);
 
-   if ((getPoseEstimateMT1() != null && getPoseEstimateMT1().tagCount != 0) && !firstpose) {
-    updateOreintation(getMT1Pose().getRotation().getDegrees());
-
-   }
+  //  if ((getPoseEstimateMT1() != null && getPoseEstimateMT1().tagCount != 0) && !firstpose) {
+  //   LimelightHelpers.SetRobotOrientation(limelightName, getMT1Pose().getRotation().getDegrees(), 0,0,0,0,0);
+  //   firstpose = true;
+  //  }
 
     if (botpose.length != 0) {
       botPoseX = botpose[0];
@@ -344,9 +343,16 @@ public class Limelight extends SubsystemBase {
   }
 
   public void updateOreintation(double degrees) {
-    if (firstpose) {
+    if ((getPoseEstimateMT1() != null && getPoseEstimateMT1().tagCount != 0)) {
+      LimelightHelpers.SetRobotOrientation(limelightName, getMT1Pose().getRotation().getDegrees(), 0,0,0,0,0);
+    }
+    else {
       LimelightHelpers.SetRobotOrientation(limelightName, degrees, 0,0,0,0,0);
     }
+  }
+
+  public void forceMT1Oreintation() {
+    LimelightHelpers.SetRobotOrientation(limelightName, getMT1Pose().getRotation().getDegrees(), 0,0,0,0,0);
   }
 
   /**

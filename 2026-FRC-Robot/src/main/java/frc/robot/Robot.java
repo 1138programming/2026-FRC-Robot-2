@@ -7,6 +7,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -66,7 +71,13 @@ public class Robot extends LoggedRobot {
     // Start AdvantageKit logger
     Logger.start();
 
-    // Instantiate our RobotContainer. This will perform all our button bindings,
+   
+    // UsbCamera camera = CameraServer.startAutomaticCapture("webcam","/dev/video0");
+    // camera.setResolution(640, 480);
+    // VideoSink server = CameraServer.getServer();
+    // server.setSource(camera);
+    
+    // Instantiate our RobotContainer. This will; perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
   }

@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Middle Shoot"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
