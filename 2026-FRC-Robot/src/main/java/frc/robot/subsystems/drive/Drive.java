@@ -238,8 +238,8 @@ public class Drive extends SubsystemBase {
 
     limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
       
-    // boolean isUsingVision = updateOdometryWithMT2();
-    // SmartDashboard.putBoolean("isUsingVision", isUsingVision);
+    boolean isUsingVision = updateOdometryWithMT2();
+    SmartDashboard.putBoolean("isUsingVision", isUsingVision);
     SmartDashboard.putString("drive pose estimater", poseEstimator.getEstimatedPosition().toString());
     SmartDashboard.putNumber("base delta angle", getAngularVelocityRadiansPerSecond() * 180/ Math.PI);
     SmartDashboard.putNumber("base horizontal vel", getHorizontalVelocityMetersPerSecond());
@@ -258,8 +258,9 @@ public class Drive extends SubsystemBase {
   //extra periodic methods
   public boolean updateOdometryWithMT2() {
     if (limelight.existsVisionData()) {
-      poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,0.7));//0.7,0.7,99999999
-      poseEstimator.addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time());
+      addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time(),VecBuilder.fill(0.7,0.7,0.7));
+      // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,0.7));//0.7,0.7,99999999
+      // poseEstimator.addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time());
       return true;
     }
 

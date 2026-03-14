@@ -104,19 +104,18 @@ public class Limelight extends SubsystemBase {
 
   public void periodic() {
     //Gets whatever the vaaibale names are
-    isTargetsDetected = (int)LimelightOneTable.getEntry("tv").getInteger(0);
-    tx = LimelightOneTable.getEntry("tx").getDouble(0);  
-    ty = LimelightOneTable.getEntry("ty").getDouble(0);  
-    Area = LimelightOneTable.getEntry("ta").getDouble(0); 
-    ID = LimelightOneTable.getEntry("tid").getDouble(0);  
+  //   isTargetsDetected = (int)LimelightOneTable.getEntry("tv").getInteger(0);
+  //   tx = LimelightOneTable.getEntry("tx").getDouble(0);  
+  //   ty = LimelightOneTable.getEntry("ty").getDouble(0);  
+  //   Area = LimelightOneTable.getEntry("ta").getDouble(0); 
+  //   ID = LimelightOneTable.getEntry("tid").getDouble(0);  
     
-   Area = LimelightOneTable.getEntry("TA").getDouble(0); 
-   ID = LimelightOneTable.getEntry("TID").getDouble(0);  
+  //  Area = LimelightOneTable.getEntry("TA").getDouble(0); 
+  //  ID = LimelightOneTable.getEntry("TID").getDouble(0);  
    
-   LimelightOneTable.getEntry("TID").getDoubleArray(new double[11]);
+  //  LimelightOneTable.getEntry("TID").getDoubleArray(new double[11]);
 
 
-   filterPublisher.accept(new double[]{3,4});
 
   // SmartDashboard.putNumber("mt1deg",getMT1Pose().getRotation().getDegrees());
 
@@ -127,21 +126,21 @@ public class Limelight extends SubsystemBase {
   //   firstpose = true;
   //  }
 
-    if (botpose.length != 0) {
-      botPoseX = botpose[0];
-      botPoseY = botpose[1];
-      botPoseZ = botpose[2];
-      roll = botpose[3];
-      pitch = botpose[4];
-      yaw = botpose[5];
-      latency = botpose[6];
-      numberOfTargetsSeen = botpose[7];
-      tagSpan = botpose[8];
-      averageDistance = botpose[9];
-      Area = botpose[10];
-      //ID = botpose[11];
+    // if (botpose.length != 0) {
+    //   botPoseX = botpose[0];
+    //   botPoseY = botpose[1];
+    //   botPoseZ = botpose[2];
+    //   roll = botpose[3];
+    //   pitch = botpose[4];
+    //   yaw = botpose[5];
+    //   latency = botpose[6];
+    //   numberOfTargetsSeen = botpose[7];
+    //   tagSpan = botpose[8];
+    //   averageDistance = botpose[9];
+    //   Area = botpose[10];
+    //   //ID = botpose[11];
 
-    }
+    // }
 
     //smart dashboarrd
 

@@ -221,15 +221,15 @@ public final class Constants {
     public static final double KintakeStowMotorSpeed = 0.2;
 
 
-    public static final double KintakePIDKp = 0.001;
+    public static final double KintakePIDKp = 0.002;
     public static final double KintakePIDKi = 0;
     public static final double KintakePIDKd = 0;
 
 
     public static final double kDeployReduction = 50.0;
 
-    public static final double kDeployAngle = 195;
-    public static final double kStowAngle = 125;
+    public static final double kDeployAngle = 23;
+    public static final double kStowAngle = 300;
 
     public static final double kStowed = 100;
 

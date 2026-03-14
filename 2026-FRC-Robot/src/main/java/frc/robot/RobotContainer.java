@@ -40,7 +40,6 @@ import frc.robot.commandGroups.AutoDriveAimPose;
 import frc.robot.commandGroups.DriveWhileAim;
 import frc.robot.commandGroups.Shooter.Indexandshoot;
 import frc.robot.commands.Autos;
-import frc.robot.commands.toggleLaser;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.IntakeIn;
@@ -56,7 +55,6 @@ import frc.robot.commands.ShooterCommands.setHoodAngle;
 import frc.robot.commands.SetIndexerPower;
 import frc.robot.commands.StopIndexer;
 
-import frc.robot.subsystems.Laser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -92,7 +90,6 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  public final Laser m_Laser;
   public final Intake intake;
   public final Limelight limelight;
   public final Shooter shooter;
@@ -102,7 +99,6 @@ public class RobotContainer {
 
   // Comands
 
-  public final toggleLaser lasertoggle;
   public final IntakeIn intakein;
   public final IntakeOut intakeOut;
   public final ExtendIntake extendIntake;
@@ -214,13 +210,11 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_Laser = new Laser();
     intake = new Intake();
     limelight = new Limelight(LimelightConstants.kLimelightName);
     shooter = new Shooter();
 
     // commands
-    lasertoggle = new toggleLaser(m_Laser);
     intakein = new IntakeIn(intake);
     intakeOut = new IntakeOut(intake);
     extendIntake = new ExtendIntake(intake);
@@ -435,8 +429,8 @@ public class RobotContainer {
             () -> getLogiLeftYAxis(),
             () -> getLogiLeftXAxis(),
             () -> getLogiRightXAxis()));
+
     intake.setDefaultCommand(stopintake);
-    // shooter.setDefaultCommand(hoodDownCommand);
 
     logitechBtnRT
         .whileTrue(
@@ -458,12 +452,12 @@ public class RobotContainer {
 
     compStreamDeck5.whileTrue(intakein);
     compStreamDeck4.whileTrue(intakeOut);
-    compStreamDeck16.whileTrue(deployIntake);
+    compStreamDeck9.whileTrue(deployIntake);
 
-    compStreamDeck15.whileTrue(stowIntake);
+    compStreamDeck10.whileTrue(stowIntake);
 
-    compStreamDeck9.whileTrue(extendIntake);
-    compStreamDeck10.whileTrue(retractIntake);
+    compStreamDeck16.whileTrue(extendIntake);
+    compStreamDeck15.whileTrue(retractIntake);
 
     // logitechBtnRB.whileTrue( new FunctionalCommand(
     // () -> {},

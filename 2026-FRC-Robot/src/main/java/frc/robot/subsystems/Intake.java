@@ -49,7 +49,7 @@ public class Intake extends SubsystemBase{
   public Intake() {
       intakeMotor = new SparkFlex(KintakeMotorId,MotorType.kBrushless);
       intakeDeployMotor = new TalonFX(KintakeDeployMotorId);
-      deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio,360,315);
+      deployencoder = new DutyCycleEncoder(KintakeThroughBoreDio,330,140);
       IntakeControler = new PIDController(KintakePIDKp, KintakePIDKi, KintakePIDKd);
       IntakeControler.disableContinuousInput();
       configureDeployMotor();
@@ -115,10 +115,8 @@ public class Intake extends SubsystemBase{
   }
 
   public void intakeMoveToPosition(double position) {
-    double power = IntakeControler.calculate(getIntakeAngle(),position);
-    if (getIntakeAngle() < position + 10) {
-      power = -power;
-    }
+    double power = IntakeControler.calculate(getIntakeThroughBore(), position);
+
     SmartDashboard.putNumber("pid out", power);
     intakeDeployMotor.set(power);
  
@@ -140,9 +138,7 @@ public class Intake extends SubsystemBase{
     return deployencoder.get();
   }
 
-   public double getIntakeAngle() {
-    return deployencoder.get() * 360;
-  }
+ 
 
   public boolean isDeployed() {
     return isDeployed;
@@ -156,7 +152,6 @@ public class Intake extends SubsystemBase{
     @Override
     public void periodic() {
       SmartDashboard.putNumber("Intake ThroughBore", getIntakeThroughBore());
-      SmartDashboard.putNumber("Intake angle", getIntakeAngle());
 
       // This method will be called once per scheduler run
     }

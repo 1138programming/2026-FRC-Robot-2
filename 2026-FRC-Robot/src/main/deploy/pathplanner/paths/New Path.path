@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5634333333333332,
-        "y": 4.005766666666666
+        "x": 1.4254493580599144,
+        "y": 4.028530670470756
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.669053676075317,
-        "y": 4.013981807486889
+        "x": 1.6742086556124116,
+        "y": 4.053406600226006
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5171000000000001,
-        "y": 4.005766666666666
+        "x": 3.5634333333333332,
+        "y": 7.192200000000001
       },
       "prevControl": {
-        "x": 2.2258252168403585,
-        "y": 4.011653757252578
+        "x": 2.8906230622919633,
+        "y": 7.3345252496433675
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "NZ",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
