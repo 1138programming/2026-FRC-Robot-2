@@ -10,8 +10,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import java.util.function.DoubleSupplier;
 
 import frc.robot.commandGroups.DriveWhileAim;
+import frc.robot.commands.ShooterCommands.SetHoodAngle;
 import frc.robot.commands.ShooterCommands.SpinShooter;
-import frc.robot.commands.ShooterCommands.setHoodAngle;
 
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
@@ -31,8 +31,8 @@ public class AutoShootPose extends ParallelCommandGroup {
 
 
     addCommands(
-      new SpinShooter(shooter, shooter.LinearSpeedToShooterPower(compensatedComponents[0])),
-      new setHoodAngle(shooter, compensatedComponents[1]),
+      new SpinShooter(shooter, shooter.ShooterRPMtoLinearSpeed(compensatedComponents[0])),
+      new SetHoodAngle(shooter, compensatedComponents[1]),
       new DriveWhileAim(drive, xSupplier, ySupplier, compensatedComponents[2])
     );
   }

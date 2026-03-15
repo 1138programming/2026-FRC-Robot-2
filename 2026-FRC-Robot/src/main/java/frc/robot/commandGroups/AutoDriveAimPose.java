@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 import frc.robot.commandGroups.DriveWhileAim;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ShooterCommands.SpinShooter;
-import frc.robot.commands.ShooterCommands.setHoodAngle;
 
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;

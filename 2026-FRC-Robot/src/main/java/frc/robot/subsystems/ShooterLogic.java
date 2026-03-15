@@ -19,20 +19,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.FieldConstants.HubConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.drive.Drive;
 
-import frc.robot.Constants;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.FieldConstants.HubConstants;
-import frc.robot.Constants.TurretConstants;
-import frc.robot.Constants.TurretConstants.TurretOffsetConstants;
 
-import static frc.robot.Constants.TurretConstants.*;
+
 import static frc.robot.Constants.FieldConstants.*;
+import static frc.robot.Constants.ShooterConstants.*;
 import static frc.robot.Constants.FieldConstants.HubConstants.*;
-import static frc.robot.Constants.ShooterConstants.kShooterHeightMeters;
-import static frc.robot.Constants.TurretConstants.*;
 
 public class ShooterLogic extends SubsystemBase {
   /** Creates a new ShooterLogic. */
@@ -41,8 +37,7 @@ public class ShooterLogic extends SubsystemBase {
   private Drive drive;
 
   private Boolean readyToShoot; 
-  private Pose3d turretPose3d;
-  private Pose2d turretPose2d;
+
 
   private Pose3d kHubFieldPose3d;
   private Pose2d kHubFieldPose2d;
@@ -58,9 +53,7 @@ public class ShooterLogic extends SubsystemBase {
     this.limelight = limelight;
     this.drive = drive;
     readyToShoot = false;
-    turretPose2d = new Pose2d(new Translation2d(), new Rotation2d());
-    turretPose3d = new Pose3d(new Translation3d(), new Rotation3d());
-
+    
     if (DriverStation.getAlliance().isPresent()) {
       if (DriverStation.getAlliance().get() == Alliance.Red) {
         kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
@@ -97,15 +90,13 @@ public class ShooterLogic extends SubsystemBase {
     kHubFieldPose2d = kHubFieldPose3d.toPose2d();
 
     // addTurretRotationtoPose();
-    turretPose3d = turretPositionPose3d();
-    turretPose2d = turretPose3d.toPose2d();
 
    
 
     //shot change math
 
-    shotChangeDataHub = calculateShotChanges(kHubFieldPose3d);
-    SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
+    // shotChangeDataHub = calculateShotChanges(kHubFieldPose3d);
+    // SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
     //shotChangeDataHub = calculateShotChanges(kHubFieldPose2d);
     //SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
      
@@ -135,10 +126,10 @@ public class ShooterLogic extends SubsystemBase {
     double robottoGoalAngle = botAngletoPose2d(target.toPose2d()); //angle from robot to goal in reference to field
 
     //initial launch components
-    double hoodAngle = Math.max(kHoodAngleMinRadians, Math.min(kHoodAngleMaxRadians, (Math.atan(2 * y / x - Math.tan(a))))); //this clamps the hood angle to constraints
+    double hoodAngle = Math.max(kHoodMinAngleRadians, Math.min(kHoodMaxAngleRadians, (Math.atan(2 * y / x - Math.tan(a))))); //this clamps the hood angle to constraints
     double flywheelSpeed = Math.sqrt(Math.abs(g * x * x / (2 * Math.pow(Math.cos(hoodAngle), 2) * (x * Math.tan(hoodAngle) - y))));
 
-    //robot velocity components -> TODO, check video to see if this matches up
+    //robot velocity components
     double robotVelocityXComponent = drive.getHorizontalVelocityMetersPerSecond();
     double robotVelocityYComponent = drive.getVerticalVelocityMetersPerSecond();
 
@@ -150,12 +141,12 @@ public class ShooterLogic extends SubsystemBase {
     double ndr = nvr * time; //convert to distance
 
     //final launch components with compensation
-    hoodAngle = Math.max(kHoodAngleMinRadians, Math.min(kHoodAngleMaxRadians, (Math.atan(vz / nvr))));
+    hoodAngle = Math.max(kHoodMaxAngleRadians, Math.min(kHoodMinAngleRadians, (Math.atan(vz / nvr))));
     flywheelSpeed = Math.sqrt(g * ndr * ndr / (2 * Math.pow(Math.cos(hoodAngle), 2) * (ndr * Math.tan(hoodAngle) - y)));
 
     // //updating turret
     double turretVelCompensation = Math.atan(robotVelocityYComponent / ivr);
-    double newAngle = robottoGoalAngle + turretVelCompensation;//TODO check signs especially for turret compensation
+    double newAngle = robottoGoalAngle + turretVelCompensation;
 
   
   
@@ -196,35 +187,17 @@ public class ShooterLogic extends SubsystemBase {
         double hoodAngle = Math.acos(Math.sqrt((innnerb + Math.sqrt(innerDiscriminant))/denominator));
         return hoodAngle;
   }
+
+  public double getexitvelocityforpose(Pose2d pose,double angle) {
+
+
+    return 1;
+
+  }
   
 
 
-  //---------------------//
-  //----- LL aiming -----//
-  //---------------------//
-
-  /**
-   * 
-   * Used for early autoaiming to start orienting the turret until shotchanges can be calculated
-   * can also be used for updating turret angle if limelight is the only source of aiming.
-   * Will require future implementation
-   * @return suggested absolute angle to aim turret (radians)
-   */
-  public double absoluteAngletoAprilTagLimelightRadians() {
-    double angleDif = limelight.getTx();
-    double absoluteAngle = angleDif;
-    return absoluteAngle;
-  }
-
-  public double absoluteAngletoAprilTagLimelightDegrees() {
-    return Math.toDegrees(absoluteAngletoAprilTagLimelightRadians());
-  }
-
-  public double absoluteAngletoAprilTagLimelightDegrees(double limelightOffsetAngleDegrees) {
-    double angleDif = limelight.getTxHelper();
-    double absoluteAngle = limelightOffsetAngleDegrees + angleDif;
-    return absoluteAngle;
-  }
+  
 
   public Pose3d getHubPose3d() {
     return kHubFieldPose3d;
@@ -241,22 +214,12 @@ public class ShooterLogic extends SubsystemBase {
 //             //
 /////////////////
 
+  
   /**
    * @param pose2d
-   * @return The relative yaw angle of the turret to directly face the Pose2d position (in degrees)
+   * @return The relative yaw angle of the bot to directly face the Pose2d position (in degrees)
    * Values range from -180 to 180
    */
-  public double relativeTurretAngletoPose2d(Pose2d pose) {
-    double angle = turretAngletoPose2d(pose);
-    if(angle > 180) {
-      angle -= 360;
-    } 
-    if(angle < -180) {
-      angle += 360;
-    }
-
-    return angle;
-  }
 
   public double relativebaseAngletoPose2d(Pose2d pose) {
     // double angle = Math.abs(Math.abs(botAngletoPose2d(pose)) - 180);
@@ -273,18 +236,7 @@ public class ShooterLogic extends SubsystemBase {
     return angle;
   }
 
-  // angle used for when we just want parameters
-  private double TurretAnglefromabsolute(double angle) {
-    if(angle > 180) {
-      angle -= 360;
-    } 
-    if(angle < -180) {
-      angle += 360;
-    }
-
-    return angle;
-  }
-
+  
 
   /**
    * @return angle difference to aim turret (radians); the Tx value from limelight
@@ -304,46 +256,30 @@ public class ShooterLogic extends SubsystemBase {
 
 
   private double distancetoPose2d(Pose2d pose2d) {
-    return turretPose2d.getTranslation().getDistance(pose2d.getTranslation());
+    return drive.getPose().getTranslation().getDistance(pose2d.getTranslation());
   }
 
-  private double distancetoPose3d(Pose3d pose3d) {
-    return turretPose3d.getTranslation().getDistance(pose3d.getTranslation());
-  }
+
 
   /**
    *
    * @param pose2d
-   * @return Returns the angle of the bot to the Pose2d relative to the field in degrees
+   * @return Returns the yaw angle of the bot to the Pose2d relative to the field in degrees
    */
   public double botAngletoPose2d(Pose2d pose2d) {
     Translation2d diffTranslation = pose2d.getTranslation().minus(drive.getPose().getTranslation());
     return diffTranslation.getAngle().getDegrees();
   }
 
+  
+  
+  
+  
 
-  private Pose3d turretPositionPose3d() {
 
-    Pose3d currentPose = new Pose3d(drive.getPose().getX(), drive.getPose().getY(), 0.0, new Rotation3d(drive.getRotation()));
-    
-    Translation3d translationOffset = new Translation3d(TurretOffsetConstants.kForwardOffsetMeters_X, TurretOffsetConstants.kSideOffsetMeters_Y, TurretOffsetConstants.kVerticalOffsetMeters_Z); //include turret offsets once known. Placeholder is top right corner of robot
-    
-    //yaw angle should be only independent value from drive and offsets and should be updated periodically
-    //yaw of the turret is subtracted because turret is CW positive while Pose is CCW positive
-    //Rotation3d rotationOffset = new Rotation3d(TurretOffsetConstants.kTurretYawOffsetRadians, TurretOffsetConstants.kTurretPitchOffsetRadians, TurretOffsetConstants.kTurretYawOffsetRadians - Math.toRadians(turret.getTurretRotationDegree())); 
-    Transform3d offsetTransformation = new Transform3d(translationOffset, new Rotation3d(0, 0, 0)); //placeholder rotation offset, will be updated with turret angle once implemented
 
-    return currentPose.plus(offsetTransformation);
-  }
-  /**
-   * 
-   * @param pose2d
-   * @return The absolute yaw angle of the turret to directly face the Pose2d position (in degrees)
-   */
-  private double turretAngletoPose2d(Pose2d pose2d) {
-    Translation2d difftranslation = pose2d.getTranslation().minus(turretPose2d.getTranslation());
-    return drive.getRotation().getDegrees() - difftranslation.getAngle().getDegrees(); 
-  }
+ 
+  
 
   public Double getShotChangeFlywheelVelocity(Targets target) {
     switch (target) {

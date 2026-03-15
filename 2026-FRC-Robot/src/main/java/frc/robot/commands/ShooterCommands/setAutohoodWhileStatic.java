@@ -31,7 +31,7 @@ public class setAutohoodWhileStatic extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.angle = logic.getHoodAimAngleforStaticBase(targetPose, shooter.ShooterPowertoLinearSpeed(power)); // Example flywheel speed of 10 m/s
+    this.angle = logic.getHoodAimAngleforStaticBase(targetPose, shooter.ShooterRPMtoLinearSpeed(power)); // Example flywheel speed of 10 m/s
   }
 
   // Called every time the scheduler runs while the command is scheduled.

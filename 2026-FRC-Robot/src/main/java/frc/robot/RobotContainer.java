@@ -11,8 +11,8 @@ package frc.robot;
 import static frc.robot.Constants.FieldConstants.TagIDConstants.kHubCenterTagRed;
 import static frc.robot.Constants.IndexerConstants.kIndexerPower;
 import static frc.robot.Constants.OperatorConstants.*;
+import static frc.robot.Constants.ShooterConstants.*;
 import static frc.robot.Constants.SwerveConstants.*;
-import static frc.robot.Constants.TurretConstants.*;
 
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
@@ -47,12 +47,12 @@ import frc.robot.commands.Intake.IntakeOut;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Intake.StopIntake;
 import frc.robot.commands.Intake.StowIntake;
+import frc.robot.commands.Intake.DeployAndIntake;
 import frc.robot.subsystems.Intake;
-import frc.robot.commands.ShooterCommands.IncrementHoodAngle;
-import frc.robot.commands.ShooterCommands.SetHoodPulseWidth;
+import frc.robot.commands.ShooterCommands.SetHoodAngle;
 import frc.robot.commands.ShooterCommands.SetShooterRPM;
+import frc.robot.commands.ShooterCommands.SpinHood;
 import frc.robot.commands.ShooterCommands.SpinShooter;
-import frc.robot.commands.ShooterCommands.setHoodAngle;
 import frc.robot.commands.SetIndexerPower;
 import frc.robot.commands.StopIndexer;
 
@@ -109,21 +109,20 @@ public class RobotContainer {
   public final StopIntake stopintake;
   public final SpinShooter spinShooter;
   public final SpinShooter spinShooterReverse;
-  public final SetHoodPulseWidth hoodAllDown;
-  public final SetHoodPulseWidth hoodMid;
-  public final SetHoodPulseWidth hoodAllUp;
-
-
-  public final IncrementHoodAngle hoodUpCommand;
-  public final IncrementHoodAngle hoodDownCommand;
-  public final SetHoodPulseWidth hoodtsCommand;
-  public final setHoodAngle sethoodangle;
+  
   public final SetIndexerPower setIndexerPower;
   public final SetIndexerPower reverseIndexerPower;
   public final StopIndexer stopIndexer;
   public final SpinShooter spin;
   public final SetShooterRPM shooterRPM;
   public final SetShooterRPM shooterRPMReverse;
+  public final SetHoodAngle setHoodAngle;
+  public final SpinHood hoodUp;
+  public final SpinHood hoodDown;
+
+
+
+  public final DeployAndIntake deployAndIntake;
 
 
   // Comands
@@ -229,16 +228,15 @@ public class RobotContainer {
     stopintake = new StopIntake(intake);
     spinShooter = new SpinShooter(shooter, 0.70);
     spinShooterReverse = new SpinShooter(shooter, -0.70);
-    hoodUpCommand = new IncrementHoodAngle(shooter, 20);
-    hoodDownCommand = new IncrementHoodAngle(shooter, -20);
-    hoodAllDown = new SetHoodPulseWidth(shooter, 500);
-    hoodMid = new SetHoodPulseWidth(shooter, 1500);
-    hoodAllUp = new SetHoodPulseWidth(shooter, 2500);
-    sethoodangle = new setHoodAngle(shooter, 0.9);
-    hoodtsCommand = new SetHoodPulseWidth(shooter, 2500);
+    ;
     spin = new SpinShooter(shooter, 0.6);
-    shooterRPMReverse = new SetShooterRPM(shooter, 4000);
-    shooterRPM = new SetShooterRPM(shooter, -4000);
+    shooterRPMReverse = new SetShooterRPM(shooter, -KFlyWheelDefaultSpeed);
+    shooterRPM = new SetShooterRPM(shooter, KFlyWheelDefaultSpeed);
+    setHoodAngle = new SetHoodAngle(shooter,50);
+    hoodUp = new SpinHood(shooter, kIndexerPower); 
+    hoodDown = new SpinHood(shooter, kIndexerPower);
+
+    deployAndIntake = new DeployAndIntake(intake);
     
 
 
@@ -435,22 +433,22 @@ public class RobotContainer {
             () -> getLogiLeftXAxis(),
             () -> getLogiRightXAxis()));
 
-    intake.setDefaultCommand(stopintake);
+    intake.setDefaultCommand(stowIntake);
 
-    logitechBtnRT
-        .whileTrue(
-          new AutoDriveAimPose(logic, shooter, drive, 
-          () -> logic.getHubPose3d(), 
-          () -> getLogiLeftYAxis(), 
-          () -> getLogiLeftXAxis()));
+    // logitechBtnRT
+    //     .whileTrue(
+    //       new AutoDriveAimPose(logic, shooter, drive, 
+    //       () -> logic.getHubPose3d(), 
+    //       () -> getLogiLeftYAxis(), 
+    //       () -> getLogiLeftXAxis()));
 
-    logitechBtnRB
-        .whileTrue(
-          DriveCommands.joystickDrive(
-            drive,
-            () -> getLogiLeftYAxis() * 0.6,
-            () -> getLogiLeftXAxis() * 0.6,
-            () -> getLogiRightXAxis() * 0.6));
+    // logitechBtnRB
+    //     .whileTrue(
+    //       DriveCommands.joystickDrive(
+    //         drive,
+    //         () -> getLogiLeftYAxis() * 0.6,
+    //         () -> getLogiLeftXAxis() * 0.6,
+    //         () -> getLogiRightXAxis() * 0.6));
 
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -476,16 +474,24 @@ public class RobotContainer {
     // () -> true,
     compStreamDeck2.whileTrue(setIndexerPower);
     compStreamDeck3.whileTrue(reverseIndexerPower);
-    compStreamDeck13.onTrue(hoodDownCommand);
-    compStreamDeck8.onTrue(hoodUpCommand);
-    compStreamDeck11.whileTrue(hoodMid);
-    compStreamDeck12.whileTrue(hoodAllDown);
-    compStreamDeck14.whileTrue(hoodAllUp);
+    // compStreamDeck13.onTrue(hoodDownCommand);
+    // compStreamDeck8.onTrue(hoodUpCommand);
+    // compStreamDeck11.whileTrue(hoodMid);
+    // compStreamDeck12.whileTrue(hoodAllDown);
+    // compStreamDeck14.whileTrue(hoodAllUp);
     // compStreamDeck7.whileTrue(spinShooter);
     // compStreamDeck6.whileTrue(spinShooterReverse);
 
     compStreamDeck7.whileTrue(shooterRPM);
     compStreamDeck6.whileTrue(shooterRPMReverse);
+    
+    logitechBtnLT.whileTrue(deployAndIntake);
+    // logitechBtnRT.whileTrue(deployIntake);
+
+
+    logitechBtnLB.whileTrue(setIndexerPower);
+    logitechBtnRB.whileTrue(shooterRPM);
+
 
 
     // logitechBtnX.whileTrue(DriveAimPose);

@@ -47,7 +47,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
-import frc.robot.Constants.TurretConstants.*;
 import frc.robot.Constants.FieldConstants.HubConstants;
 import frc.robot.Constants.FieldConstants.HubConstants.*;
 import frc.robot.LimelightHelpers;
@@ -250,7 +249,6 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putData("feild",feild);
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
-    SmartDashboard.putNumber("meters to center hub", distanetoCenterHub());
 
 
   }
@@ -430,22 +428,7 @@ public class Drive extends SubsystemBase {
   }
 
   //to be implemented into shooter logic most likely
-  public Pose3d turretPositionPose3d() {
-    Rotation3d currentRotation = new Rotation3d(getRotation());
-    Pose3d currentPose = new Pose3d(poseEstimator.getEstimatedPosition().getX(),poseEstimator.getEstimatedPosition().getY(), 0.0, currentRotation);
-    
-    Translation3d translationOffset = new Translation3d(TurretOffsetConstants.kOldForwardOffsetMeters_X, TurretOffsetConstants.kOldSideOffsetMeters_Y, TurretOffsetConstants.kOldVerticalOffsetMeters_Z); //include turret offsets once known. Placeholder is top right corner of robot
-    Rotation3d rotationOffset = new Rotation3d(TurretOffsetConstants.kTurretYawOffsetRadians, TurretOffsetConstants.kTurretPitchOffsetRadians,TurretOffsetConstants.kTurretYawOffsetRadians);
-    Transform3d offsetTransformation = new Transform3d(translationOffset, rotationOffset);
+ 
 
-    return currentPose.plus(offsetTransformation);
-  }
-
-  public double distanetoCenterHub() {
-    Pose3d currentPose = turretPositionPose3d();
-    
-    Pose3d hubCenterTop = new Pose3d(HubConstants.red.kPoseX, HubConstants.red.kPoseY, HubConstants.red.kPoseZ, new Rotation3d());
-    double distance = currentPose.getTranslation().getDistance(hubCenterTop.getTranslation());
-    return distance;
-  }
+  
 }

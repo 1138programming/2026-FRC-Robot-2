@@ -22,6 +22,7 @@ public class StowIntake extends Command {
     public void execute() {
         intake.setDeployed(false);
         intake.intakeMoveToPosition(kStowAngle);
+        intake.stopIntakeMotor();
     }
 
     // Called once the command ends or is interrupted.

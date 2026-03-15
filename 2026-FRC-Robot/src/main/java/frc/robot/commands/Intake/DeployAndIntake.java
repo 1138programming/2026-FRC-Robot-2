@@ -2,23 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ShooterCommands;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
-
+import frc.robot.subsystems.Intake;
+import static frc.robot.Constants.intakeConstants.*;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class SetHoodAngle extends Command {
-  Shooter shooter;
-  double angle;
-  /** Creates a new SetShooterRPM. */
-  public SetHoodAngle(Shooter shooter, double angle) {
-    this.shooter = shooter;
-    this.angle = angle;
-    addRequirements(shooter);
-  }
+public class DeployAndIntake extends Command {
+       private Intake intake;
+  /** Creates a new DeployAndIntake. */
+  public DeployAndIntake(Intake intake) {
+     this.intake = intake;
+    addRequirements(intake);
+    // Use addRequirements() here to declare subsystem dependencies.
+ 
 
-  
+  }
 
   // Called when the command is initially scheduled.
   @Override
@@ -27,14 +26,16 @@ public class SetHoodAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setHoodAngle(angle);
+    intake.intakeMoveToPosition(kDeployAngle);
+    intake.setIntakePower(KintakeMotorInSpeed);
+
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopHoodMotor();
-
+    intake.stopIntakeMotor();
   }
 
   // Returns true when the command should end.

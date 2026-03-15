@@ -14,7 +14,6 @@ import frc.robot.subsystems.Shooter;
 import static frc.robot.Constants.FieldConstants.*;
 import static frc.robot.Constants.ShooterConstants.*;
 
-import frc.robot.commands.ShooterCommands.setHoodAngle;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.commands.ShooterCommands.setAutohoodWhileStatic;
 

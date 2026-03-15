@@ -118,101 +118,13 @@ public final class Constants {
     public static final double khoodIncrement = 0.1;
   }
 
-  public static class TurretConstants {
-    public static final double KrotationMotorkP = 0.025;// 0.011
-    public static final double KrotationMotorkI = 0.15; //0.000
-    public static final double KrotationMotorkD = 0.0001; //0.000
-    public static final double KrotationMotorkIzone = 1; 
-
-
-    public static final double KrotationMotorkS = 0.01;// 0.025
-    public static final double KrotationMotorkV = 0.00122; //0.0009
-
-    public static final double Kturretsetpointoffset = 0.2;// pid tolerance
-    public static final double KturretBodyOffset = 12; //8.5, offset of flywheel to direction of turret cause deisgner are dumb, degrees
-
-    public static final double KrotationMotorCoefficient = 1;
-    public static final double KrotationMotorMaxVelocity = 0.8;
-    public static final double KrotationMotorMinVelocity = 0.02;
-
-
-
-    public static final double KhoodMotorkP = 20.0;
-    public static final double KhoodMotorkI = 0.0;
-    public static final double KhoodMotorkD = 0.0;
-  
-
-    public static final double KflywheelMotorP = 2.4;
-    public static final double KflywheelMotorI = 0.0;
-    public static final double KflywheelMotorD = 0.1;
-
-    public static final double KhoodMotorOffset = 0.0;
-    public static final double khoodServoOffset = 0.0;
-    public static final double KrotationMotorOffset = 0.0;
-
-
-    public static final double KrotationMotorRightLim = 151;//148
-    public static final double KrotationMotorLeftLim = -151;// -148
-
-    public static final double KrotationMotorLeftMagnetRot = -140; // -137 deg pos of CANcoder at left magent switch 138 +1
-    public static final double KrotationMotorRightMagnetRot = 140; //137deg pos of CANcoder at right magent switch 138-1
-
-
-    public static final double KhoodMaxAngle = 70.0;
-    public static final double KhoodMinAngle = 20.0;
-
-    public static final int KrotationMotorID = 2;
-    public static final int KhoodMotorID = 10;
-    public static final int KflywheelMotorID = 9;
-    public static final int KhoodPort = 0; // PWM port for hood servo, PLACEHOLDER 
-
-
-    public static final int KturretRotationCANcoderID = 5;
-    public static final int KhoodPitchCANcoderID = 6;
-
-    public static final double kHoodAngleMinRadians = Math.toRadians(20.0);
-    public static final double kHoodAngleMaxRadians = Math.toRadians(80.0);
-
-    public static final boolean useSoftStops = true; 
-    public static final double kFlyWheelRadiusMeters = 0.0762; // 3 inches in meters PLACEHOLDER PLACEHOLDER
-
-    public static class TurretOffsetConstants {
-      //translation offsets -> PLEASE UPDATE
-      //currently configured for base/alpha bot 
-      public static final double kOldForwardOffsetMeters_X = 0.0;
-      
-      public static final double kOldSideOffsetMeters_Y = 0.0;
-      public static final double kOldVerticalOffsetMeters_Z = 0.6096; 
-
-      //inch values
-      // forward: -3.625 -> meters: -0.092075
-      // side: 0 -> meters: 0
-      // verticle: 14.35 -> meters: 0.36449
-
-      public static final double kForwardOffsetMeters_X = -0.092075;
-      public static final double kSideOffsetMeters_Y = 0.0;
-      public static final double kVerticalOffsetMeters_Z = 0.36449;
-
-
-      //rotation offsets
-      public static final double kTurretRollOffsetRadians = 0.0; 
-      public static final double kTurretPitchOffsetRadians = 0.0; 
-      public static final double kTurretYawOffsetRadians = 0.0; 
-
-    }
-  
-
-    public static final int KleftLimSwitchID = 9;
-    public static final int KrightLimSwitchID = 8;
-
-    public static final double kturretToCancoderRatio= 11; // concoder rotates 11 times per 1 rotation of turret.
-  }
+ 
 
   public static class intakeConstants {
     //change
     public static final int KintakeMotorId = 2;
-    public static final double KintakeMotorInSpeed = -0.4;
-    public static final double KintakeMotorOutSpeed = 0.4;
+    public static final double KintakeMotorInSpeed = -0.7;
+    public static final double KintakeMotorOutSpeed = 0.7;
 
     
     public static final int KintakeDeployMotorId = 1;
@@ -221,7 +133,7 @@ public final class Constants {
     public static final double KintakeStowMotorSpeed = 0.2;
 
 
-    public static final double KintakePIDKp = 0.002;
+    public static final double KintakePIDKp = 0.0015;
     public static final double KintakePIDKi = 0;
     public static final double KintakePIDKd = 0;
 
@@ -229,7 +141,7 @@ public final class Constants {
     public static final double kDeployReduction = 50.0;
 
     public static final double kDeployAngle = 23;
-    public static final double kStowAngle = 300;
+    public static final double kStowAngle = 270;
 
     public static final double kStowed = 100;
 
@@ -331,27 +243,37 @@ public final class Constants {
   public static class ShooterConstants{
     public static final int kShooterID = 3;
 
-    public static final int kServoHubID = 5;
-     public static final int KHoodPulseWidth = 2000;
 
     public static final double kHoodMaxAngleDeg = 70; 
     public static final double kHoodMinAngleDeg = 20;
 
-    public static final double kHoodMaxAngle = 0.77; 
-    public static final double kHoodMinAngle = 0.01;
+    
+    public static final double kHoodMaxAngleRadians = Math.toRadians(kHoodMaxAngleDeg); 
+    public static final double kHoodMinAngleRadians = Math.toRadians(kHoodMinAngleDeg);
+ 
 
-    public static final double kHoodServoTravelDeg = 350;
 
     public static final double kHoodTolerance = 1.0; //degrees
 
-    public static final LinearVelocity kMaxServoSpeed = Millimeters.of(20).per(Second);
-    public static final Distance kServoLength = Millimeters.of(100); //meters, placeholder
+    public static final int KHoodMotorID = 5;
+    public static final int KHoodThroughBoreDIO = 1;
 
-    public static final int kpulseWidthMin = 500;
-    public static final int kpulseWidthMax = 2500;
-     
-    public static final double shooterkS = 0.1;
-    public static final double shooterkV = 0.000127; //0.0008
+    public static final double KHoodGearRatio = 0;
+
+    public static final int KHoodMotorKp= 0;
+    public static final int KHoodMotorKI= 0;
+    public static final int KHoodMotorKD= 0;
+
+
+
+
+    public static final double KShooterFlywheelkS = 0.1;
+    public static final double KShooterFlywheelkV = 0.00014; // 0.000127
+    public static final double KShooterFlywheelkP = 0.01;
+    public static final double KShooterFlywheelkI = 0; // 0.000127
+
+    public static final double KFlyWheelDefaultSpeed = 4500;
+
 
     public static final double kShooterHeightInches = 19.39;
     public static final double kShooterHeightMeters = 0.492506;
