@@ -50,6 +50,7 @@ import frc.robot.commands.Intake.StowIntake;
 import frc.robot.subsystems.Intake;
 import frc.robot.commands.ShooterCommands.IncrementHoodAngle;
 import frc.robot.commands.ShooterCommands.SetHoodPulseWidth;
+import frc.robot.commands.ShooterCommands.SetShooterRPM;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.commands.ShooterCommands.setHoodAngle;
 import frc.robot.commands.SetIndexerPower;
@@ -120,6 +121,10 @@ public class RobotContainer {
   public final SetIndexerPower setIndexerPower;
   public final SetIndexerPower reverseIndexerPower;
   public final StopIndexer stopIndexer;
+  public final SpinShooter spin;
+  public final SetShooterRPM shooterRPM;
+  public final SetShooterRPM shooterRPMReverse;
+
 
   // Comands
 
@@ -231,6 +236,10 @@ public class RobotContainer {
     hoodAllUp = new SetHoodPulseWidth(shooter, 2500);
     sethoodangle = new setHoodAngle(shooter, 0.9);
     hoodtsCommand = new SetHoodPulseWidth(shooter, 2500);
+    spin = new SpinShooter(shooter, 0.6);
+    shooterRPMReverse = new SetShooterRPM(shooter, 4000);
+    shooterRPM = new SetShooterRPM(shooter, -4000);
+    
 
 
     indexer = new Indexer();
@@ -309,11 +318,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeout", intakeOut);
     NamedCommands.registerCommand("shoot", spinShooterReverse);
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
-    NamedCommands.registerCommand("restgyro",Commands.runOnce(
-                () -> drive.setPose(
-                    new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
-                drive)
-                .ignoringDisable(true));
+    
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -476,8 +481,12 @@ public class RobotContainer {
     compStreamDeck11.whileTrue(hoodMid);
     compStreamDeck12.whileTrue(hoodAllDown);
     compStreamDeck14.whileTrue(hoodAllUp);
-    compStreamDeck7.whileTrue(spinShooterReverse);
-    compStreamDeck6.whileTrue(spinShooter);
+    // compStreamDeck7.whileTrue(spinShooter);
+    // compStreamDeck6.whileTrue(spinShooterReverse);
+
+    compStreamDeck7.whileTrue(shooterRPM);
+    compStreamDeck6.whileTrue(shooterRPMReverse);
+
 
     // logitechBtnX.whileTrue(DriveAimPose);
 
@@ -494,6 +503,8 @@ public class RobotContainer {
                 () -> limelight.forceMT1Oreintation(),
                 limelight)
                 .ignoringDisable(true));
+    
+    logitechBtnA.whileTrue(shooterRPM);
     
   }
 

@@ -7,6 +7,8 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Servo;
@@ -25,6 +27,7 @@ public class Shooter extends SubsystemBase{
   private SparkFlex ShooterMotor;
   private ServoHub servoHub;
   private ServoChannel hoodServo;
+  private SimpleMotorFeedforward shooterMotorFeedForward;
 
   private int currentPulse;
 
@@ -44,10 +47,17 @@ public class Shooter extends SubsystemBase{
     hoodServo.setEnabled(true);
     hoodServo.setPowered(true);
     currentPulse = hoodServo.getPulseWidth();
+    shooterMotorFeedForward = new SimpleMotorFeedforward(shooterkS, shooterkV);
+
   }
 
   public void setShooterPower(double power){
     ShooterMotor.set(power);
+  }
+
+  public void setShooterVelocity(double rpm){
+    double motorOutput = shooterMotorFeedForward.calculate(rpm);
+    setShooterPower(-motorOutput);
   }
 
   public void stopShooter() {
@@ -150,7 +160,7 @@ public class Shooter extends SubsystemBase{
     // updateCurrentPosition();
     SmartDashboard.putNumber("servo pulse", hoodServo.getPulseWidth());
     SmartDashboard.putNumber("hood angle", getHoodAngle());
-    SmartDashboard.putNumber("fkywheel speed",ShooterMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("flywheel speed",ShooterMotor.getEncoder().getVelocity());
     
     setHoodPulse(currentPulse);
   }

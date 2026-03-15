@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Shoot"
+            "pathName": "Back Up Middle"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.5
+                  "waitTime": 1.0
                 }
               },
               {
@@ -30,15 +30,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 5.0
-                }
-              },
               {
                 "type": "named",
                 "data": {

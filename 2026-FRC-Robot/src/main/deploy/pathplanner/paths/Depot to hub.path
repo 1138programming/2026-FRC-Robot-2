@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.592666666666667,
-        "y": 5.993633333333333
+        "x": 0.6361911554921535,
+        "y": 5.982268188302426
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5597555555555553,
-        "y": 5.993633333333333
+        "x": 1.7166817501965435,
+        "y": 5.977742084745851
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "at depot actually"
     },
     {
       "anchor": {
-        "x": 0.484188888888889,
-        "y": 5.993633333333333
+        "x": 3.418002853067047,
+        "y": 4.00265335235378
       },
       "prevControl": {
-        "x": -0.515811111111111,
-        "y": 5.993633333333333
+        "x": 3.14179169935144,
+        "y": 5.354085075194772
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "at hub"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.33,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -1.3169124057933108
   },
   "reversed": false,
-  "folder": null,
+  "folder": "hub-depot-nz",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

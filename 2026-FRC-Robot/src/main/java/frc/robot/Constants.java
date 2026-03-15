@@ -349,9 +349,9 @@ public final class Constants {
 
     public static final int kpulseWidthMin = 500;
     public static final int kpulseWidthMax = 2500;
-    
-
-    
+     
+    public static final double shooterkS = 0.1;
+    public static final double shooterkV = 0.000127; //0.0008
 
     public static final double kShooterHeightInches = 19.39;
     public static final double kShooterHeightMeters = 0.492506;
