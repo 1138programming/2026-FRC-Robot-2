@@ -42,11 +42,17 @@ public class ShooterLogic extends SubsystemBase {
   private Pose3d kHubFieldPose3d;
   private Pose2d kHubFieldPose2d;
 
+  
+  private Pose3d kAZoneFieldPose3d;
+  private Pose2d kAZoneFieldPose2d;
+
   private double[] shotChangeDataHub;
 
   public enum Targets {
-    HUB
+    HUB,
+    AZONE
   }
+  private Targets activeTarget;
 
 
   public ShooterLogic(Limelight limelight, Drive drive) {
@@ -57,16 +63,25 @@ public class ShooterLogic extends SubsystemBase {
     if (DriverStation.getAlliance().isPresent()) {
       if (DriverStation.getAlliance().get() == Alliance.Red) {
         kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
+        kAZoneFieldPose3d = new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
       }
 
       if (DriverStation.getAlliance().get() == Alliance.Blue) {
         kHubFieldPose3d = HubConstants.blue.KhubFieldPose3d;
+        kAZoneFieldPose3d = new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
+
       }
     } else {
       //default red cause thats what the wooden hub we have has
       kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
+      kAZoneFieldPose3d = new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
+
     }
     kHubFieldPose2d = kHubFieldPose3d.toPose2d();
+    kAZoneFieldPose2d = kAZoneFieldPose3d.toPose2d();
+
+
+    activeTarget = Targets.HUB;
 
   }
 
@@ -115,7 +130,7 @@ public class ShooterLogic extends SubsystemBase {
    * 
    * @return double[] {flywheelSpeed (meters per second), hoodAngle (radians), turretAngle (radians)}
    */
-
+  @Deprecated
   public double[] calculateShotChanges(Pose3d target) {
 
     final double g = 9.81;
@@ -154,6 +169,13 @@ public class ShooterLogic extends SubsystemBase {
     return new double[] {flywheelSpeed, hoodAngle, newAngle};
   }
 
+  
+  /**
+   * Calculates the  hood angle, based on robot position in accordance to the hub center.
+   * 
+   * @return double[] {flywheelSpeed (meters per second), hoodAngle (radians), turretAngle (radians)}
+   */
+  @Deprecated
   public double getHoodAimAngleforStaticBase(Pose3d target, double flywheelSpeed) {
         double y = target.getZ();
         double h = kShooterHeightMeters; //should be constant
@@ -188,19 +210,34 @@ public class ShooterLogic extends SubsystemBase {
         return hoodAngle;
   }
 
-  public double getexitvelocityforpose(Pose2d pose,double angle) {
+  public double getFlywheelExitVelocity(double hoodAngle) {
+    
+    final double g = 9.81;
+    double x =  distancetoPose2d(getTargetPose3d().toPose2d()) - kPassThroughPointRadius; //could be alternatively used using Pose
+    double y = getTargetPose3d().getZ() - kShooterHeightMeters; //could be alternatively used using Pose
+    double flywheelSpeed = Math.sqrt(Math.abs(g * x * x / (2 * Math.pow(Math.cos(hoodAngle), 2) * (x * Math.tan(hoodAngle) - y))));
 
-
-    return 1;
-
+    return flywheelSpeed;
   }
   
 
+  public void setTargetHUB() {
+    activeTarget = Targets.HUB;
+  }
+   
+  public void setTargetAZONE(){
+    activeTarget = Targets.AZONE;
+  }
 
-  
-
-  public Pose3d getHubPose3d() {
-    return kHubFieldPose3d;
+  public Pose3d getTargetPose3d() {
+    switch (activeTarget) {
+      case HUB:
+        return kHubFieldPose3d;
+      case AZONE:
+        return kHubFieldPose3d;
+      default:
+        return null;
+    }
   }
 
   //-----------------------//
@@ -236,25 +273,8 @@ public class ShooterLogic extends SubsystemBase {
     return angle;
   }
 
-  
-
-  /**
-   * @return angle difference to aim turret (radians); the Tx value from limelight
-   */
-  public double getAngletoAprilTagLimelight() {
-    double angleDif = limelight.getTx();
-    return Math.toRadians(angleDif);
-  }
-
-
-
-
-
   //in shooter logic as it requires continual adjustment by drive for the robot's position
   //Review if this is alright here
-  
-
-
   private double distancetoPose2d(Pose2d pose2d) {
     return drive.getPose().getTranslation().getDistance(pose2d.getTranslation());
   }
@@ -269,17 +289,7 @@ public class ShooterLogic extends SubsystemBase {
   public double botAngletoPose2d(Pose2d pose2d) {
     Translation2d diffTranslation = pose2d.getTranslation().minus(drive.getPose().getTranslation());
     return diffTranslation.getAngle().getDegrees();
-  }
-
-  
-  
-  
-  
-
-
-
- 
-  
+  } 
 
   public Double getShotChangeFlywheelVelocity(Targets target) {
     switch (target) {

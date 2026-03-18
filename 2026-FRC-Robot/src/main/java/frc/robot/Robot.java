@@ -70,12 +70,6 @@ public class Robot extends LoggedRobot {
 
     // Start AdvantageKit logger
     Logger.start();
-
-   
-    // UsbCamera camera = CameraServer.startAutomaticCapture("webcam","/dev/video0");
-    // camera.setResolution(640, 480);
-    // VideoSink server = CameraServer.getServer();
-    // server.setSource(camera);
     
     // Instantiate our RobotContainer. This will; perform all our button bindings,
     // and put our autonomous chooser on the dashboard.

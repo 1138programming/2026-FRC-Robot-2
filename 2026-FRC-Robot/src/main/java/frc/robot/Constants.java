@@ -246,12 +246,11 @@ public final class Constants {
 
     public static final double kHoodMaxAngleDeg = 70; 
     public static final double kHoodMinAngleDeg = 20;
+    public static final double kHoodDefaultAngleDeg = 20;
 
-    
     public static final double kHoodMaxAngleRadians = Math.toRadians(kHoodMaxAngleDeg); 
     public static final double kHoodMinAngleRadians = Math.toRadians(kHoodMinAngleDeg);
- 
-
+    public static final double kHoodDefaultAngleRadians = Math.toRadians(kHoodDefaultAngleDeg);
 
     public static final double kHoodTolerance = 1.0; //degrees
 
@@ -268,11 +267,13 @@ public final class Constants {
 
 
     public static final double KShooterFlywheelkS = 0.1;
-    public static final double KShooterFlywheelkV = 0.00014; // 0.000127
-    public static final double KShooterFlywheelkP = 0.01;
-    public static final double KShooterFlywheelkI = 0; // 0.000127
+    public static final double KShooterFlywheelkV = 0.0001315; // 0.0001315
+    public static final double KShooterFlywheelkP = 0.0005; // 0.0002 - 0.001
+    public static final double KShooterFlywheelkI = 0; 
 
-    public static final double KFlyWheelDefaultSpeed = 4500;
+    public static final double KShooterFlywheelPITolerance =10;
+
+    public static final double KFlyWheelDefaultSpeed = 3000;
 
 
     public static final double kShooterHeightInches = 19.39;

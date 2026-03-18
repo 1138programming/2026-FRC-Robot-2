@@ -4,40 +4,35 @@
 
 package frc.robot.commands.ShooterCommands;
 
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class setAutohoodWhileStatic extends Command {
+import static frc.robot.Constants.ShooterConstants.*;
 
-  private Shooter shooter;
-  private ShooterLogic logic;
-  private double angle;
-  private double power;
-  private Pose3d targetPose;
-  /** Creates a new AimhoodWhileStatic. */
-  public setAutohoodWhileStatic(Shooter shooter, ShooterLogic logic, double power, Pose3d target) {
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class AimFlywheelSpeed extends Command {
+  Shooter shooter;
+  ShooterLogic logic;
+  /** Creates a new SetShooterRPM. */
+  public AimFlywheelSpeed(Shooter shooter, ShooterLogic logic) {
     this.shooter = shooter;
     this.logic = logic;
-    this.power = power;
-    this.targetPose = target;
-            addRequirements(shooter);
-
+    addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    this.angle = logic.getHoodAimAngleforStaticBase(targetPose, shooter.ShooterRPMtoLinearSpeed(power)); // Example flywheel speed of 10 m/s
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // shooter.setHoodAngle(angle);
+    double speed = logic.getFlywheelExitVelocity(kHoodDefaultAngleRadians);
+    SmartDashboard.putNumber("exit velocity",speed);
+    shooter.setShooterVelocity(shooter.LinearSpeedToRPM(speed));
   }
 
   // Called once the command ends or is interrupted.

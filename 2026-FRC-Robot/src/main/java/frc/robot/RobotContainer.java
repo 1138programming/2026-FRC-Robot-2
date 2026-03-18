@@ -49,6 +49,7 @@ import frc.robot.commands.Intake.StopIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Intake.DeployAndIntake;
 import frc.robot.subsystems.Intake;
+import frc.robot.commands.ShooterCommands.AimFlywheelSpeed;
 import frc.robot.commands.ShooterCommands.SetHoodAngle;
 import frc.robot.commands.ShooterCommands.SetShooterRPM;
 import frc.robot.commands.ShooterCommands.SpinHood;
@@ -119,6 +120,8 @@ public class RobotContainer {
   public final SetHoodAngle setHoodAngle;
   public final SpinHood hoodUp;
   public final SpinHood hoodDown;
+
+   public final AimFlywheelSpeed aimFlywheelSpeed;
 
 
 
@@ -226,9 +229,9 @@ public class RobotContainer {
     deployIntake = new DeployIntake(intake);
     stowIntake = new StowIntake(intake);
     stopintake = new StopIntake(intake);
-    spinShooter = new SpinShooter(shooter, 0.70);
-    spinShooterReverse = new SpinShooter(shooter, -0.70);
-    ;
+    spinShooter = new SpinShooter(shooter, 1);
+    spinShooterReverse = new SpinShooter(shooter, -1);
+    
     spin = new SpinShooter(shooter, 0.6);
     shooterRPMReverse = new SetShooterRPM(shooter, -KFlyWheelDefaultSpeed);
     shooterRPM = new SetShooterRPM(shooter, KFlyWheelDefaultSpeed);
@@ -237,6 +240,7 @@ public class RobotContainer {
     hoodDown = new SpinHood(shooter, kIndexerPower);
 
     deployAndIntake = new DeployAndIntake(intake);
+
     
 
 
@@ -311,10 +315,12 @@ public class RobotContainer {
     }
 
     logic = new ShooterLogic(limelight, drive);
+    aimFlywheelSpeed = new AimFlywheelSpeed(shooter, logic);
+
 
     // Set up auto routines
     NamedCommands.registerCommand("intakeout", intakeOut);
-    NamedCommands.registerCommand("shoot", spinShooterReverse);
+    NamedCommands.registerCommand("shoot", spinShooter);
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
     
 
@@ -429,9 +435,9 @@ public class RobotContainer {
 
         DriveCommands.joystickDrive(
             drive,
-            () -> getLogiLeftYAxis(),
-            () -> getLogiLeftXAxis(),
-            () -> getLogiRightXAxis()));
+            () -> getLogiLeftYAxis() * 0.6,
+            () -> getLogiLeftXAxis() * 0.6,
+            () -> getLogiRightXAxis()* 0.6));
 
     intake.setDefaultCommand(stowIntake);
 
@@ -442,13 +448,13 @@ public class RobotContainer {
     //       () -> getLogiLeftYAxis(), 
     //       () -> getLogiLeftXAxis()));
 
-    // logitechBtnRB
-    //     .whileTrue(
-    //       DriveCommands.joystickDrive(
-    //         drive,
-    //         () -> getLogiLeftYAxis() * 0.6,
-    //         () -> getLogiLeftXAxis() * 0.6,
-    //         () -> getLogiRightXAxis() * 0.6));
+    logitechBtnRB
+        .whileTrue(
+          DriveCommands.joystickDrive(
+            drive,
+            () -> getLogiLeftYAxis(),
+            () -> getLogiLeftXAxis(),
+            () -> getLogiRightXAxis()));
 
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -461,6 +467,10 @@ public class RobotContainer {
 
     compStreamDeck16.whileTrue(extendIntake);
     compStreamDeck15.whileTrue(retractIntake);
+
+    compStreamDeck17.whileTrue(spinShooter);
+
+
 
     // logitechBtnRB.whileTrue( new FunctionalCommand(
     // () -> {},
@@ -490,7 +500,7 @@ public class RobotContainer {
 
 
     logitechBtnLB.whileTrue(setIndexerPower);
-    logitechBtnRB.whileTrue(shooterRPM);
+    // logitechBtnRB.whileTrue(shooterRPM);
 
 
 

@@ -101,6 +101,7 @@ public class Drive extends SubsystemBase {
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
   private final Limelight limelight;
+  private  boolean firstpose;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = Rotation2d.kZero;
@@ -157,6 +158,8 @@ public class Drive extends SubsystemBase {
         (targetPose) -> {
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
         });
+
+    firstpose = false;    
 
     // Configure SysId
     sysId =
@@ -234,15 +237,20 @@ public class Drive extends SubsystemBase {
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
+    if (!firstpose && limelight.existsMT1Data()) {
+      setPose(new Pose2d(getPose().getTranslation(), limelight.getMT1Pose().getRotation()));
+      System.out.println("reset to mt1");
+      firstpose = true;
+    }
 
     limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
       
     boolean isUsingVision = updateOdometryWithMT2();
     SmartDashboard.putBoolean("isUsingVision", isUsingVision);
     SmartDashboard.putString("drive pose estimater", poseEstimator.getEstimatedPosition().toString());
-    SmartDashboard.putNumber("base delta angle", getAngularVelocityRadiansPerSecond() * 180/ Math.PI);
-    SmartDashboard.putNumber("base horizontal vel", getHorizontalVelocityMetersPerSecond());
-    SmartDashboard.putNumber("base vertical vel", getVerticalVelocityMetersPerSecond());
+    // SmartDashboard.putNumber("base delta angle", getAngularVelocityRadiansPerSecond() * 180/ Math.PI);
+    // SmartDashboard.putNumber("base horizontal vel", getHorizontalVelocityMetersPerSecond());
+    // SmartDashboard.putNumber("base vertical vel", getVerticalVelocityMetersPerSecond());
 
 
     feild.setRobotPose(getPose());
@@ -255,6 +263,7 @@ public class Drive extends SubsystemBase {
 
   //extra periodic methods
   public boolean updateOdometryWithMT2() {
+   
     if (limelight.existsVisionData()) {
       addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time(),VecBuilder.fill(0.7,0.7,0.7));
       // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,0.7));//0.7,0.7,99999999

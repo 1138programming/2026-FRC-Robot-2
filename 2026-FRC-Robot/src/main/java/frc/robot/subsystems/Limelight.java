@@ -59,7 +59,6 @@ public class Limelight extends SubsystemBase {
     //other 
     private double latency;
     private int isTargetsDetected;
-    private boolean firstpose;
 
     private final DoubleArrayPublisher orientationPublisher;
     private final DoubleArrayPublisher filterPublisher;
@@ -96,7 +95,6 @@ public class Limelight extends SubsystemBase {
     //LimelightOneTable.getEntry("priorityid").setNumber(priorityID);
     orientationPublisher = LimelightOneTable.getDoubleArrayTopic("robot_orientation_set").publish();
     filterPublisher =    LimelightOneTable.getDoubleArrayTopic("fiducial_id_filters_set").publish();
-    firstpose = false;
 
 
   //stores the data for the LL 
@@ -342,12 +340,13 @@ public class Limelight extends SubsystemBase {
   }
 
   public void updateOreintation(double degrees) {
-    if ((getPoseEstimateMT1() != null && getPoseEstimateMT1().tagCount != 0)) {
-      LimelightHelpers.SetRobotOrientation(limelightName, getMT1Pose().getRotation().getDegrees(), 0,0,0,0,0);
-    }
-    else {
+    // if ((getPoseEstimateMT1() != null && getPoseEstimateMT1().tagCount != 0) && !firstpose) {
+    //   LimelightHelpers.SetRobotOrientation(limelightName, getMT1Pose().getRotation().getDegrees(), 0,0,0,0,0);
+    //   firstpose = true;
+    // }
+    // else {
       LimelightHelpers.SetRobotOrientation(limelightName, degrees, 0,0,0,0,0);
-    }
+    
   }
 
   public void forceMT1Oreintation() {
@@ -382,8 +381,11 @@ public class Limelight extends SubsystemBase {
     }
     return (mt2 != null && mt2.tagCount != 0);
   }
+  public boolean existsMT1Data() {
+    return getPoseEstimateMT1() != null && getPoseEstimateMT1().tagCount != 0;
+  }
 
-   public Pose2d getMT1Pose() {
+  public Pose2d getMT1Pose() {
     return getPoseEstimateMT1().pose;
   }
 

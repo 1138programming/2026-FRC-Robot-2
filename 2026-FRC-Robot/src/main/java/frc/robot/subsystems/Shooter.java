@@ -24,6 +24,8 @@ import static edu.wpi.first.units.Units.Value;
 
 import static frc.robot.Constants.ShooterConstants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 
 public class Shooter extends SubsystemBase{
   private SparkFlex ShooterMotor;
@@ -52,6 +54,7 @@ public class Shooter extends SubsystemBase{
     ShooterMotor = new SparkFlex(kShooterID, MotorType.kBrushless);
     shooterMotorFeedForward = new SimpleMotorFeedforward(KShooterFlywheelkS, KShooterFlywheelkV);
     shooterMotorPI = new PIDController(KShooterFlywheelkP, KShooterFlywheelkI, 0);
+    shooterMotorPI.setTolerance(KShooterFlywheelPITolerance);
 
     HoodMotor = new SparkMax(KHoodMotorID, MotorType.kBrushless);
     hoodPidController = new PIDController(KHoodMotorKp, KHoodMotorKI, KHoodMotorKD);
@@ -66,6 +69,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public void setShooterVelocity(double rpm){
+    Logger.recordOutput("Flywheel/DesiredRPM", rpm);
     double motorOutput = shooterMotorFeedForward.calculate(rpm) + shooterMotorPI.calculate(getflywheelVelocity(), rpm);
     setShooterPower(motorOutput);
   }
@@ -85,8 +89,9 @@ public class Shooter extends SubsystemBase{
    * @return Linear speed meters per second
    */
   public double ShooterRPMtoLinearSpeed(double rpm) {
-    // Convert power to RPM, then to RPS. 6784 is the free speed of the motor at 12V
-    return rpm * (2 * Math.PI * kShooterWheelRadiusMeters); // Convert RPS to linear speed
+    // Convert RPM to RPS.
+    double rps =  rpm / 60;; // Convert linear speed to RPS
+    return rps * (2 * Math.PI * kShooterWheelRadiusMeters); // Convert RPS to linear speed
   }
 
   public double LinearSpeedToRPM(double linearSpeed) {
@@ -124,9 +129,11 @@ public class Shooter extends SubsystemBase{
   
   @Override
   public void periodic() {
-    // updateCurrentPosition();
+
     SmartDashboard.putNumber("hood angle", getHoodAngle());
     SmartDashboard.putNumber("flywheel speed",getflywheelVelocity());
+    Logger.recordOutput("Flywheel/RPM", getflywheelVelocity());
+
     
   }
 
