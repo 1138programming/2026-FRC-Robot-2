@@ -202,7 +202,7 @@ public final class Constants {
         public static final Pose3d KhubFieldPose3d = new Pose3d(kPoseX, kPoseY, kPoseZ, new Rotation3d());
       }
 
-      public static final double kPassThroughPointRadius = 0.6096; //meters
+      public static final double kPassThroughPointRadius = 0; // 0.6096 meters
 
     }
 
@@ -246,7 +246,7 @@ public final class Constants {
 
     public static final double kHoodMaxAngleDeg = 70; 
     public static final double kHoodMinAngleDeg = 20;
-    public static final double kHoodDefaultAngleDeg = 20;
+    public static final double kHoodDefaultAngleDeg = 60;
 
     public static final double kHoodMaxAngleRadians = Math.toRadians(kHoodMaxAngleDeg); 
     public static final double kHoodMinAngleRadians = Math.toRadians(kHoodMinAngleDeg);
@@ -273,13 +273,17 @@ public final class Constants {
 
     public static final double KShooterFlywheelPITolerance =10;
 
-    public static final double KFlyWheelDefaultSpeed = 3000;
+    public static final double KFlyWheelDefaultSpeed = 4500;
+    public static final double KFlyWheelautoSpeed = 3600;
+
+    public static final double KFlyWheelRPMMultiplier = 2.1;
+
 
 
     public static final double kShooterHeightInches = 19.39;
-    public static final double kShooterHeightMeters = 0.492506;
-    public static final double kShooterWheelRadiusInches = 1.48; // 3 inches in meters PLACEHOLDER PLACEHOLDER
-    public static final double kShooterWheelRadiusMeters = kShooterWheelRadiusInches * 0.0254;
+    public static final double kShooterHeightMeters = 0.482506;
+    public static final double kShooterWheelRadiusInches = 3; // 3 inches in meters PLACEHOLDER PLACEHOLDER
+    public static final double kShooterWheelRadiusMeters = 0.0381;
 
   }
 
@@ -287,6 +291,8 @@ public final class Constants {
     public static final int kIndexerID = 4;
     
     public static final double kIndexerPower = 0.75;
+
+    public static final double kIndexerPowerAuto = 0.4;
     
   }
 }

@@ -4,12 +4,14 @@
 
 package frc.robot.commandGroups.Shooter;
 
-import static frc.robot.Constants.IndexerConstants.kIndexerPower;
+import static frc.robot.Constants.IndexerConstants.*;
+import static frc.robot.Constants.ShooterConstants.KFlyWheelautoSpeed;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.SetIndexerPower;
+import frc.robot.commands.ShooterCommands.SetShooterRPM;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
@@ -30,8 +32,8 @@ public class Indexandshoot extends ParallelDeadlineGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetIndexerPower(indexer, kIndexerPower),
-      new SpinShooter(shooter, -0.7)
+      new SetIndexerPower(indexer, -kIndexerPowerAuto),
+      new SetShooterRPM(shooter, KFlyWheelautoSpeed)
     );
   }
 }

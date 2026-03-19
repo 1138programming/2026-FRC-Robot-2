@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants.HubConstants;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.drive.Drive;
 
 
@@ -33,7 +32,6 @@ import static frc.robot.Constants.FieldConstants.HubConstants.*;
 public class ShooterLogic extends SubsystemBase {
   /** Creates a new ShooterLogic. */
 
-  private Limelight limelight;
   private Drive drive;
 
   private Boolean readyToShoot; 
@@ -55,8 +53,7 @@ public class ShooterLogic extends SubsystemBase {
   private Targets activeTarget;
 
 
-  public ShooterLogic(Limelight limelight, Drive drive) {
-    this.limelight = limelight;
+  public ShooterLogic(Drive drive) {
     this.drive = drive;
     readyToShoot = false;
     
@@ -211,11 +208,11 @@ public class ShooterLogic extends SubsystemBase {
   }
 
   public double getFlywheelExitVelocity(double hoodAngle) {
-    
     final double g = 9.81;
     double x =  distancetoPose2d(getTargetPose3d().toPose2d()) - kPassThroughPointRadius; //could be alternatively used using Pose
-    double y = getTargetPose3d().getZ() - kShooterHeightMeters; //could be alternatively used using Pose
-    double flywheelSpeed = Math.sqrt(Math.abs(g * x * x / (2 * Math.pow(Math.cos(hoodAngle), 2) * (x * Math.tan(hoodAngle) - y))));
+    double y = 2.0 - kShooterHeightMeters; //could be alternatively used using Pose
+    double flywheelSpeed = Math.sqrt(Math.abs(g * (x * x) / ( 
+      Math.pow(Math.cos(hoodAngle), 2) * (y- (x * Math.tan(hoodAngle)))*2)));
 
     return flywheelSpeed;
   }

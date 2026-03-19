@@ -80,8 +80,9 @@ public class Shooter extends SubsystemBase{
 
   public double getflywheelVelocity() {
     return ShooterMotor.getEncoder().getVelocity();
-
   }
+
+
 
 
   /**
@@ -97,10 +98,8 @@ public class Shooter extends SubsystemBase{
   public double LinearSpeedToRPM(double linearSpeed) {
     double rps = linearSpeed / (2 * Math.PI * kShooterWheelRadiusMeters); // Convert linear speed to RPS
     double rpm = rps * 60; // Convert RPS to RPM
-    return rpm; // Convert RPM to power
+    return rpm * KFlyWheelRPMMultiplier; // Convert RPM to power
   }
-
-
 
   public void spinHoodMotor(double power){
     if (getHoodAngle() > (kHoodMinAngleDeg + kHoodTolerance)) {

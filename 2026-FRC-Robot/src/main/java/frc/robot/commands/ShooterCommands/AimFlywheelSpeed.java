@@ -32,12 +32,16 @@ public class AimFlywheelSpeed extends Command {
   public void execute() {
     double speed = logic.getFlywheelExitVelocity(kHoodDefaultAngleRadians);
     SmartDashboard.putNumber("exit velocity",speed);
+    SmartDashboard.putNumber("exit rpm",shooter.LinearSpeedToRPM(speed));
     shooter.setShooterVelocity(shooter.LinearSpeedToRPM(speed));
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooter.stopShooter();
+
+  }
 
   // Returns true when the command should end.
   @Override

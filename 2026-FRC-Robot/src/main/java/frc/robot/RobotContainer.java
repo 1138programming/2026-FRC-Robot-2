@@ -8,8 +8,8 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.FieldConstants.TagIDConstants.kHubCenterTagRed;
-import static frc.robot.Constants.IndexerConstants.kIndexerPower;
+import static frc.robot.Constants.FieldConstants.TagIDConstants.*;
+import static frc.robot.Constants.IndexerConstants.*;
 import static frc.robot.Constants.OperatorConstants.*;
 import static frc.robot.Constants.ShooterConstants.*;
 import static frc.robot.Constants.SwerveConstants.*;
@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 //subsystem
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
 import frc.robot.subsystems.Indexer;
@@ -97,7 +96,6 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   public final Intake intake;
-  public final Limelight limelight;
   public final Shooter shooter;
   public final Indexer indexer;
   public final Vision vision;
@@ -223,7 +221,6 @@ public class RobotContainer {
   public RobotContainer() {
 
     intake = new Intake();
-    limelight = new Limelight(LimelightConstants.kLimelightName);
     shooter = new Shooter();
    
 
@@ -240,7 +237,7 @@ public class RobotContainer {
     
     spin = new SpinShooter(shooter, 0.6);
     shooterRPMReverse = new SetShooterRPM(shooter, -KFlyWheelDefaultSpeed);
-    shooterRPM = new SetShooterRPM(shooter, KFlyWheelDefaultSpeed);
+    shooterRPM = new SetShooterRPM(shooter, KFlyWheelautoSpeed);
     setHoodAngle = new SetHoodAngle(shooter,50);
     hoodUp = new SpinHood(shooter, kIndexerPower); 
     hoodDown = new SpinHood(shooter, kIndexerPower);
@@ -251,7 +248,7 @@ public class RobotContainer {
 
 
     indexer = new Indexer();
-    setIndexerPower = new SetIndexerPower(indexer, -kIndexerPower);
+    setIndexerPower = new SetIndexerPower(indexer, -kIndexerPowerAuto);
     reverseIndexerPower = new SetIndexerPower(indexer, kIndexerPower);
     stopIndexer = new StopIndexer(indexer);
         
@@ -317,13 +314,13 @@ public class RobotContainer {
         break;
     }
 
-    logic = new ShooterLogic(limelight, drive);
+    logic = new ShooterLogic( drive);
     aimFlywheelSpeed = new AimFlywheelSpeed(shooter, logic);
 
 
     // Set up auto routines
     NamedCommands.registerCommand("intakeout", intakeOut);
-    NamedCommands.registerCommand("shoot", spinShooter);
+    NamedCommands.registerCommand("shoot", shooterRPM);
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
     
 
@@ -485,6 +482,7 @@ public class RobotContainer {
     // driveSpeed = 0.7;
     // },
     // () -> true,
+    compStreamDeck1.whileTrue(aimFlywheelSpeed);
     compStreamDeck2.whileTrue(setIndexerPower);
     compStreamDeck3.whileTrue(reverseIndexerPower);
     // compStreamDeck13.onTrue(hoodDownCommand);
@@ -499,7 +497,7 @@ public class RobotContainer {
     compStreamDeck6.whileTrue(shooterRPMReverse);
     
     logitechBtnLT.whileTrue(deployAndIntake);
-    // logitechBtnRT.whileTrue(deployIntake);
+    logitechBtnRT.whileTrue(aimFlywheelSpeed);
 
 
     logitechBtnLB.whileTrue(setIndexerPower);
@@ -517,12 +515,7 @@ public class RobotContainer {
                     new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                 drive)
                 .ignoringDisable(true));
-    logitechBtnX.onTrue(
-            Commands.runOnce(
-                () -> limelight.forceMT1Oreintation(),
-                limelight)
-                .ignoringDisable(true));
-    
+   
     logitechBtnA.whileTrue(shooterRPM);
     
   }
