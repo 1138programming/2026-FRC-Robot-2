@@ -53,7 +53,6 @@ import frc.robot.LimelightHelpers;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.Mode;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Limelight;
 import frc.robot.util.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -100,8 +99,6 @@ public class Drive extends SubsystemBase {
   private final Alert gyroDisconnectedAlert =
       new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
-  private final Limelight limelight;
-  private  boolean firstpose;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
   private Rotation2d rawGyroRotation = Rotation2d.kZero;
@@ -122,15 +119,14 @@ public class Drive extends SubsystemBase {
       ModuleIO flModuleIO,
       ModuleIO frModuleIO,
       ModuleIO blModuleIO,
-      ModuleIO brModuleIO,
-      Limelight limelight) {
+      ModuleIO brModuleIO
+      ) {
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
     modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
     modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
     modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
 
-    this.limelight = limelight;
 
     // Usage reporting for swerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
@@ -159,7 +155,6 @@ public class Drive extends SubsystemBase {
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
         });
 
-    firstpose = false;    
 
     // Configure SysId
     sysId =
@@ -171,6 +166,7 @@ public class Drive extends SubsystemBase {
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+    // limelight.updateOreintation(limelight.getMT1Pose().getRotation().getDegrees());
     // if(DriverStation.getAlliance().isPresent()
     //                   && DriverStation.getAlliance().get() == Alliance.Red) {
   
@@ -237,16 +233,13 @@ public class Drive extends SubsystemBase {
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
-    if (!firstpose && limelight.existsMT1Data()) {
-      setPose(new Pose2d(getPose().getTranslation(), limelight.getMT1Pose().getRotation()));
-      System.out.println("reset to mt1");
-      firstpose = true;
-    }
+  
 
-    limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+    
+    // limelight.updateOreintation(poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+
       
-    boolean isUsingVision = updateOdometryWithMT2();
-    SmartDashboard.putBoolean("isUsingVision", isUsingVision);
+
     SmartDashboard.putString("drive pose estimater", poseEstimator.getEstimatedPosition().toString());
     // SmartDashboard.putNumber("base delta angle", getAngularVelocityRadiansPerSecond() * 180/ Math.PI);
     // SmartDashboard.putNumber("base horizontal vel", getHorizontalVelocityMetersPerSecond());
@@ -261,19 +254,17 @@ public class Drive extends SubsystemBase {
 
   }
 
-  //extra periodic methods
-  public boolean updateOdometryWithMT2() {
-   
-    if (limelight.existsVisionData()) {
-      addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time(),VecBuilder.fill(0.7,0.7,0.7));
-      // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,0.7));//0.7,0.7,99999999
-      // poseEstimator.addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time());
-      return true;
-    }
+  // //extra periodic methods
+  // public boolean updateOdometryWithMT2() {
+  //   if (limelight.existsVisionData()) {
+  //     poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,0.7));//0.7,0.7,99999999
+  //     poseEstimator.addVisionMeasurement(limelight.getMT2Pose(), limelight.getMT2Time());
+  //     return true;
+  //   }
 
-    return false; 
+  //   return false; 
 
-  }
+  // }
 
   /**
    * Runs the drive at the desired velocity.

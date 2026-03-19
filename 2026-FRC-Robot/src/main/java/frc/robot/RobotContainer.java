@@ -79,6 +79,10 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIOLimelight;
+import static frc.robot.subsystems.vision.VisionConstants.*;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -96,6 +100,7 @@ public class RobotContainer {
   public final Limelight limelight;
   public final Shooter shooter;
   public final Indexer indexer;
+  public final Vision vision;
 
   public final ShooterLogic logic;
 
@@ -220,6 +225,7 @@ public class RobotContainer {
     intake = new Intake();
     limelight = new Limelight(LimelightConstants.kLimelightName);
     shooter = new Shooter();
+   
 
     // commands
     intakein = new IntakeIn(intake);
@@ -263,26 +269,15 @@ public class RobotContainer {
             new ModuleIOTalonFX(TunerConstants.FrontLeft),
             new ModuleIOTalonFX(TunerConstants.FrontRight),
             new ModuleIOTalonFX(TunerConstants.BackLeft),
-            new ModuleIOTalonFX(TunerConstants.BackRight),
-            limelight);
+            new ModuleIOTalonFX(TunerConstants.BackRight)
+            );
 
-        // The ModuleIOTalonFXS implementation provides an example implementation for
-        // TalonFXS controller connected to a CANdi with a PWM encoder. The
-        // implementations
-        // of ModuleIOTalonFX, ModuleIOTalonFXS, and ModuleIOSpark (from the Spark
-        // swerve
-        // template) can be freely intermixed to support alternative hardware
-        // arrangements.
-        // Please see the AdvantageKit template documentation for more information:
-        // https://docs.advantagekit.org/getting-started/template-projects/talonfx-swerve-template#custom-module-implementations
-        //
-        // drive =
-        // new Drive(
-        // new GyroIOPigeon2(),
-        // new ModuleIOTalonFXS(TunerConstants.FrontLeft),
-        // new ModuleIOTalonFXS(TunerConstants.FrontRight),
-        // new ModuleIOTalonFXS(TunerConstants.BackLeft),
-        // new ModuleIOTalonFXS(TunerConstants.BackRight));
+         vision = new Vision(
+          drive::addVisionMeasurement, 
+          new VisionIOLimelight(camera0Name, drive::getRotation)
+          );
+
+      
         break;
 
       case SIM:
@@ -293,8 +288,12 @@ public class RobotContainer {
             new ModuleIOSim(TunerConstants.FrontLeft),
             new ModuleIOSim(TunerConstants.FrontRight),
             new ModuleIOSim(TunerConstants.BackLeft),
-            new ModuleIOSim(TunerConstants.BackRight),
-            limelight);
+            new ModuleIOSim(TunerConstants.BackRight)
+            );
+          vision = new Vision(
+          drive::addVisionMeasurement, 
+          new VisionIOLimelight(camera0Name, drive::getRotation)
+          );
         break;
 
       default:
@@ -309,8 +308,12 @@ public class RobotContainer {
             new ModuleIO() {
             },
             new ModuleIO() {
-            },
-            limelight);
+            }
+            );
+          vision = new Vision(
+          drive::addVisionMeasurement, 
+          new VisionIOLimelight(camera0Name, drive::getRotation)
+          );
         break;
     }
 
