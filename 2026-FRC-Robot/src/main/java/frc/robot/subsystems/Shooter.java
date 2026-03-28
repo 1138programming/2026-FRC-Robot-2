@@ -28,7 +28,8 @@ import org.littletonrobotics.junction.Logger;
 
 
 public class Shooter extends SubsystemBase{
-  private SparkFlex ShooterMotor;
+  private SparkFlex ShooterMotorLeft;
+  private SparkFlex ShooterMotorRight;
 
   private SimpleMotorFeedforward shooterMotorFeedForward;
   private PIDController shooterMotorPI;
@@ -51,7 +52,8 @@ public class Shooter extends SubsystemBase{
   public Shooter(){
 
 
-    ShooterMotor = new SparkFlex(kShooterID, MotorType.kBrushless);
+    ShooterMotorLeft = new SparkFlex(kLeftShooterID, MotorType.kBrushless);
+    ShooterMotorRight = new SparkFlex(kRightShooterID, MotorType.kBrushless);
     shooterMotorFeedForward = new SimpleMotorFeedforward(KShooterFlywheelkS, KShooterFlywheelkV);
     shooterMotorPI = new PIDController(KShooterFlywheelkP, KShooterFlywheelkI, 0);
     shooterMotorPI.setTolerance(KShooterFlywheelPITolerance);
@@ -65,7 +67,8 @@ public class Shooter extends SubsystemBase{
   /// Flywheel
 
   public void setShooterPower(double power){
-    ShooterMotor.set(power);
+    ShooterMotorLeft.set(power);
+    ShooterMotorRight.set(power);
   }
 
   public void setShooterVelocity(double rpm){
@@ -75,11 +78,13 @@ public class Shooter extends SubsystemBase{
   }
 
   public void stopShooter() {
-    ShooterMotor.set(0.0);
+    ShooterMotorLeft.set(0.0);
+    ShooterMotorRight.set(0.0);
   }
 
   public double getflywheelVelocity() {
-    return ShooterMotor.getEncoder().getVelocity();
+    return (ShooterMotorLeft.getEncoder().getVelocity() + 
+    ShooterMotorRight.getEncoder().getVelocity())/(double) 2;
   }
 
 

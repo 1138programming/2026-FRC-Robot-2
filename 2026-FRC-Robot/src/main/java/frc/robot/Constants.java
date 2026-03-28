@@ -241,7 +241,8 @@ public final class Constants {
   }
 
   public static class ShooterConstants{
-    public static final int kShooterID = 3;
+    public static final int kLeftShooterID = 3;
+    public static final int kRightShooterID = -1;
 
 
     public static final double kHoodMaxAngleDeg = 70; 
