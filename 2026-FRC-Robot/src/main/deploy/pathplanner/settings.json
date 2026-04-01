@@ -3,8 +3,10 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "NZ",
-    "New Folder",
+    "Depot Auton",
+    "LeftSide PreLoad",
+    "Tower Auton",
+    "RightSide PreLoad",
     "hub-depot-nz"
   ],
   "autoFolders": [],

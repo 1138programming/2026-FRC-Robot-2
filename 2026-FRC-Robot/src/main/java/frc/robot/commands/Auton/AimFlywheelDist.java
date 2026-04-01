@@ -2,8 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ShooterCommands;
+package frc.robot.commands.Auton;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
@@ -11,14 +13,18 @@ import frc.robot.subsystems.ShooterLogic;
 
 import static frc.robot.Constants.ShooterConstants.*;
 
+import java.util.function.DoubleSupplier;
+
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AimFlywheelSpeed extends Command {
+public class AimFlywheelDist extends Command {
   Shooter shooter;
   ShooterLogic logic;
+ DoubleSupplier distanceSupplier;
   /** Creates a new SetShooterRPM. */
-  public AimFlywheelSpeed(Shooter shooter, ShooterLogic logic) {
+  public AimFlywheelDist(Shooter shooter, ShooterLogic logic, DoubleSupplier distanceSupplier) {
     this.shooter = shooter;
     this.logic = logic;
+    this.distanceSupplier = distanceSupplier;
     addRequirements(shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,9 +36,11 @@ public class AimFlywheelSpeed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = logic.getFlywheelExitVelocity(kHoodDefaultAngleRadians);
+    
+    double speed = logic.getFlywheelExitVelocity(kHoodDefaultAngleRadians, distanceSupplier.getAsDouble());
     SmartDashboard.putNumber("exit velocity",speed);
     SmartDashboard.putNumber("exit rpm",shooter.LinearSpeedToRPM(speed));
+    SmartDashboard.putBoolean("readyToShoot",shooter.readyToShoot());
     shooter.setShooterVelocity(shooter.LinearSpeedToRPM(speed));
   }
 

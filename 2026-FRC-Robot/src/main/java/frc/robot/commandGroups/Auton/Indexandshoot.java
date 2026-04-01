@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commandGroups.Shooter;
+package frc.robot.commandGroups.Auton;
 
 import static frc.robot.Constants.IndexerConstants.*;
 import static frc.robot.Constants.ShooterConstants.KFlyWheelautoSpeed;
@@ -10,7 +10,7 @@ import static frc.robot.Constants.ShooterConstants.KFlyWheelautoSpeed;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.SetIndexerPower;
+import frc.robot.commands.Indexer.SetIndexerPower;
 import frc.robot.commands.ShooterCommands.SetShooterRPM;
 import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.subsystems.Indexer;

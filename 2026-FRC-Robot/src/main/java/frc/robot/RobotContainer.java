@@ -35,10 +35,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.FieldConstants.HubConstants;
-import frc.robot.commandGroups.AutoDriveAimPose;
+import frc.robot.commandGroups.AutoRotateToPose;
 import frc.robot.commandGroups.DriveWhileAim;
-import frc.robot.commandGroups.Shooter.Indexandshoot;
-import frc.robot.commands.Autos;
+import frc.robot.commandGroups.Auton.AutoShootPoseAuton;
+import frc.robot.commandGroups.Auton.Indexandshoot;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.IntakeIn;
@@ -48,14 +48,15 @@ import frc.robot.commands.Intake.StopIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Intake.DeployAndIntake;
 import frc.robot.subsystems.Intake;
-import frc.robot.commands.ShooterCommands.AimFlywheelSpeed;
 import frc.robot.commands.ShooterCommands.SetHoodAngle;
 import frc.robot.commands.ShooterCommands.SetShooterRPM;
 import frc.robot.commands.ShooterCommands.SpinHood;
 import frc.robot.commands.ShooterCommands.SpinShooter;
-import frc.robot.commands.SetIndexerPower;
-import frc.robot.commands.StopIndexer;
-
+import frc.robot.commands.Auton.AimFlywheelDistAndIndex;
+import frc.robot.commands.Auton.AimFlywheelPose;
+import frc.robot.commands.Auton.AimFlywheelPoseAndIndex;
+import frc.robot.commands.Indexer.SetIndexerPower;
+import frc.robot.commands.Indexer.StopIndexer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -124,8 +125,10 @@ public class RobotContainer {
   public final SpinHood hoodUp;
   public final SpinHood hoodDown;
 
-   public final AimFlywheelSpeed aimFlywheelSpeed;
-
+  public final AimFlywheelPose aimFlywheelSpeed;
+  public final AimFlywheelPoseAndIndex aimFlywheelPoseAndIndex;
+  public final AimFlywheelDistAndIndex aimFlywheelShuttleAndIndex;
+  public final AutoShootPoseAuton autoShootPoseAuton;
 
 
   public final DeployAndIntake deployAndIntake;
@@ -241,10 +244,7 @@ public class RobotContainer {
     setHoodAngle = new SetHoodAngle(shooter,50);
     hoodUp = new SpinHood(shooter, kIndexerPower); 
     hoodDown = new SpinHood(shooter, kIndexerPower);
-
     deployAndIntake = new DeployAndIntake(intake);
-
-    
 
 
     indexer = new Indexer();
@@ -315,13 +315,24 @@ public class RobotContainer {
     }
 
     logic = new ShooterLogic( drive);
-    aimFlywheelSpeed = new AimFlywheelSpeed(shooter, logic);
+    aimFlywheelSpeed = new AimFlywheelPose(shooter, logic, () -> logic.getHubPose3d());
+    aimFlywheelPoseAndIndex = new AimFlywheelPoseAndIndex(shooter,indexer,logic, () -> logic.getHubPose3d());
+    aimFlywheelShuttleAndIndex = new AimFlywheelDistAndIndex(shooter, indexer, logic, () -> drive.getPose().getX());
+  
+    // aimFlywheelShuttleAndIndex = new AimFlywheelDistAndIndex(shooter, indexer, logic, () -> drive.getPose().getX());
+    autoShootPoseAuton = new AutoShootPoseAuton(logic, shooter, indexer, drive,           
+          () -> logic.getHubPose3d(), 
+          () -> 0.0, 
+          () -> 0.0);
+          
+
 
 
     // Set up auto routines
     NamedCommands.registerCommand("intakeout", intakeOut);
     NamedCommands.registerCommand("shoot", shooterRPM);
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
+    NamedCommands.registerCommand("aimFlywheelPoseAndIndex",  aimFlywheelPoseAndIndex);
     
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -443,11 +454,18 @@ public class RobotContainer {
 
     // logitechBtnRT
     //     .whileTrue(
-    //       new AutoDriveAimPose(logic, shooter, drive, 
+    //       new AutoRotateToPose(logic, shooter, drive, 
     //       () -> logic.getHubPose3d(), 
-    //       () -> getLogiLeftYAxis(), 
-    //       () -> getLogiLeftXAxis()));
+    //       () -> getLogiLeftYAxis()* 0.5, 
+    //       () -> getLogiLeftXAxis()* 0.5));
 
+          
+    logitechBtnRT
+        .whileTrue(
+ new AutoShootPoseAuton(logic, shooter, indexer, drive,           
+          () -> logic.getHubPose3d(), 
+      () -> getLogiLeftYAxis()* 0.5, 
+          () -> getLogiLeftXAxis()* 0.5));
     logitechBtnRB
         .whileTrue(
           DriveCommands.joystickDrive(
@@ -482,9 +500,16 @@ public class RobotContainer {
     // driveSpeed = 0.7;
     // },
     // () -> true,
-    compStreamDeck1.whileTrue(aimFlywheelSpeed);
-    compStreamDeck2.whileTrue(setIndexerPower);
-    compStreamDeck3.whileTrue(reverseIndexerPower);
+    // compStreamDeck1.whileTrue(autoShootPoseAuton);
+    compStreamDeck1.whileTrue(
+     new AutoShootPoseAuton(logic, shooter, indexer, drive,           
+          () -> logic.getHubPose3d(), 
+      () -> getLogiLeftYAxis()* 0.5, 
+          () -> getLogiLeftXAxis()* 0.5));
+    compStreamDeck3.whileTrue(setIndexerPower);
+    compStreamDeck2.whileTrue(reverseIndexerPower);
+    compStreamDeck13.whileTrue(aimFlywheelSpeed);
+
     // compStreamDeck13.onTrue(hoodDownCommand);
     // compStreamDeck8.onTrue(hoodUpCommand);
     // compStreamDeck11.whileTrue(hoodMid);
@@ -495,9 +520,12 @@ public class RobotContainer {
 
     compStreamDeck7.whileTrue(shooterRPM);
     compStreamDeck6.whileTrue(shooterRPMReverse);
+
+    compStreamDeck8.whileTrue(aimFlywheelShuttleAndIndex);
+
     
     logitechBtnLT.whileTrue(deployAndIntake);
-    logitechBtnRT.whileTrue(aimFlywheelSpeed);
+    // logitechBtnRT.whileTrue(aimFlywheelSpeed);
 
 
     logitechBtnLB.whileTrue(setIndexerPower);

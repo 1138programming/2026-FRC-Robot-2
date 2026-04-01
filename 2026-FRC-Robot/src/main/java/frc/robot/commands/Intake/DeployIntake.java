@@ -21,7 +21,7 @@ public class DeployIntake extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        intake.setDeployed(true);
+        // intake.setDeployed(true);
         intake.intakeMoveToPosition(kDeployAngle);
     }
 

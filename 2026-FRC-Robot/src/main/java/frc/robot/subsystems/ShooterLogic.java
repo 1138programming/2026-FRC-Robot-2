@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 import java.util.Vector;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -34,51 +35,16 @@ public class ShooterLogic extends SubsystemBase {
 
   private Drive drive;
 
-  private Boolean readyToShoot; 
-
-
-  private Pose3d kHubFieldPose3d;
-  private Pose2d kHubFieldPose2d;
-
-  
-  private Pose3d kAZoneFieldPose3d;
   private Pose2d kAZoneFieldPose2d;
 
   private double[] shotChangeDataHub;
 
-  public enum Targets {
-    HUB,
-    AZONE
-  }
-  private Targets activeTarget;
 
 
   public ShooterLogic(Drive drive) {
     this.drive = drive;
-    readyToShoot = false;
     
-    if (DriverStation.getAlliance().isPresent()) {
-      if (DriverStation.getAlliance().get() == Alliance.Red) {
-        kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
-        kAZoneFieldPose3d = new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
-      }
-
-      if (DriverStation.getAlliance().get() == Alliance.Blue) {
-        kHubFieldPose3d = HubConstants.blue.KhubFieldPose3d;
-        kAZoneFieldPose3d = new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
-
-      }
-    } else {
-      //default red cause thats what the wooden hub we have has
-      kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
-      kAZoneFieldPose3d = new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
-
-    }
-    kHubFieldPose2d = kHubFieldPose3d.toPose2d();
-    kAZoneFieldPose2d = kAZoneFieldPose3d.toPose2d();
-
-
-    activeTarget = Targets.HUB;
+    
 
   }
 
@@ -86,40 +52,13 @@ public class ShooterLogic extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-
-     if (DriverStation.getAlliance().isPresent()) {
-      if (DriverStation.getAlliance().get() == Alliance.Red) {
-        kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
-      }
-
-      if (DriverStation.getAlliance().get() == Alliance.Blue) {
-        kHubFieldPose3d = HubConstants.blue.KhubFieldPose3d;
-      }
-    } else {
-      //default red cause thats what the wooden hub we have has
-      kHubFieldPose3d = HubConstants.red.KhubFieldPose3d;
-    }
-    kHubFieldPose2d = kHubFieldPose3d.toPose2d();
-
-    // addTurretRotationtoPose();
-
-   
-
-    //shot change math
-
-    // shotChangeDataHub = calculateShotChanges(kHubFieldPose3d);
-    // SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
-    //shotChangeDataHub = calculateShotChanges(kHubFieldPose2d);
-    //SmartDashboard.putNumberArray("shot changes", shotChangeDataHub);
-     
-
     //SmartDashboard.putNumber("TX Helper", absoluteAngletoAprilTagLimelightDegrees(0));
-    SmartDashboard.putNumber("Angle to Hub center", botAngletoPose2d(kHubFieldPose2d));
-      SmartDashboard.putNumber("relative Angle to Hub center", relativebaseAngletoPose2d(kHubFieldPose2d));
+    SmartDashboard.putNumber("Angle to Hub center", botAngletoPose2d(getHubPose3d().toPose2d()));
+      SmartDashboard.putNumber("relative Angle to Hub center", relativebaseAngletoPose2d(getHubPose3d().toPose2d()));
     // SmartDashboard.putString("Turret Pose 2d", turretPose2d.toString());
     // SmartDashboard.putString("diff translation", kHubFieldPose2d.getTranslation().minus(turretPose2d.getTranslation()).toString());
 
-    SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(kHubFieldPose2d));
+    SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(getHubPose3d().toPose2d()));
   }
 
   /**
@@ -207,9 +146,19 @@ public class ShooterLogic extends SubsystemBase {
         return hoodAngle;
   }
 
-  public double getFlywheelExitVelocity(double hoodAngle) {
+  public double getFlywheelExitVelocity(double hoodAngle,Pose3d target ) {
     final double g = 9.81;
-    double x =  distancetoPose2d(getTargetPose3d().toPose2d()) - kPassThroughPointRadius; //could be alternatively used using Pose
+    double x =  distancetoPose2d(target.toPose2d()) - kPassThroughPointRadius; //could be alternatively used using Pose
+    double y = 2.0 - kShooterHeightMeters; //could be alternatively used using Pose
+    double flywheelSpeed = Math.sqrt(Math.abs(g * (x * x) / ( 
+      Math.pow(Math.cos(hoodAngle), 2) * (y- (x * Math.tan(hoodAngle)))*2)));
+
+    return flywheelSpeed;
+  }
+
+  public double getFlywheelExitVelocity(double hoodAngle, double distance) {
+    final double g = 9.81;
+    double x =  distance - kPassThroughPointRadius; //could be alternatively used using Pose
     double y = 2.0 - kShooterHeightMeters; //could be alternatively used using Pose
     double flywheelSpeed = Math.sqrt(Math.abs(g * (x * x) / ( 
       Math.pow(Math.cos(hoodAngle), 2) * (y- (x * Math.tan(hoodAngle)))*2)));
@@ -217,24 +166,34 @@ public class ShooterLogic extends SubsystemBase {
     return flywheelSpeed;
   }
   
+  public Pose3d getHubPose3d() {
+    if (DriverStation.getAlliance().isPresent()) {
+      if (DriverStation.getAlliance().get() == Alliance.Red) {
+        return HubConstants.red.KhubFieldPose3d;
+      }
 
-  public void setTargetHUB() {
-    activeTarget = Targets.HUB;
-  }
-   
-  public void setTargetAZONE(){
-    activeTarget = Targets.AZONE;
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
+       return HubConstants.blue.KhubFieldPose3d;
+      }
+    } 
+
+      //default red cause thats what the wooden hub we have has
+      return HubConstants.red.KhubFieldPose3d;
+
   }
 
-  public Pose3d getTargetPose3d() {
-    switch (activeTarget) {
-      case HUB:
-        return kHubFieldPose3d;
-      case AZONE:
-        return kHubFieldPose3d;
-      default:
-        return null;
-    }
+  public Pose3d getAzonePose3d() {
+    if (DriverStation.getAlliance().isPresent()) {
+      if (DriverStation.getAlliance().get() == Alliance.Red) {
+        return new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
+      }
+
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
+       return new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
+      }
+    } 
+    //default red cause thats what the wooden hub we have has
+    return new Pose3d(0.0,0.0,0.0,Rotation3d.kZero);
   }
 
   //-----------------------//
@@ -270,13 +229,14 @@ public class ShooterLogic extends SubsystemBase {
     return angle;
   }
 
-  //in shooter logic as it requires continual adjustment by drive for the robot's position
-  //Review if this is alright here
-  private double distancetoPose2d(Pose2d pose2d) {
+  /**
+   *
+   * @param pose2d
+   * @return Returns the distance of the bot to the Pose2d
+   */
+  public double distancetoPose2d(Pose2d pose2d) {
     return drive.getPose().getTranslation().getDistance(pose2d.getTranslation());
   }
-
-
 
   /**
    *
@@ -288,32 +248,7 @@ public class ShooterLogic extends SubsystemBase {
     return diffTranslation.getAngle().getDegrees();
   } 
 
-  public Double getShotChangeFlywheelVelocity(Targets target) {
-    switch (target) {
-      case HUB:
-        return shotChangeDataHub[0];
-      default:
-        return null;
-    }
-  }
-
-  public Double getShotChangeHoodAngle(Targets target) {
-        switch (target) {
-      case HUB:
-        return shotChangeDataHub[1];
-      default:
-        return null;
-    }
-  }
-
-  public Double getShotChangeTurretAngle(Targets target) {
-        switch (target) {
-      case HUB:
-        return shotChangeDataHub[2];
-      default:
-        return null;
-    }
-  }
+  
 
 }
 

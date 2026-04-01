@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.563,
+        "x": 2.4,
         "y": 4.005766666666666
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.668620342741984,
-        "y": 4.013981807486889
+        "x": 2.725389979353217,
+        "y": 4.09960302875735
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.4,
-        "y": 4.006
+        "x": 1.5268444444444444,
+        "y": 3.7036888888888884
       },
       "prevControl": {
-        "x": 3.1087252168403583,
-        "y": 4.011887090585912
+        "x": 1.2774312830941232,
+        "y": 3.629896673266569
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "done shooting preloads"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Tower Auton",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

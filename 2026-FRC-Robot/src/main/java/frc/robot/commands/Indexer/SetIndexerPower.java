@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Indexer;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Indexer;
@@ -11,6 +11,8 @@ public class SetIndexerPower extends Command {
     public SetIndexerPower(Indexer indexer, double power){
         this.indexer = indexer;
         this.power = power;
+        addRequirements(indexer);
+
     }
 
     @Override

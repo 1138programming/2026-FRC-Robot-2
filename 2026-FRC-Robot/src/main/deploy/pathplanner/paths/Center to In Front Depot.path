@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.563,
-        "y": 4.005766666666666
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 2.668620342741984,
-        "y": 4.013981807486889
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 2.4,
         "y": 4.006
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4586333333333337,
+        "y": 5.760000000000002
+      },
+      "isLocked": false,
+      "linkedName": "done shooting preloads"
+    },
+    {
+      "anchor": {
+        "x": 1.1955333333333331,
+        "y": 5.974144444444444
+      },
       "prevControl": {
-        "x": 3.1087252168403583,
-        "y": 4.011887090585912
+        "x": 1.4455333333333331,
+        "y": 5.974144444444444
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "done shooting preloads"
+      "linkedName": "in front of depot"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Depot Auton",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

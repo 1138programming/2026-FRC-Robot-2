@@ -133,15 +133,15 @@ public final class Constants {
     public static final double KintakeStowMotorSpeed = 0.2;
 
 
-    public static final double KintakePIDKp = 0.0015;
-    public static final double KintakePIDKi = 0;
+    public static final double KintakePIDKp = 0.0019;//0.003
+    public static final double KintakePIDKi = 0.001;//0/0005
     public static final double KintakePIDKd = 0;
 
 
     public static final double kDeployReduction = 50.0;
 
-    public static final double kDeployAngle = 23;
-    public static final double kStowAngle = 270;
+    public static final double kDeployAngle = 31;
+    public static final double kStowAngle = 275; //284
 
     public static final double kStowed = 100;
 
@@ -176,6 +176,7 @@ public final class Constants {
 
   public static class FieldConstants {
     public static final double kHubHeight = 1.8288; //meters
+    public static final double kFeildlength= 17.37; //meters
     public static final double kScoreHeight = kHubHeight - 0.5588; //meters (shooter height is 0.5588m temporary)
     public static final double kScoreAngle = Math.toRadians(35); //radians
     
@@ -271,17 +272,17 @@ public final class Constants {
     public static final double KShooterFlywheelkP = 0.0005; // 0.0002 - 0.001
     public static final double KShooterFlywheelkI = 0; 
 
-    public static final double KShooterFlywheelPITolerance =10;
+    public static final double KShooterFlywheelPITolerance =150;
 
     public static final double KFlyWheelDefaultSpeed = 4500;
     public static final double KFlyWheelautoSpeed = 3600;
 
-    public static final double KFlyWheelRPMMultiplier = 2.1;
+    public static final double KFlyWheelRPMMultiplier = 2.14;
 
 
 
     public static final double kShooterHeightInches = 19.39;
-    public static final double kShooterHeightMeters = 0.482506;
+    public static final double kShooterHeightMeters = 0.425;
     public static final double kShooterWheelRadiusInches = 3; // 3 inches in meters PLACEHOLDER PLACEHOLDER
     public static final double kShooterWheelRadiusMeters = 0.0381;
 
@@ -290,9 +291,9 @@ public final class Constants {
   public static class IndexerConstants{
     public static final int kIndexerID = 4;
     
-    public static final double kIndexerPower = 0.75;
+    public static final double kIndexerPower = 0.5;
 
-    public static final double kIndexerPowerAuto = 0.4;
+    public static final double kIndexerPowerAuto = 0.45;
     
   }
 }

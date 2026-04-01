@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase{
 
   public void setShooterVelocity(double rpm){
     Logger.recordOutput("Flywheel/DesiredRPM", rpm);
-    double motorOutput = shooterMotorFeedForward.calculate(rpm) + shooterMotorPI.calculate(getflywheelVelocity(), rpm);
+    double motorOutput = shooterMotorFeedForward.calculate(rpm) + shooterMotorPI.calculate(getFlywheelVelocity(), rpm);
     setShooterPower(motorOutput);
   }
 
@@ -78,10 +78,13 @@ public class Shooter extends SubsystemBase{
     ShooterMotor.set(0.0);
   }
 
-  public double getflywheelVelocity() {
+  public double getFlywheelVelocity() {
     return ShooterMotor.getEncoder().getVelocity();
   }
 
+  public boolean readyToShoot() {
+    return shooterMotorPI.atSetpoint();
+  }
 
 
 
@@ -129,9 +132,8 @@ public class Shooter extends SubsystemBase{
   @Override
   public void periodic() {
 
-    SmartDashboard.putNumber("hood angle", getHoodAngle());
-    SmartDashboard.putNumber("flywheel speed",getflywheelVelocity());
-    Logger.recordOutput("Flywheel/RPM", getflywheelVelocity());
+    SmartDashboard.putNumber("flywheel speed",getFlywheelVelocity());
+    Logger.recordOutput("Flywheel/RPM", getFlywheelVelocity());
 
     
   }

@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import static frc.robot.Constants.intakeConstants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 
 public class Intake extends SubsystemBase{
     private SparkFlex intakeMotor;
@@ -109,6 +111,10 @@ public class Intake extends SubsystemBase{
     intakeMotor.set(power);
   }
 
+  public double getIntakeVelocity() {
+    return intakeMotor.getEncoder().getVelocity();
+  }
+
 
   public void setIntakeDeployMotorPower(double power) {
     intakeDeployMotor.set(power);
@@ -116,7 +122,6 @@ public class Intake extends SubsystemBase{
 
   public void intakeMoveToPosition(double position) {
     double power = IntakeControler.calculate(getIntakeThroughBore(), position);
-
     SmartDashboard.putNumber("pid out", power);
     intakeDeployMotor.set(power);
  
@@ -152,6 +157,8 @@ public class Intake extends SubsystemBase{
     @Override
     public void periodic() {
       SmartDashboard.putNumber("Intake ThroughBore", getIntakeThroughBore());
+      Logger.recordOutput("Intake/ThroughBore", getIntakeThroughBore());
+      Logger.recordOutput("Intake/RPM", getIntakeVelocity());
 
       // This method will be called once per scheduler run
     }
