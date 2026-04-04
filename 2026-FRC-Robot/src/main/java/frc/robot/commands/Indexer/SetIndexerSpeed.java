@@ -6,18 +6,18 @@ import frc.robot.subsystems.Indexer;
 public class SetIndexerSpeed extends Command {
 
     private Indexer indexer;
-    private double power;
+    private double speed;
 
     public SetIndexerSpeed(Indexer indexer, double speed){
         this.indexer = indexer;
-        this.power = power;
+        this.speed = speed;
         addRequirements(indexer);
 
     }
 
     @Override
     public void execute(){
-        indexer.setIndexerSpeed(power);
+        indexer.setIndexerSpeed(speed);
     }
 
       @Override
@@ -30,7 +30,4 @@ public class SetIndexerSpeed extends Command {
     public boolean isFinished(){
         return false;
     }
-
-
-    
 }
