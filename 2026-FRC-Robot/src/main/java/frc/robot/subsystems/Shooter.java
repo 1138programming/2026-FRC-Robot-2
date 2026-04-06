@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.servohub.ServoChannel;
 import com.revrobotics.servohub.ServoHub;
 import com.revrobotics.servohub.ServoChannel.ChannelId;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -28,8 +32,8 @@ import org.littletonrobotics.junction.Logger;
 
 
 public class Shooter extends SubsystemBase{
-  private SparkFlex ShooterMotorLeft;
-  private SparkFlex ShooterMotorRight;
+  private SparkFlex ShooterMotorLeader;
+  private SparkFlex ShooterMotorFollowert;
 
   private SimpleMotorFeedforward shooterMotorFeedForward;
   private PIDController shooterMotorPI;
@@ -47,13 +51,35 @@ public class Shooter extends SubsystemBase{
   private double targetPos = 0.5;
 
   private Time lastUpdateTime = Seconds.of(0);
+
+  SparkMaxConfig leaderConfig;
+  SparkMaxConfig followerConfig;
   
 
   public Shooter(){
 
 
-    ShooterMotorLeft = new SparkFlex(kLeftShooterID, MotorType.kBrushless);
-    ShooterMotorRight = new SparkFlex(kRightShooterID, MotorType.kBrushless);
+    ShooterMotorLeader = new SparkFlex(kLeftShooterID, MotorType.kBrushless);
+    ShooterMotorFollowert = new SparkFlex(kRightShooterID, MotorType.kBrushless);
+
+    leaderConfig = new SparkMaxConfig();
+    leaderConfig
+      .smartCurrentLimit(60)
+      .idleMode(IdleMode.kCoast);
+
+    followerConfig = new SparkMaxConfig();
+    followerConfig
+      .smartCurrentLimit(60)
+      .idleMode(IdleMode.kCoast)
+      .follow(ShooterMotorLeader);
+
+
+
+
+    ShooterMotorLeader.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    ShooterMotorFollowert.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+
     shooterMotorFeedForward = new SimpleMotorFeedforward(KShooterFlywheelkS, KShooterFlywheelkV);
     shooterMotorPI = new PIDController(KShooterFlywheelkP, KShooterFlywheelkI, 0);
     shooterMotorPI.setTolerance(KShooterFlywheelPITolerance);
@@ -67,8 +93,8 @@ public class Shooter extends SubsystemBase{
   /// Flywheel
 
   public void setShooterPower(double power){
-    ShooterMotorLeft.set(power);
-    ShooterMotorRight.set(power);
+    ShooterMotorLeader.set(power);
+    ShooterMotorFollowert.set(power);
   }
 
   public void setShooterVelocity(double rpm){
@@ -78,13 +104,13 @@ public class Shooter extends SubsystemBase{
   }
 
   public void stopShooter() {
-    ShooterMotorLeft.set(0.0);
-    ShooterMotorRight.set(0.0);
+    ShooterMotorLeader.set(0.0);
+    ShooterMotorFollowert.set(0.0);
   }
 
   public double getflywheelVelocity() {
-    return (ShooterMotorLeft.getEncoder().getVelocity() + 
-    ShooterMotorRight.getEncoder().getVelocity())/(double) 2;
+    return (ShooterMotorLeader.getEncoder().getVelocity() + 
+    ShooterMotorFollowert.getEncoder().getVelocity())/(double) 2;
   }
 
 
