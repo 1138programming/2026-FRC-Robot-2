@@ -294,6 +294,15 @@ public final class Constants {
     public static final double kIndexerPower = 0.5;
 
     public static final double kIndexerPowerAuto = 0.45;
-    
+  }
+  
+  public static class FanConstants //sparkmaxes
+  {
+    public static final int kfarLeftFanID = -1;
+    public static final int kMidLeftFanID = -1;
+    public static final int kMidRightFanID = -1;
+    public static final int kFarRightFanID = -1;
+
+    public static final double kFanPower = 0;
   }
 }
