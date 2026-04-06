@@ -298,6 +298,28 @@ public class Drive extends SubsystemBase {
       modules[i].runCharacterization(output);
     }
   }
+  // Turns wheels in order to resit movemnt of the drive base.
+  public void runBrake() {
+    SwerveModuleState[] setpointStates = {
+      new SwerveModuleState(0,Rotation2d.kZero),
+      new SwerveModuleState(0,Rotation2d.k180deg),
+      new SwerveModuleState(0,Rotation2d.kZero),
+      new SwerveModuleState(0,Rotation2d.k180deg)
+    };  
+    Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
+      // Send setpoints to modules
+    for (int i = 0; i < 4; i++) {
+      modules[i].runSetpoint(setpointStates[i]);
+    }
+    
+      // Log optimized setpoints (runSetpoint mutates each state)
+    Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+
+
+
+  }
+
+
 
   /** Stops the drive. */
   public void stop() {
