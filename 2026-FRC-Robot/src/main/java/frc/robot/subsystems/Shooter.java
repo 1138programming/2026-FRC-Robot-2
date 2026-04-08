@@ -52,8 +52,8 @@ public class Shooter extends SubsystemBase{
 
   private Time lastUpdateTime = Seconds.of(0);
 
-  SparkMaxConfig leaderConfig;
-  SparkMaxConfig followerConfig;
+  private SparkMaxConfig leaderConfig;
+  private SparkMaxConfig followerConfig;
   
 
   public Shooter(){
@@ -77,7 +77,7 @@ public class Shooter extends SubsystemBase{
 
 
     ShooterMotorLeader.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    ShooterMotorFollowert.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    ShooterMotorFollowert.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
     shooterMotorFeedForward = new SimpleMotorFeedforward(KShooterFlywheelkS, KShooterFlywheelkV);

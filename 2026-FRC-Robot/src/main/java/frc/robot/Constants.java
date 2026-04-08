@@ -242,7 +242,7 @@ public final class Constants {
 
   public static class ShooterConstants{
     public static final int kLeftShooterID = 3;
-    public static final int kRightShooterID = -1;
+    public static final int kRightShooterID = 4;
 
 
     public static final double kHoodMaxAngleDeg = 70; 
@@ -289,7 +289,9 @@ public final class Constants {
   }
 
   public static class IndexerConstants{
-    public static final int kIndexerID = 4;
+    public static final int kIndexerLeaderID = 5;
+    public static final int kIndexerFollowerID = 6;
+
     
     public static final double kIndexerPower = 0.75;
 
