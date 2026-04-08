@@ -9,8 +9,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.HangConstants.*;
 
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class Hang extends SubsystemBase {
   /** Creates a new Hang. */
@@ -19,9 +23,34 @@ public class Hang extends SubsystemBase {
   private SparkFlex rightHangMotor;
 
 
+  SparkMaxConfig leaderConfig;
+  SparkMaxConfig followerConfig;
+  
+
+
   public Hang() {
     leftHangMotor = new SparkFlex(kLeftHangID, MotorType.kBrushless);
     rightHangMotor = new SparkFlex(kRightHangID, MotorType.kBrushless);
+
+    
+
+
+    leaderConfig = new SparkMaxConfig();
+    leaderConfig
+      .smartCurrentLimit(60)
+      .idleMode(IdleMode.kCoast);
+
+    followerConfig = new SparkMaxConfig();
+    followerConfig
+      .smartCurrentLimit(60)
+      .idleMode(IdleMode.kCoast)
+      .follow(leftHangMotor);
+
+
+
+
+    leftHangMotor.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightHangMotor.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 
