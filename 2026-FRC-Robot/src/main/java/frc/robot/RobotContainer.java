@@ -20,6 +20,7 @@ import java.util.function.BooleanSupplier;
 //subsystem
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
+import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.Indexer;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -57,6 +58,12 @@ import frc.robot.commands.Auton.AimFlywheelPose;
 import frc.robot.commands.Auton.AimFlywheelPoseAndIndex;
 import frc.robot.commands.Indexer.SetIndexerPower;
 import frc.robot.commands.Indexer.StopIndexer;
+
+import frc.robot.commands.hang.HangDeploy;
+import frc.robot.commands.hang.HangPullup;
+import frc.robot.commands.hang.HangRetract;
+import frc.robot.commands.hang.HangPower;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -100,6 +107,7 @@ public class RobotContainer {
   public final Shooter shooter;
   public final Indexer indexer;
   public final Vision vision;
+  public final Hang hang;
 
   public final ShooterLogic logic;
 
@@ -114,7 +122,14 @@ public class RobotContainer {
   public final StopIntake stopintake;
   public final SpinShooter spinShooter;
   public final SpinShooter spinShooterReverse;
-  
+
+  public final HangDeploy hangDeploy;
+  public final HangRetract hangRetract;
+  public final HangPullup hangPullup;
+  //public final HangPower hangPower;
+
+
+
   public final SetIndexerPower setIndexerPower;
   public final SetIndexerPower reverseIndexerPower;
   public final StopIndexer stopIndexer;
@@ -225,7 +240,8 @@ public class RobotContainer {
 
     intake = new Intake();
     shooter = new Shooter();
-   
+
+    hang = new Hang();
 
     // commands
     intakein = new IntakeIn(intake);
@@ -245,6 +261,10 @@ public class RobotContainer {
     hoodUp = new SpinHood(shooter, kIndexerPower); 
     hoodDown = new SpinHood(shooter, kIndexerPower);
     deployAndIntake = new DeployAndIntake(intake);
+
+    hangDeploy = new HangDeploy(hang);
+    hangRetract = new HangRetract(hang);
+    hangPullup = new HangPullup(hang);
 
 
     indexer = new Indexer();
@@ -334,6 +354,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
     NamedCommands.registerCommand("aimFlywheelPoseAndIndex",  aimFlywheelPoseAndIndex);
     
+
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -489,7 +510,6 @@ public class RobotContainer {
     compStreamDeck17.whileTrue(spinShooter);
 
 
-
     // logitechBtnRB.whileTrue( new FunctionalCommand(
     // () -> {},
     // () -> {
@@ -532,6 +552,10 @@ public class RobotContainer {
     // logitechBtnRB.whileTrue(shooterRPM);
 
 
+
+    compStreamDeck17.whileTrue(hangDeploy);
+    compStreamDeck18.whileTrue(hangRetract);
+    compStreamDeck19.whileTrue(hangPullup);
 
     // logitechBtnX.whileTrue(DriveAimPose);
 

@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Depot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Depot to hub"
+            "pathName": "Copy of Middle Shoot"
           }
         },
         {
@@ -23,22 +17,29 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 10.0
+                  "waitTime": 0.75
                 }
               },
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 5.0
+                  "name": "shoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Move"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "indexandshoot"
+                }
+              }
+            ]
           }
         }
       ]
