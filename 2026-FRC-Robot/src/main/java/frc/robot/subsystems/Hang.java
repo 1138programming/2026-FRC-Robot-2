@@ -4,42 +4,34 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.HangConstants.*;
 
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 public class Hang extends SubsystemBase {
   /** Creates a new Hang. */
 
-  private TalonFX hangMotor;
+  private SparkFlex leftHangMotor;
+  private SparkFlex rightHangMotor;
+
 
   public Hang() {
-    hangMotor = new TalonFX(kHangID);
-    configureHangMotor();
+    leftHangMotor = new SparkFlex(kLeftHangID, MotorType.kBrushless);
+    rightHangMotor = new SparkFlex(kRightHangID, MotorType.kBrushless);
+
   }
 
-  private void configureHangMotor() {
-    final TalonFXConfiguration config = new TalonFXConfiguration()
-      .withMotorOutput(
-          new MotorOutputConfigs()
-            .withInverted(InvertedValue.Clockwise_Positive)
-            .withNeutralMode(NeutralModeValue.Brake)
-      );
-
-      hangMotor.getConfigurator().apply(config);
-  }
 
   public void setHangPower(double power) {
-    hangMotor.set(power);
+    leftHangMotor.set(power);
   }
 
   public void stopHang() {
-    hangMotor.set(0);
+    leftHangMotor.set(0);
   }
 
 

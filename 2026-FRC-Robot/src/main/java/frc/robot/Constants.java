@@ -361,7 +361,9 @@ public final class Constants {
   }
 
   public static class HangConstants {
-    public static final int kHangID = 11;
+    public static final int kLeftHangID = 11;
+    public static final int kRightHangID = 12;
+
 
     public static final double khighPower = 0.6;
     public static final double klowPower = 0.17;
