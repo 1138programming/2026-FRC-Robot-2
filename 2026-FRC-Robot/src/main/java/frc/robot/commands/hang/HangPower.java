@@ -29,7 +29,6 @@ public class HangPower extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
     hang.setHangPower(power);
   }
 

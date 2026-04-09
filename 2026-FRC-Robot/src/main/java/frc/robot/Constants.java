@@ -137,14 +137,12 @@ public final class Constants {
     public static final double KintakePIDKi = 0.001;//0/0005
     public static final double KintakePIDKd = 0;
 
-
     public static final double kDeployReduction = 50.0;
 
     public static final double kDeployAngle = 31;
     public static final double kStowAngle = 275; //284
 
     public static final double kStowed = 100;
-
 
   }
   
@@ -265,9 +263,6 @@ public final class Constants {
     public static final int KHoodMotorKI= 0;
     public static final int KHoodMotorKD= 0;
 
-
-
-
     public static final double KShooterFlywheelkS = 0.1;
     public static final double KShooterFlywheelkV = 0.0001315; // 0.0001315
     public static final double KShooterFlywheelkP = 0.0005; // 0.0002 - 0.001
@@ -310,12 +305,12 @@ public final class Constants {
   
   public static class FanConstants //sparkmaxes
   {
-    public static final int kfarLeftFanID = -1;
-    public static final int kMidLeftFanID = -1;
-    public static final int kMidRightFanID = -1;
-    public static final int kFarRightFanID = -1;
+    public static final int kfarLeftFanID = 14;
+    public static final int kMidLeftFanID = 15;
+    public static final int kMidRightFanID = 16;
+    public static final int kFarRightFanID = 17;
 
-    public static final double kFanPower = 0;
+    public static final double kFanPower = 0.5;
   }
 }
 

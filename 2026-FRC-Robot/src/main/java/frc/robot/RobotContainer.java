@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.FanConstants.kFanPower;
 import static frc.robot.Constants.FieldConstants.TagIDConstants.*;
 import static frc.robot.Constants.IndexerConstants.*;
 import static frc.robot.Constants.OperatorConstants.*;
@@ -20,6 +21,7 @@ import java.util.function.BooleanSupplier;
 //subsystem
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLogic;
+import frc.robot.subsystems.Fans;
 import frc.robot.subsystems.Hang;
 import frc.robot.subsystems.Indexer;
 
@@ -56,6 +58,8 @@ import frc.robot.commands.ShooterCommands.SpinShooter;
 import frc.robot.commands.Auton.AimFlywheelDistAndIndex;
 import frc.robot.commands.Auton.AimFlywheelPose;
 import frc.robot.commands.Auton.AimFlywheelPoseAndIndex;
+import frc.robot.commands.Fans.SetLeftFansPower;
+import frc.robot.commands.Fans.SetRightFansPower;
 import frc.robot.commands.Indexer.SetIndexerPower;
 import frc.robot.commands.Indexer.StopIndexer;
 
@@ -108,6 +112,7 @@ public class RobotContainer {
   public final Indexer indexer;
   public final Vision vision;
   public final Hang hang;
+  public final Fans fan;
 
   public final ShooterLogic logic;
 
@@ -126,8 +131,12 @@ public class RobotContainer {
   public final HangDeploy hangDeploy;
   public final HangRetract hangRetract;
   public final HangPullup hangPullup;
-  //public final HangPower hangPower;
 
+  public final HangPower hangPower;
+  public final HangPower hangDown;
+
+  public final SetLeftFansPower spinLeftFans;
+  public final SetRightFansPower spinRightFans;
 
 
   public final SetIndexerPower setIndexerPower;
@@ -240,7 +249,7 @@ public class RobotContainer {
 
     intake = new Intake();
     shooter = new Shooter();
-
+    fan = new Fans();
     hang = new Hang();
 
     // commands
@@ -266,6 +275,12 @@ public class RobotContainer {
     hangRetract = new HangRetract(hang);
     hangPullup = new HangPullup(hang);
 
+    hangPower = new HangPower(hang, 0.2);
+    hangDown = new HangPower(hang, -0.2);
+
+    
+    spinLeftFans = new SetLeftFansPower(fan, -kFanPower);
+    spinRightFans = new SetRightFansPower(fan, -kFanPower);
 
     indexer = new Indexer();
     setIndexerPower = new SetIndexerPower(indexer, -kIndexerPowerAuto);
@@ -504,10 +519,7 @@ public class RobotContainer {
 
     compStreamDeck10.whileTrue(stowIntake);
 
-    compStreamDeck16.whileTrue(extendIntake);
-    compStreamDeck15.whileTrue(retractIntake);
-
-    compStreamDeck17.whileTrue(spinShooter);
+    // compStreamDeck17.whileTrue(spinShooter);
 
 
     // logitechBtnRB.whileTrue( new FunctionalCommand(
@@ -529,6 +541,10 @@ public class RobotContainer {
     compStreamDeck3.whileTrue(setIndexerPower);
     compStreamDeck2.whileTrue(reverseIndexerPower);
     compStreamDeck13.whileTrue(aimFlywheelSpeed);
+
+    compStreamDeck14.whileTrue(spinLeftFans);
+    compStreamDeck14.whileTrue(spinRightFans);
+
 
     // compStreamDeck13.onTrue(hoodDownCommand);
     // compStreamDeck8.onTrue(hoodUpCommand);
@@ -553,9 +569,9 @@ public class RobotContainer {
 
 
 
-    compStreamDeck17.whileTrue(hangDeploy);
-    compStreamDeck18.whileTrue(hangRetract);
-    compStreamDeck19.whileTrue(hangPullup);
+    // compStreamDeck17.whileTrue(hangDeploy);
+    compStreamDeck15.whileTrue(hangPower);
+    compStreamDeck16.whileTrue(hangDown);
 
    
 

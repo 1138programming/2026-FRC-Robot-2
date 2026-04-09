@@ -73,20 +73,12 @@ public class Shooter extends SubsystemBase{
       .idleMode(IdleMode.kCoast)
       .follow(ShooterMotorLeader);
 
-
-
-
     ShooterMotorLeader.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     ShooterMotorFollowert.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
 
     shooterMotorFeedForward = new SimpleMotorFeedforward(KShooterFlywheelkS, KShooterFlywheelkV);
     shooterMotorPI = new PIDController(KShooterFlywheelkP, KShooterFlywheelkI, 0);
     shooterMotorPI.setTolerance(KShooterFlywheelPITolerance);
-
-    HoodMotor = new SparkMax(KHoodMotorID, MotorType.kBrushless);
-    hoodPidController = new PIDController(KHoodMotorKp, KHoodMotorKI, KHoodMotorKD);
-    HoodThroughBore = new DutyCycleEncoder(KHoodThroughBoreDIO,0,0);
 
   }
 
