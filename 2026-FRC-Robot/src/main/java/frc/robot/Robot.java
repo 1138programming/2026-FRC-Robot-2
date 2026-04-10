@@ -7,11 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSink;
+
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -72,11 +68,7 @@ public class Robot extends LoggedRobot {
     // Start AdvantageKit logger
     Logger.start();
 
-    // UsbCamera camera = CameraServer.startAutomaticCapture("webcam","/dev/video0");
-    // camera.setResolution(540, 80);
-    // camera.setFPS(30);
-    // VideoSink server = CameraServer.getServer();
-    // server.setSource(camera);
+   
     
     // Instantiate our RobotContainer. This will; perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
@@ -85,7 +77,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
-      CameraServer.startAutomaticCapture();
   }
 
   /** This function is called periodically during all modes. */

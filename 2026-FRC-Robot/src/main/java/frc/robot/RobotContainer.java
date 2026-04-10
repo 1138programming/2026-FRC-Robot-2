@@ -479,7 +479,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
-
         DriveCommands.joystickDrive(
             drive,
             () -> getLogiLeftYAxis() * 0.6,
@@ -496,13 +495,14 @@ public class RobotContainer {
     //       () -> getLogiLeftXAxis()* 0.5));
 
           
-    logitechBtnRT
+  logitechBtnRT
         .whileTrue(
  new AutoShootPoseAuton(logic, shooter, indexer, drive,           
           () -> logic.getHubPose3d(), 
       () -> getLogiLeftYAxis()* 0.5, 
           () -> getLogiLeftXAxis()* 0.5));
-    logitechBtnRB
+
+  logitechBtnRB
         .whileTrue(
           DriveCommands.joystickDrive(
             drive,
@@ -564,8 +564,7 @@ public class RobotContainer {
     // logitechBtnRT.whileTrue(aimFlywheelSpeed);
 
 
-    logitechBtnLB.whileTrue(setIndexerPower);
-    // logitechBtnRB.whileTrue(shooterRPM);
+    logitechBtnLB.whileTrue(DriveCommands.Brake(drive));
 
 
 

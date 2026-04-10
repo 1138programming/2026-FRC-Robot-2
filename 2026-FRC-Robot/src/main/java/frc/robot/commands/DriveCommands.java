@@ -195,6 +195,17 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
+    public static Command Brake(
+      Drive drive) {
+    return Commands.run(
+        () -> {
+          
+          drive.runBrake();
+              
+        },
+        drive
+        );
+  }
 
    /**
    * Field relative drive command using joystick for linear control and PID for angular control.
@@ -251,6 +262,7 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
+
 
   
   /**
