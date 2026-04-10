@@ -100,7 +100,7 @@ public class Shooter extends SubsystemBase{
   }
 
   public double getflywheelVelocity() {
-    return ShooterMotorLeader.getEncoder().getVelocity(); //+
+    return ShooterMotorLeader.getEncoder().getVelocity(); 
   }
 
   public boolean readyToShoot() {

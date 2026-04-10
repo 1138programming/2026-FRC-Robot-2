@@ -45,7 +45,7 @@ public class AimFlywheelPoseAndIndex extends Command {
     shooter.setShooterVelocity(shooter.LinearSpeedToRPM(speed));
     SmartDashboard.putBoolean("readyToShoot",shooter.readyToShoot());
     if (shooter.readyToShoot()) {
-      indexer.setIndexerPower(-kIndexerPowerAuto);
+      indexer.setIndexerPower(kIndexerPowerAuto);
     }
   }
 

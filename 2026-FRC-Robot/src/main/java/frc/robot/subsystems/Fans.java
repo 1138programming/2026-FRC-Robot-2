@@ -31,24 +31,24 @@ public class Fans extends SubsystemBase
         midRightFanMotor = new SparkMax(kMidRightFanID, MotorType.kBrushless);
         farRightFanMotor = new SparkMax(kFarRightFanID, MotorType.kBrushless);
 
-        // globalConfig = new SparkMaxConfig();
-        // globalConfig
-        //     .smartCurrentLimit(60)
-        //     .idleMode(IdleMode.kBrake);
+        globalConfig = new SparkMaxConfig();
+        globalConfig
+            .smartCurrentLimit(30)
+            .idleMode(IdleMode.kBrake);
 
-        // farLeftFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        // midLeftFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        // midRightFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        // farRightFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        farLeftFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        midLeftFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        midRightFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        farRightFanMotor.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     }
 
     @Override 
     public void periodic() {
-        SmartDashboard.putNumber("left fan vel", farLeftFanMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("left mid fan vel", midLeftFanMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("right mid fan vel", midRightFanMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("right fan vel", farRightFanMotor.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("left fan vel", farLeftFanMotor.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("left mid fan vel", midLeftFanMotor.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("right mid fan vel", midRightFanMotor.getEncoder().getVelocity());
+        // SmartDashboard.putNumber("right fan vel", farRightFanMotor.getEncoder().getVelocity());
     }
 
     public void stopAllFans()
