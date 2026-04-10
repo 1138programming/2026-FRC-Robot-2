@@ -33,7 +33,7 @@ public class Indexandshoot extends ParallelDeadlineGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
 
-      new SetIndexerPower(indexer, -kIndexerPowerAuto),
+      new SetIndexerPower(indexer, kIndexerPowerAuto),
       new SetShooterRPM(shooter, KFlyWheelautoSpeed)
     );
   }

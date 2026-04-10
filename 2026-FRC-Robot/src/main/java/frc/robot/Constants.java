@@ -265,7 +265,7 @@ public final class Constants {
 
     public static final double KShooterFlywheelkS = 0.1;
     public static final double KShooterFlywheelkV = 0.0001315; // 0.0001315
-    public static final double KShooterFlywheelkP = 0.0005; // 0.0002 - 0.001
+    public static final double KShooterFlywheelkP =  0.0005 ; // 0.0005 
     public static final double KShooterFlywheelkI = 0; 
 
     public static final double KShooterFlywheelPITolerance =150;
@@ -310,7 +310,7 @@ public final class Constants {
     public static final int kMidRightFanID = 16;
     public static final int kFarRightFanID = 17;
 
-    public static final double kFanPower = 0.5;
+    public static final double kFanPower = 1;
   }
 }
 

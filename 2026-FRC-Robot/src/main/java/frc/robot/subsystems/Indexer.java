@@ -35,7 +35,7 @@ public class Indexer extends SubsystemBase {
         followerConfig
             .smartCurrentLimit(60)
             .idleMode(IdleMode.kCoast)
-            .follow(indexerMotorLeader);
+            .follow(indexerMotorLeader,true);
 
         indexerMotorLeader.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         indexerMotorFollower.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

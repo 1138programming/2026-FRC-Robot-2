@@ -30,7 +30,6 @@ public class Module {
   private final Alert turnDisconnectedAlert;
   private final Alert turnEncoderDisconnectedAlert;
   private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
-  private double commandedSpeedMetersPerSec = 0.0;
 
   public Module(
       ModuleIO io,
@@ -79,7 +78,6 @@ public class Module {
     state.cosineScale(inputs.turnPosition);
 
     // Store commanded speed for debugging
-    commandedSpeedMetersPerSec = state.speedMetersPerSecond;
 
     // Apply setpoints
     io.setDriveVelocity(state.speedMetersPerSecond / constants.WheelRadius);
@@ -143,8 +141,4 @@ public class Module {
     return Units.radiansToRotations(inputs.driveVelocityRadPerSec);
   }
 
-  /** Returns the commanded drive speed in meters per second. */
-  public double getCommandedSpeedMetersPerSec() {
-    return commandedSpeedMetersPerSec;
-  }
 }

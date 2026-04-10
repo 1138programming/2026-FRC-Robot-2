@@ -20,7 +20,7 @@ public class Hang extends SubsystemBase {
   /** Creates a new Hang. */
 
   private SparkFlex leftHangMotor;
-  private SparkFlex rightHangMotor;
+  // private SparkFlex rightHangMotor;
 
 
   SparkMaxConfig leaderConfig;
@@ -29,10 +29,11 @@ public class Hang extends SubsystemBase {
 
 
   public Hang() {
-    leftHangMotor = new SparkFlex(kLeftHangID, MotorType.kBrushless);
-    rightHangMotor = new SparkFlex(kRightHangID, MotorType.kBrushless);
+    leftHangMotor = new SparkFlex(kRightHangID, MotorType.kBrushless);
+    // rightHangMotor = new SparkFlex(kRightHangID, MotorType.kBrushless);
 
     
+
 
 
     leaderConfig = new SparkMaxConfig();
@@ -50,7 +51,7 @@ public class Hang extends SubsystemBase {
 
 
     leftHangMotor.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    rightHangMotor.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // rightHangMotor.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 

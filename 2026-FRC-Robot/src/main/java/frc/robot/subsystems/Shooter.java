@@ -33,7 +33,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase{
   private SparkFlex ShooterMotorLeader;
-  private SparkFlex ShooterMotorFollowert;
+  // private SparkFlex ShooterMotorFollowert;
 
   private SimpleMotorFeedforward shooterMotorFeedForward;
   private PIDController shooterMotorPI;
@@ -59,13 +59,14 @@ public class Shooter extends SubsystemBase{
   public Shooter(){
 
 
-    ShooterMotorLeader = new SparkFlex(kLeftShooterID, MotorType.kBrushless);
-    ShooterMotorFollowert = new SparkFlex(kRightShooterID, MotorType.kBrushless);
+    ShooterMotorLeader = new SparkFlex(kRightShooterID, MotorType.kBrushless);
+    // ShooterMotorFollowert = new SparkFlex(kRightShooterID, MotorType.kBrushless);
 
     leaderConfig = new SparkMaxConfig();
     leaderConfig
       .smartCurrentLimit(60)
-      .idleMode(IdleMode.kCoast);
+      .idleMode(IdleMode.kCoast)
+      .inverted(true);
 
     followerConfig = new SparkMaxConfig();
     followerConfig
@@ -74,7 +75,7 @@ public class Shooter extends SubsystemBase{
       .follow(ShooterMotorLeader);
 
     ShooterMotorLeader.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    ShooterMotorFollowert.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // ShooterMotorFollowert.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     shooterMotorFeedForward = new SimpleMotorFeedforward(KShooterFlywheelkS, KShooterFlywheelkV);
     shooterMotorPI = new PIDController(KShooterFlywheelkP, KShooterFlywheelkI, 0);
@@ -86,7 +87,6 @@ public class Shooter extends SubsystemBase{
 
   public void setShooterPower(double power){
     ShooterMotorLeader.set(power);
-    ShooterMotorFollowert.set(power);
   }
 
   public void setShooterVelocity(double rpm){
@@ -97,12 +97,10 @@ public class Shooter extends SubsystemBase{
 
   public void stopShooter() {
     ShooterMotorLeader.set(0.0);
-    ShooterMotorFollowert.set(0.0);
   }
 
   public double getflywheelVelocity() {
-    return (ShooterMotorLeader.getEncoder().getVelocity() + 
-    ShooterMotorFollowert.getEncoder().getVelocity())/(double) 2;
+    return ShooterMotorLeader.getEncoder().getVelocity(); //+
   }
 
   public boolean readyToShoot() {

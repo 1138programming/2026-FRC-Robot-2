@@ -252,7 +252,6 @@ public class Drive extends SubsystemBase {
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
     // Output drive speeds when joystick is being used
-    outputDriveSpeeds();
 
   }
 
@@ -300,12 +299,13 @@ public class Drive extends SubsystemBase {
   }
   // Turns wheels in order to resit movemnt of the drive base.
   public void runBrake() {
-    SwerveModuleState[] setpointStates = {
+    SwerveModuleState[] setpointStates = { 
+      new SwerveModuleState(0,Rotation2d.kCW_90deg),
       new SwerveModuleState(0,Rotation2d.kZero),
-      new SwerveModuleState(0,Rotation2d.k180deg),
       new SwerveModuleState(0,Rotation2d.kZero),
-      new SwerveModuleState(0,Rotation2d.k180deg)
-    };  
+      new SwerveModuleState(0,Rotation2d.kCW_90deg)
+    }; 
+    
     Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
       // Send setpoints to modules
     for (int i = 0; i < 4; i++) {
@@ -453,44 +453,44 @@ public class Drive extends SubsystemBase {
 
   //to be implemented into shooter logic most likely
 
-  /**
-   * Outputs the commanded and actual drive speeds in m/s to console.
-   * Only prints when joystick is being used (robot is moving).
-   */
-  private void outputDriveSpeeds() {
-    final double MOVEMENT_THRESHOLD = 0.05; // m/s threshold to consider "moving"
+  // /**
+  //  * Outputs the commanded and actual drive speeds in m/s to console.
+  //  * Only prints when joystick is being used (robot is moving).
+  //  */
+  // private void outputDriveSpeeds() {
+  //   final double MOVEMENT_THRESHOLD = 0.05; // m/s threshold to consider "moving"
 
-    // Check if robot is actually being commanded to move
-    ChassisSpeeds chassisSpeed = getChassisSpeeds();
-    double robotSpeedMps = Math.hypot(chassisSpeed.vxMetersPerSecond, chassisSpeed.vyMetersPerSecond);
-    boolean isMoving = robotSpeedMps > MOVEMENT_THRESHOLD ||
-                      Math.abs(chassisSpeed.omegaRadiansPerSecond) > 0.1;
+  //   // Check if robot is actually being commanded to move
+  //   ChassisSpeeds chassisSpeed = getChassisSpeeds();
+  //   double robotSpeedMps = Math.hypot(chassisSpeed.vxMetersPerSecond, chassisSpeed.vyMetersPerSecond);
+  //   boolean isMoving = robotSpeedMps > MOVEMENT_THRESHOLD ||
+  //                     Math.abs(chassisSpeed.omegaRadiansPerSecond) > 0.1;
 
-    // Only print if joystick is being used
-    if (isMoving) {
-      System.out.println("========== DRIVE SPEEDS ==========");
-      System.out.printf("Robot Speed: %.3f m/s | vx: %.3f | vy: %.3f | omega: %.3f rad/s%n",
-          robotSpeedMps,
-          chassisSpeed.vxMetersPerSecond,
-          chassisSpeed.vyMetersPerSecond,
-          chassisSpeed.omegaRadiansPerSecond);
+  //   // Only print if joystick is being used
+  //   if (isMoving) {
+  //     System.out.println("========== DRIVE SPEEDS ==========");
+  //     System.out.printf("Robot Speed: %.3f m/s | vx: %.3f | vy: %.3f | omega: %.3f rad/s%n",
+  //         robotSpeedMps,
+  //         chassisSpeed.vxMetersPerSecond,
+  //         chassisSpeed.vyMetersPerSecond,
+  //         chassisSpeed.omegaRadiansPerSecond);
 
-      String[] moduleNames = {"FrontLeft", "FrontRight", "BackLeft", "BackRight"};
-      for (int i = 0; i < 4; i++) {
-        Module module = modules[i];
-        String name = moduleNames[i];
+  //     String[] moduleNames = {"FrontLeft", "FrontRight", "BackLeft", "BackRight"};
+  //     for (int i = 0; i < 4; i++) {
+  //       Module module = modules[i];
+  //       String name = moduleNames[i];
 
-        // Get commanded and actual speeds
-        double commandedSpeedMps = module.getCommandedSpeedMetersPerSec();
-        double actualSpeedMps = module.getVelocityMetersPerSec();
-        double error = commandedSpeedMps - actualSpeedMps;
+  //       // Get commanded and actual speeds
+  //       double commandedSpeedMps = module.getCommandedSpeedMetersPerSec();
+  //       double actualSpeedMps = module.getVelocityMetersPerSec();
+  //       double error = commandedSpeedMps - actualSpeedMps;
 
-        System.out.printf("  %s: Cmd: %.3f m/s | Actual: %.3f m/s | Error: %.3f m/s%n",
-            name, commandedSpeedMps, actualSpeedMps, error);
-      }
-      System.out.println("==================================");
-    }
-  }
+  //       System.out.printf("  %s: Cmd: %.3f m/s | Actual: %.3f m/s | Error: %.3f m/s%n",
+  //           name, commandedSpeedMps, actualSpeedMps, error);
+  //     }
+  //     System.out.println("==================================");
+  //   }
+  // }
 
 
 }

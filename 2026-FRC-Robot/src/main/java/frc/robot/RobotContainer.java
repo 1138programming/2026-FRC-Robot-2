@@ -60,8 +60,11 @@ import frc.robot.commands.Auton.AimFlywheelPose;
 import frc.robot.commands.Auton.AimFlywheelPoseAndIndex;
 import frc.robot.commands.Fans.SetLeftFansPower;
 import frc.robot.commands.Fans.SetRightFansPower;
+import frc.robot.commands.Fans.SetFansStreamDeck;
 import frc.robot.commands.Indexer.SetIndexerPower;
 import frc.robot.commands.Indexer.StopIndexer;
+import frc.robot.commands.Fans.SetAllFansPower;
+
 
 import frc.robot.commands.hang.HangDeploy;
 import frc.robot.commands.hang.HangPullup;
@@ -107,7 +110,7 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  public final Intake intake;
+  // public final Intake intake;
   public final Shooter shooter;
   public final Indexer indexer;
   public final Vision vision;
@@ -118,13 +121,13 @@ public class RobotContainer {
 
   // Comands
 
-  public final IntakeIn intakein;
-  public final IntakeOut intakeOut;
-  public final ExtendIntake extendIntake;
-  public final RetractIntake retractIntake;
-  public final DeployIntake deployIntake;
-  public final StowIntake stowIntake;
-  public final StopIntake stopintake;
+  // public final IntakeIn intakein;
+  // public final IntakeOut intakeOut;
+  // public final ExtendIntake extendIntake;
+  // public final RetractIntake retractIntake;
+  // public final DeployIntake deployIntake;
+  // public final StowIntake stowIntake;
+  // public final StopIntake stopintake;
   public final SpinShooter spinShooter;
   public final SpinShooter spinShooterReverse;
 
@@ -137,7 +140,7 @@ public class RobotContainer {
 
   public final SetLeftFansPower spinLeftFans;
   public final SetRightFansPower spinRightFans;
-
+  public final SetAllFansPower spinAllFans;
 
   public final SetIndexerPower setIndexerPower;
   public final SetIndexerPower reverseIndexerPower;
@@ -155,7 +158,7 @@ public class RobotContainer {
   public final AutoShootPoseAuton autoShootPoseAuton;
 
 
-  public final DeployAndIntake deployAndIntake;
+  // public final DeployAndIntake deployAndIntake;
 
 
   // Comands
@@ -247,19 +250,19 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    intake = new Intake();
+    // intake = new Intake();
     shooter = new Shooter();
     fan = new Fans();
     hang = new Hang();
 
-    // commands
-    intakein = new IntakeIn(intake);
-    intakeOut = new IntakeOut(intake);
-    extendIntake = new ExtendIntake(intake);
-    retractIntake = new RetractIntake(intake);
-    deployIntake = new DeployIntake(intake);
-    stowIntake = new StowIntake(intake);
-    stopintake = new StopIntake(intake);
+    // // commands
+    // intakein = new IntakeIn(intake);
+    // intakeOut = new IntakeOut(intake);
+    // extendIntake = new ExtendIntake(intake);
+    // retractIntake = new RetractIntake(intake);
+    // deployIntake = new DeployIntake(intake);
+    // stowIntake = new StowIntake(intake);
+    // stopintake = new StopIntake(intake);
     spinShooter = new SpinShooter(shooter, 1);
     spinShooterReverse = new SpinShooter(shooter, -1);
     
@@ -269,22 +272,23 @@ public class RobotContainer {
     setHoodAngle = new SetHoodAngle(shooter,50);
     hoodUp = new SpinHood(shooter, kIndexerPower); 
     hoodDown = new SpinHood(shooter, kIndexerPower);
-    deployAndIntake = new DeployAndIntake(intake);
+    // deployAndIntake = new DeployAndIntake(intake);
 
     hangDeploy = new HangDeploy(hang);
     hangRetract = new HangRetract(hang);
     hangPullup = new HangPullup(hang);
 
-    hangPower = new HangPower(hang, 0.2);
-    hangDown = new HangPower(hang, -0.2);
+    hangPower = new HangPower(hang, 0.6);
+    hangDown = new HangPower(hang, -0.7);
 
     
-    spinLeftFans = new SetLeftFansPower(fan, -kFanPower);
-    spinRightFans = new SetRightFansPower(fan, -kFanPower);
+    spinLeftFans = new SetLeftFansPower(fan, kFanPower);
+    spinRightFans = new SetRightFansPower(fan, kFanPower);
+    spinAllFans = new SetAllFansPower(fan, kFanPower);
 
     indexer = new Indexer();
-    setIndexerPower = new SetIndexerPower(indexer, -kIndexerPowerAuto);
-    reverseIndexerPower = new SetIndexerPower(indexer, kIndexerPower);
+    setIndexerPower = new SetIndexerPower(indexer, kIndexerPowerAuto);
+    reverseIndexerPower = new SetIndexerPower(indexer, -kIndexerPower);
     stopIndexer = new StopIndexer(indexer);
         
     indexandshoot = new Indexandshoot(shooter, indexer);
@@ -364,7 +368,7 @@ public class RobotContainer {
 
 
     // Set up auto routines
-    NamedCommands.registerCommand("intakeout", intakeOut);
+    // NamedCommands.registerCommand("intakeout", intakeOut);
     NamedCommands.registerCommand("shoot", shooterRPM);
     NamedCommands.registerCommand("indexandshoot", indexandshoot);
     NamedCommands.registerCommand("aimFlywheelPoseAndIndex",  aimFlywheelPoseAndIndex);
@@ -485,7 +489,17 @@ public class RobotContainer {
             () -> getLogiLeftXAxis() * 0.6,
             () -> getLogiRightXAxis()* 0.6));
 
-    intake.setDefaultCommand(stowIntake);
+    // intake.setDefaultCommand(stowIntake);
+
+    fan.setDefaultCommand( 
+      new SetFansStreamDeck(
+        fan,
+        () -> getStreamDeckButton9(),
+        () -> getStreamDeckButton10(),
+        () -> getStreamDeckButton13(),
+        () -> getStreamDeckButton8()
+      )
+    );
 
     // logitechBtnRT
     //     .whileTrue(
@@ -513,11 +527,11 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    compStreamDeck5.whileTrue(intakein);
-    compStreamDeck4.whileTrue(intakeOut);
-    compStreamDeck9.whileTrue(deployIntake);
+    // compStreamDeck5.whileTrue(intakein);
+    // compStreamDeck4.whileTrue(intakeOut);
+    // compStreamDeck9.whileTrue(deployIntake);
 
-    compStreamDeck10.whileTrue(stowIntake);
+    // compStreamDeck10.whileTrue(stowIntake);
 
     // compStreamDeck17.whileTrue(spinShooter);
 
@@ -540,27 +554,23 @@ public class RobotContainer {
           () -> getLogiLeftXAxis()* 0.5));
     compStreamDeck3.whileTrue(setIndexerPower);
     compStreamDeck2.whileTrue(reverseIndexerPower);
-    compStreamDeck13.whileTrue(aimFlywheelSpeed);
+    // compStreamDeck13.whileTrue(aimFlywheelSpeed);
+    compStreamDeck11.whileTrue(spinLeftFans);
+    compStreamDeck12.whileTrue(spinRightFans);
+    compStreamDeck14.whileTrue(spinAllFans);
 
-    compStreamDeck14.whileTrue(spinLeftFans);
-    compStreamDeck14.whileTrue(spinRightFans);
 
 
-    // compStreamDeck13.onTrue(hoodDownCommand);
-    // compStreamDeck8.onTrue(hoodUpCommand);
-    // compStreamDeck11.whileTrue(hoodMid);
-    // compStreamDeck12.whileTrue(hoodAllDown);
-    // compStreamDeck14.whileTrue(hoodAllUp);
-    // compStreamDeck7.whileTrue(spinShooter);
+
     // compStreamDeck6.whileTrue(spinShooterReverse);
 
     compStreamDeck7.whileTrue(shooterRPM);
     compStreamDeck6.whileTrue(shooterRPMReverse);
 
-    compStreamDeck8.whileTrue(aimFlywheelShuttleAndIndex);
+    // compStreamDeck8.whileTrue(aimFlywheelShuttleAndIndex);
 
     
-    logitechBtnLT.whileTrue(deployAndIntake);
+    // logitechBtnLT.whileTrue(deployAndIntake);
     // logitechBtnRT.whileTrue(aimFlywheelSpeed);
 
 
@@ -568,8 +578,8 @@ public class RobotContainer {
 
 
 
-    // compStreamDeck17.whileTrue(hangDeploy);
-    compStreamDeck15.whileTrue(hangPower);
+    compStreamDeck17.whileTrue(spinShooter);
+    compStreamDeck15.whileTrue(hangPower);  
     compStreamDeck16.whileTrue(hangDown);
 
    
@@ -586,6 +596,20 @@ public class RobotContainer {
     logitechBtnA.whileTrue(shooterRPM);
     
   }
+
+   public boolean getStreamDeckButton8() {
+    return compStreamDeck8.getAsBoolean();
+  }
+ public boolean getStreamDeckButton13() {
+    return compStreamDeck13.getAsBoolean();
+  }
+ public boolean getStreamDeckButton10() {
+    return compStreamDeck10.getAsBoolean();
+  }
+ public boolean getStreamDeckButton9() {
+    return compStreamDeck9.getAsBoolean();
+  }
+
 
   public double getLogiRightYAxis() {
     final double Y = logitech.getRawAxis(KRightYAxis);
