@@ -51,6 +51,10 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
+  // Speed test variables
+  private static Timer speedTestTimer = new Timer();
+  private static boolean speedTestInitialized = false;
+
   private DriveCommands() {}
 
   @AutoLogOutput
@@ -105,6 +109,10 @@ public class DriveCommands {
                   isFlipped
                       ? drive.getRotation().plus(new Rotation2d(Math.PI))
                       : drive.getRotation()));
+
+          // ===== MAX SPEED TEST (UNCOMMENT TO ENABLE) =====
+          // Logs actual speed every 0.5s when joystick is near max. Hold stick forward at 100% on blocks.
+          // logMaxSpeed(drive);
         },
         drive);
   }
@@ -395,6 +403,37 @@ public class DriveCommands {
                               + formatter.format(Units.metersToInches(wheelRadius))
                               + " inches");
                     })));
+  }
+
+  /**
+   * Logs max speed continuously when called. Prints every 0.5 seconds.
+   * For testing: Put robot on blocks, push joystick to max, hold for several seconds.
+   */
+  private static void logMaxSpeed(Drive drive) {
+    if (!speedTestInitialized) {
+      speedTestTimer.restart();
+      speedTestInitialized = true;
+      System.out.println("===== MAX SPEED TEST ACTIVE =====");
+      System.out.println("Hold joystick at 100% forward. Results print every 0.5s.");
+    }
+
+    // Print every 0.5 seconds
+    if (speedTestTimer.hasElapsed(0.5)) {
+      double speed = drive.getFFCharacterizationVelocity();
+      double speedMPS = Math.hypot(
+          drive.getHorizontalVelocityMetersPerSecond(),
+          drive.getVerticalVelocityMetersPerSecond());
+
+      NumberFormat formatter = new DecimalFormat("#0.00");
+      System.out.println(
+          "Speed: " + formatter.format(speedMPS) + " m/s ("
+          + formatter.format(speedMPS / 6.05 * 100) + "% of 6.05 theoretical)");
+
+      SmartDashboard.putNumber("Speed Test/Current", speedMPS);
+      SmartDashboard.putNumber("Speed Test/Percent", speedMPS / 6.05 * 100);
+
+      speedTestTimer.restart();
+    }
   }
 
   private static class WheelRadiusCharacterizationState {
