@@ -61,6 +61,8 @@ import frc.robot.commands.Auton.AimFlywheelPoseAndIndex;
 import frc.robot.commands.Fans.SetLeftFansPower;
 import frc.robot.commands.Fans.SetRightFansPower;
 import frc.robot.commands.Fans.SetFansStreamDeck;
+import frc.robot.commands.Fans.SetInnerFansPower;
+import frc.robot.commands.Fans.SetOutsideFansPower;
 import frc.robot.commands.Indexer.SetIndexerPower;
 import frc.robot.commands.Indexer.StopIndexer;
 import frc.robot.commands.Fans.SetAllFansPower;
@@ -140,6 +142,8 @@ public class RobotContainer {
 
   public final SetLeftFansPower spinLeftFans;
   public final SetRightFansPower spinRightFans;
+  public final SetInnerFansPower innerFans;
+  public final SetOutsideFansPower outerFans;
   public final SetAllFansPower spinAllFans;
 
   public final SetIndexerPower setIndexerPower;
@@ -284,6 +288,8 @@ public class RobotContainer {
     
     spinLeftFans = new SetLeftFansPower(fan, kFanPower);
     spinRightFans = new SetRightFansPower(fan, kFanPower);
+    innerFans = new SetInnerFansPower(fan, kIndexerPower);
+    outerFans  = new SetOutsideFansPower(fan, kIndexerPower);
     spinAllFans = new SetAllFansPower(fan, kFanPower);
 
     indexer = new Indexer();
@@ -555,8 +561,8 @@ public class RobotContainer {
     compStreamDeck3.whileTrue(setIndexerPower);
     compStreamDeck2.whileTrue(reverseIndexerPower);
     // compStreamDeck13.whileTrue(aimFlywheelSpeed);
-    compStreamDeck11.whileTrue(spinLeftFans);
-    compStreamDeck12.whileTrue(spinRightFans);
+    compStreamDeck12.whileTrue(innerFans);
+    compStreamDeck11.whileTrue(outerFans);
     compStreamDeck14.whileTrue(spinAllFans);
 
 

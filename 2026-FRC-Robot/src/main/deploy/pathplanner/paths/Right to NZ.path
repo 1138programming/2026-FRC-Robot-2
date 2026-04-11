@@ -3,35 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4,
-        "y": 4.006
+        "x": 3.8,
+        "y": 0.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4586333333333334,
-        "y": 5.760000000000002
+        "x": 4.694417385707402,
+        "y": 0.7000000000000004
       },
       "isLocked": false,
-      "linkedName": "done shooting preloads"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1955333333333331,
-        "y": 5.974144444444444
+        "x": 6.0,
+        "y": 0.7
       },
       "prevControl": {
-        "x": 1.4455333333333331,
-        "y": 5.974144444444444
+        "x": 5.291250332754237,
+        "y": 0.7000000000000002
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "in front of depot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Depot Auton",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
