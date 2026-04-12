@@ -53,11 +53,13 @@ public class AimFlywheelDistAndIndex extends Command {
     else {
     double speed = logic.getFlywheelExitVelocity(kHoodDefaultAngleRadians, distanceSupplier.getAsDouble());
     }
-    SmartDashboard.putNumber("distance",kFeildlength - distanceSupplier.getAsDouble());
-    SmartDashboard.putNumber("exit velocity",speed);
-    SmartDashboard.putNumber("exit rpm",shooter.LinearSpeedToRPM(speed));
-    SmartDashboard.putBoolean("readyToShoot",shooter.readyToShoot());
     shooter.setShooterVelocity(shooter.LinearSpeedToRPM(speed));
+    if (frc.robot.Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("distance",kFeildlength - distanceSupplier.getAsDouble());
+      SmartDashboard.putNumber("exit velocity",speed);
+      SmartDashboard.putNumber("exit rpm",shooter.LinearSpeedToRPM(speed));
+      SmartDashboard.putBoolean("readyToShoot",shooter.readyToShoot());
+    }
     if (shooter.readyToShoot()) {
       indexer.setIndexerPower(kIndexerPowerAuto);
     }

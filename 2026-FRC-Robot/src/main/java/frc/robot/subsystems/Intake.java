@@ -122,9 +122,11 @@ public class Intake extends SubsystemBase{
 
   public void intakeMoveToPosition(double position) {
     double power = IntakeControler.calculate(getIntakeThroughBore(), position);
-    SmartDashboard.putNumber("pid out", power);
+    if (frc.robot.Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("pid out", power);
+    }
     intakeDeployMotor.set(power);
- 
+
   }
 
   public void resetIntakePid() {
@@ -156,7 +158,9 @@ public class Intake extends SubsystemBase{
 
     @Override
     public void periodic() {
-      SmartDashboard.putNumber("Intake ThroughBore", getIntakeThroughBore());
+      if (frc.robot.Constants.DEBUG_MESSAGES) {
+        SmartDashboard.putNumber("Intake ThroughBore", getIntakeThroughBore());
+      }
       Logger.recordOutput("Intake/ThroughBore", getIntakeThroughBore());
       Logger.recordOutput("Intake/RPM", getIntakeVelocity());
 

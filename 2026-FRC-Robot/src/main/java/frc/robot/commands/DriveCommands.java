@@ -238,7 +238,9 @@ public class DriveCommands {
               double omega =
                   angleController.calculate(
                       drive.getRotation().getRadians(), Math.toRadians(rotationSupplier.getAsDouble()));
-            SmartDashboard.putNumber("angle out", rotationSupplier.getAsDouble());
+            if (frc.robot.Constants.DEBUG_MESSAGES) {
+              SmartDashboard.putNumber("angle out", rotationSupplier.getAsDouble());
+            }
 
 
               // Convert to field relative speeds & send command

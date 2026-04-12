@@ -51,14 +51,14 @@ public class ShooterLogic extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    //SmartDashboard.putNumber("TX Helper", absoluteAngletoAprilTagLimelightDegrees(0));
-    SmartDashboard.putNumber("Angle to Hub center", botAngletoPose2d(getHubPose3d().toPose2d()));
+    if (frc.robot.Constants.DEBUG_MESSAGES) {
+      //SmartDashboard.putNumber("TX Helper", absoluteAngletoAprilTagLimelightDegrees(0));
+      SmartDashboard.putNumber("Angle to Hub center", botAngletoPose2d(getHubPose3d().toPose2d()));
       SmartDashboard.putNumber("relative Angle to Hub center", relativebaseAngletoPose2d(getHubPose3d().toPose2d()));
-    // SmartDashboard.putString("Turret Pose 2d", turretPose2d.toString());
-    // SmartDashboard.putString("diff translation", kHubFieldPose2d.getTranslation().minus(turretPose2d.getTranslation()).toString());
-
-    SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(getHubPose3d().toPose2d()));
+      // SmartDashboard.putString("Turret Pose 2d", turretPose2d.toString());
+      // SmartDashboard.putString("diff translation", kHubFieldPose2d.getTranslation().minus(turretPose2d.getTranslation()).toString());
+      SmartDashboard.putNumber("Distance to Hub Center", distancetoPose2d(getHubPose3d().toPose2d()));
+    }
   }
 
   /**
