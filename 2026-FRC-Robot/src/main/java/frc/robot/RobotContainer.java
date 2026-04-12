@@ -487,13 +487,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Default command, normal field-relative drive
+    // Default command, normal field-relative drive with turbo on RB
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> getLogiLeftYAxis() * 0.6,
-            () -> getLogiLeftXAxis() * 0.6,
-            () -> getLogiRightXAxis()* 0.6));
+            () -> getLogiLeftYAxis() * (logitechBtnRB.getAsBoolean() ? 1.0 : 0.6),
+            () -> getLogiLeftXAxis() * (logitechBtnRB.getAsBoolean() ? 1.0 : 0.6),
+            () -> getLogiRightXAxis() * (logitechBtnRB.getAsBoolean() ? 1.0 : 0.6)));
 
     // intake.setDefaultCommand(stowIntake);
 
@@ -522,13 +522,7 @@ public class RobotContainer {
       () -> getLogiLeftYAxis()* 0.5, 
           () -> getLogiLeftXAxis()* 0.5));
 
-  logitechBtnRB
-        .whileTrue(
-          DriveCommands.joystickDrive(
-            drive,
-            () -> getLogiLeftYAxis(),
-            () -> getLogiLeftXAxis(),
-            () -> getLogiRightXAxis()));
+    // RB now handled in default command for instant turbo response
 
     // Switch to X pattern when X button is pressed
     // logitechBtnX.onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -620,7 +614,9 @@ public class RobotContainer {
 
   public double getLogiRightYAxis() {
     final double Y = logitech.getRawAxis(KRightYAxis);
-    SmartDashboard.putNumber("getLogiRightYAxis", -Y);
+    if (Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("getLogiRightYAxis", -Y);
+    }
     if (Y > KDeadZone || Y < -KDeadZone)
       return -Y;
     else
@@ -629,7 +625,9 @@ public class RobotContainer {
 
   public double getLogiLeftYAxis() {
     final double Y = logitech.getY();
-    SmartDashboard.putNumber("getLogiLeftYAxis", -Y);
+    if (Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("getLogiLeftYAxis", -Y);
+    }
     if (Y > KDeadZone || Y < -KDeadZone)
       return -Y;
     else
@@ -638,7 +636,9 @@ public class RobotContainer {
 
   public double getLogiRightXAxis() {
     double X = logitech.getZ();
-    SmartDashboard.putNumber("getLogiRightXAxis", -X);
+    if (Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("getLogiRightXAxis", -X);
+    }
     if (X > KDeadZone || X < -KDeadZone) {
       return -X;
     } else {
@@ -648,7 +648,9 @@ public class RobotContainer {
 
   public double getLogiLeftXAxis() {
     double X = logitech.getX();
-    SmartDashboard.putNumber("getLogiLeftXAxis", -X);
+    if (Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("getLogiLeftXAxis", -X);
+    }
     if (X > KDeadZone || X < -KDeadZone) {
 
       return -X;

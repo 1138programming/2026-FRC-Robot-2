@@ -152,11 +152,10 @@ public class Shooter extends SubsystemBase{
   
   @Override
   public void periodic() {
-
-    SmartDashboard.putNumber("flywheel speed",getflywheelVelocity());
+    if (frc.robot.Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("flywheel speed",getflywheelVelocity());
+    }
     Logger.recordOutput("Flywheel/RPM", getflywheelVelocity());
-
-    
   }
 
 

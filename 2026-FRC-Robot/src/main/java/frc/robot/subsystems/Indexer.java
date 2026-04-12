@@ -59,8 +59,10 @@ public class Indexer extends SubsystemBase {
         setIndexerPower(0);
     }
 
-    @Override    
+    @Override
     public void periodic() {
-        SmartDashboard.putNumber("indexer speed", getIndexerSpeed());
+        if (frc.robot.Constants.DEBUG_MESSAGES) {
+            SmartDashboard.putNumber("indexer speed", getIndexerSpeed());
+        }
     }
 }

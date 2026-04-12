@@ -36,10 +36,12 @@ public class AimFlywheelPose extends Command {
   @Override
   public void execute() {
     double speed = logic.getFlywheelExitVelocity(kHoodDefaultAngleRadians, target.get());
-    SmartDashboard.putNumber("exit velocity",speed);
-    SmartDashboard.putNumber("exit rpm",shooter.LinearSpeedToRPM(speed));
     shooter.setShooterVelocity(shooter.LinearSpeedToRPM(speed));
-    SmartDashboard.putBoolean("readyToShoot",shooter.readyToShoot());
+    if (frc.robot.Constants.DEBUG_MESSAGES) {
+      SmartDashboard.putNumber("exit velocity",speed);
+      SmartDashboard.putNumber("exit rpm",shooter.LinearSpeedToRPM(speed));
+      SmartDashboard.putBoolean("readyToShoot",shooter.readyToShoot());
+    }
   }
 
   // Called once the command ends or is interrupted.

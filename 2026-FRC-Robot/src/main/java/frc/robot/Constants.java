@@ -40,6 +40,9 @@ public final class Constants {
     REPLAY
   }
 
+  // Set to false to disable non-critical SmartDashboard updates (reduces loop overruns)
+  public static final boolean DEBUG_MESSAGES = false;
+
   public static class standardConstants {
     public static final double gravity = 9.81; // m/s^2
   }
